@@ -2,36 +2,52 @@ import spacy
 
 from xml.etree import ElementTree as ET
 from nltk.tree import Tree
-
-
+import pandas as pd
+import numpy as np
 
 class GCN:
 
   def __init__(self):
     self.en_nlp = spacy.load("en")
-  
+    self.data = pd.DataFrame({'text': [], 'label': []}) 
+
+
   def parse_sem_eval(self):
+
     tree = ET.parse(self.file_name)
     root = tree.getroot() 
-    parsed_data = []   
+    data_row = []
     for review in root.findall('Review'):
       for sentences in review:
         for sentence in sentences:
-          parsed_data.append((sentence.find('text').text))
+          temp_row = ['lorem ipsum', []]
+          temp_row[0]= sentence.find('text').text
+          for opinions in sentence.findall('Opinions'):
+            for opinion in opinions:
+              polarity = opinion.get('polarity')
+              if(polarity == 'positive'):
+                temp_row[1] += [1]
+              else:
+                temp_row[1] += [-1]
+          data_row += [temp_row]
+    parsed_data = pd.DataFrame(data_row, columns = ['text', 'label'])  
     return parsed_data 
 
-  def parse_twitter(self):
-    parsed_data = []
-    
+  def parse_twitter(self):    
     count = 0
+    data_row = []
     with open(self.file_name, "r") as file1:
       for line in file1:
         stripped_line = line.strip()
         if count%3 == 0:
-          parsed_data.append(stripped_line)
+          temp_row = ['lorem ipsum', 0]
+          temp_row[0] = stripped_line
+        elif count%3 == 2:
+          temp_row[1] = int(stripped_line)
+          data_row += [temp_row]
         count += 1
+    parsed_data = pd.DataFrame(data_row, columns = ['text', 'label'])
     return parsed_data        
-    
 
   def nltk_spacy_tree(self, sent):
       """
@@ -57,16 +73,17 @@ class GCN:
   def run_sem_eval(self, file_name):
     self.file_name = file_name
     data = self.parse_sem_eval()
-    for text in data:
-      self.nltk_spacy_tree(text)
+    for index, item in data.iterrows():
+      self.nltk_spacy_tree(item[0])
 
   def run_twitter(self, file_name):
     self.file_name = file_name
     data = self.parse_twitter()
-    for text in data:
-      self.nltk_spacy_tree(text)
+    
+    for index, item in data.iterrows():
+      self.nltk_spacy_tree(item[0])
     
 
 gcn = GCN()
-#gcn.run_sem_eval('SemEval16_gold_Laptops/EN_LAPT_SB1_TEST_.xml.gold') 
-gcn.run_twitter('Twitter-acl-14-short-data/train.txt')
+gcn.run_sem_eval('SemEval16_gold_Laptops/EN_LAPT_SB1_TEST_.xml.gold') 
+#gcn.run_twitter('Twitter-acl-14-short-data/train.txt')
