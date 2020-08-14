@@ -1,4 +1,3 @@
-
 import spacy
 from nltk.tree import Tree
 import pandas as pd
@@ -32,20 +31,19 @@ class GCN:
       # The first item in the list is the full tree
       tree[0].draw()
    
-  def run_sem_eval(self, file_name):
-    data = self.processor.parse_sem_eval(file_name)
-    for _, item in data.iterrows():
-      tokens = self.processor.tokenize(item[0])
-      vocab = self.processor.create_vocab(tokens)
-      self.nltk_spacy_tree(item[0])
+  def run_gcn(self, file_name, dataset_name=None):
+    if dataset_name == "twitter": 
+      data = self.processor.parse_twitter(file_name)
+    elif dataset_name == "semEval":
+      data = self.processor.parse_sem_eval(file_name)
+    else:
+      print("Please input valid dataset_name: [twitter, semEval]")
 
-  def run_twitter(self, file_name):
-    data = self.processor.parse_twitter(file_name)
-    for _, item in data.iterrows():
-      tokens = self.processor.tokenize(item[0])
-      vocab = self.processor.create_vocab(tokens)
+    for index, item in data.iterrows():
+      self.processor.dgl_graph(item[0], index)
+      exit(0)
       self.nltk_spacy_tree(item[0])
   
 gcn = GCN()
 # gcn.run_sem_eval('SemEval16_gold_Laptops/EN_LAPT_SB1_TEST_.xml.gold') 
-gcn.run_twitter('Twitter-acl-14-short-data/train.txt')
+gcn.run_gcn('Twitter-acl-14-short-data/train.txt', dataset_name="twitter")
