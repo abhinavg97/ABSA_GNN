@@ -82,7 +82,7 @@ class Processing:
     # add edge weights and node weights
     vocab = self.create_vocab(text)
 
-    g.ndata['feat'] = 
+    # g.ndata['feat'] = 1
 
   def create_vocab(self, text):
 
