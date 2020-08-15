@@ -6,14 +6,26 @@ from collections import Counter
 import pandas as pd
 import networkx as nx
 import dgl
-from spacy.vocab import Vocab
 import torch
-from spacy.vectors import Vectors
 
 class Processing:
 
   def __init__(self):
-    pass
+    self.id_to_vector = {}
+    self.word_to_id = {}
+    self.nlp = spacy.load("en_core_web_lg")
+  
+  def __visulaize_dependancy_tree(self, doc):
+    from pathlib import Path
+    svg = spacy.displacy.render(doc, style='dep', jupyter=False)
+    output_path = Path("/home/abhi/Desktop/temp.svg")
+    output_path.open("w", encoding="utf-8").write(svg)
+
+  def __visualize_dgl_graph_as_networkx(self, graph):
+    graph = graph.to_networkx()
+    pos = nx.nx_agraph.graphviz_layout(graph, prog='dot')
+    nx.draw(graph, pos, with_labels=False, node_size=10,
+            node_color=[[.5, .5, .5]], arrowsize=4)
 
   def parse_sem_eval(self, file_name):
     tree = ET.parse(file_name)
@@ -51,48 +63,42 @@ class Processing:
     parsed_data = pd.DataFrame(data_row, columns = ['text', 'label'])
     return parsed_data        
 
-  def networkx_graph(self, text):
-    nlp = spacy.load("en_core_web_lg")
-    doc = nlp(text)
-    edges = []
-    for token in doc:
-        for child in token.children:
-            edges.append(('{0}'.format(token.lower_),
-                          '{0}'.format(child.lower_)))
-    graph = nx.Graph(edges)
-    return graph
 
-  def __visulaize_dependancy_tree(self, doc):
-    from pathlib import Path
-    svg = spacy.displacy.render(doc, style='dep', jupyter=False)
-    output_path = Path("/home/abhi/Desktop/temp.svg")
-    output_path.open("w", encoding="utf-8").write(svg)
-
-  def __visualize_dgl_graph_as_networkx(self, graph):
-    graph = graph.to_networkx()
-    pos = nx.nx_agraph.graphviz_layout(graph, prog='dot')
-    nx.draw(graph, pos, with_labels=False, node_size=10,
-            node_color=[[.5, .5, .5]], arrowsize=4)
-
-  def dgl_graph(self, text, index):
-    graph = self.networkx_graph(text)
-    g = dgl.DGLGraph()
-    g.from_networkx(graph)
-
-    # add edge weights and node weights
-    vocab = self.create_vocab(text)
-
-    # g.ndata['feat'] = 1
-
-  def create_vocab(self, text):
-
-    nlp = spacy.load("en_core_web_lg")
-    tokens = nlp(text)
+  def init(self, data):
     words = {}
-    vocab = Vocab()
+    counter = 0
+    for _, item in data.iterrows():
+      tokens = self.nlp(item[0])      
+      for token in tokens:
+        if token.text not in words:
+          words[token.text] = 1
+          self.id_to_vector[counter] = token.vector
+          self.word_to_id[token.lower_] = counter
+          counter += 1
+        
+  def dgl_graph(self, data):
 
-    for token in tokens:
-      if token.text not in words:
-        words[token.text] = 1
-        vocab.set_vector(token.text, token.vector)
-    return vocab
+    for _, item in data.iterrows():
+      g = dgl.DGLGraph()
+      tokens = self.nlp(item[0])
+      embedding = []              # node embedding
+      edges_sources = []           # edge data
+      edges_dest = []             # edge data
+      counter = 0                 # uniq ids for the tokens in the document
+      uniq_ids = {}               # ids to map token to id for the dgl graph
+
+      for token in tokens:
+        if token.lower_ not in uniq_ids:
+          uniq_ids[token.lower_] = counter
+          embedding.append(token.vector)
+          counter += 1
+
+      for token in tokens:
+        for child in token.children:
+          edges_sources.append(uniq_ids[token.lower_])
+          edges_dest.append(uniq_ids[child.lower_])
+
+    # add edges and node embeddings to the graph
+    g.add_nodes(counter)
+    g.add_edges(torch.tensor(edges_sources), torch.tensor(edges_dest))
+    g.ndata['feat'] = torch.tensor(embedding)

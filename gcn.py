@@ -3,7 +3,7 @@ from nltk.tree import Tree
 import pandas as pd
 from processing import processing
 
-class GCN:
+class Graph:
 
   def __init__(self):
     self.en_nlp = spacy.load("en")
@@ -38,12 +38,12 @@ class GCN:
       data = self.processor.parse_sem_eval(file_name)
     else:
       print("Please input valid dataset_name: [twitter, semEval]")
-
-    for index, item in data.iterrows():
-      self.processor.dgl_graph(item[0], index)
-      exit(0)
+    
+    # self.processor.init(data)
+    self.processor.dgl_graph(data)
+    for _, item in data.iterrows():
       self.nltk_spacy_tree(item[0])
   
-gcn = GCN()
+gcn = Graph()
 # gcn.run_sem_eval('SemEval16_gold_Laptops/EN_LAPT_SB1_TEST_.xml.gold') 
 gcn.run_gcn('Twitter-acl-14-short-data/train.txt', dataset_name="twitter")
