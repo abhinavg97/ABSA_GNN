@@ -1,35 +1,9 @@
-import spacy
-from nltk.tree import Tree
-import pandas as pd
 from processing import processing
 
 class Graph:
 
   def __init__(self):
-    self.en_nlp = spacy.load("en")
-    self.data = pd.DataFrame({'text': [], 'label': []}) 
     self.processor = processing.Processing()
-
-  def nltk_spacy_tree(self, sent):
-      """
-      Visualize the SpaCy dependency tree with nltk.tree
-      """
-      doc = self.en_nlp(sent)
-      def token_format(token):
-          return "_".join([token.orth_, token.tag_, token.dep_])
-
-      def to_nltk_tree(node):
-          if node.n_lefts + node.n_rights > 0:
-              return Tree(token_format(node),
-                         [to_nltk_tree(child) 
-                          for child in node.children]
-                     )
-          else:
-              return token_format(node)
-
-      tree = [to_nltk_tree(sent.root) for sent in doc.sents]
-      # The first item in the list is the full tree
-      tree[0].draw()
    
   def run_gcn(self, file_name, dataset_name=None):
     if dataset_name == "twitter": 
@@ -41,8 +15,10 @@ class Graph:
     
     # self.processor.init(data)
     self.processor.dgl_graph(data)
+    exit(0)
     for _, item in data.iterrows():
-      self.nltk_spacy_tree(item[0])
+      print(item[0])
+      self.processor.nltk_spacy_tree(item[0])
   
 gcn = Graph()
 # gcn.run_sem_eval('SemEval16_gold_Laptops/EN_LAPT_SB1_TEST_.xml.gold') 
