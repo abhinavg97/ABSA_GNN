@@ -1,23 +1,27 @@
 # GCN
 
 
-## Backlog:
+# Backlog:
 
-1. Create Dependancy tree for the SemEval dataset using spacy
-2. Create Dependancy tree for twitter dataset
+1. Create large DGL graph
 
-
-
-## Install the virtual Environment for python
+# Install the virtual Environment for python
 
 ```
 sudo apt install python3-venv
 ```
 
+# Activate the virtual Environment for python
 
-## Install the Dependancies
+```
+source venv/bin/activate
+```
+
+
+# Install the Dependancies
 
 ```
 sudo apt install python3-tk
-pip install nltk spacy
+pip install nltk spacy pandas
+python - m spacy download en_core_web_md
 ```
