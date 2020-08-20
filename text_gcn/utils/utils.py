@@ -1,24 +1,35 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 import itertools
-from scipy.sparse import csr_matrix
 import nltk
 from nltk.collocations import *
+import pandas as pd
+import spacy
 
 
-def pmi(docs):
+def pmi(df):
     """[summary]
         https://towardsdatascience.com/collocations-in-nlp-using-nltk-library-2541002998db
         https://www.nltk.org/howto/collocations.html
     Returns:
         list_of_tuples: tuples containing word pair and their associated pmi
     """
+
+    docs = []
+    for _, item in df.iterrows():
+        docs += [item[0]]
+
     separator = ', '
     text = separator.join(docs)
     bigram_measures = nltk.collocations.BigramAssocMeasures()
-    tokens = nltk.wordpunct_tokenize(text)
+
+    nlp = spacy.load("en_core_web_lg")
+    tokens = nlp(text)
+    tokenized = []
+    for token in tokens:
+        tokenized += [token.lower_]
     # Bigrams
-    finder = BigramCollocationFinder.from_words(tokens)
+    finder = BigramCollocationFinder.from_words(tokenized)
     # only bigrams that appear 3+ times
     # finder.apply_freq_filter(3)
 
@@ -29,35 +40,31 @@ def pmi(docs):
     return list_of_tuples
 
 
-def similarity_pairwise_words():
-    pass
+def iou(l1, l2):
+
+    if(len(l1) == 0 and len(l2) == 0):
+        return 0.0
+
+    union_len = len(l1) + len(l2)
+    intersection = []
+    for x in l1:
+        if x in l2:
+            intersection.append(x)
+            l2.remove(x)
+    union_len -= len(intersection)
+    return len(intersection)/union_len
 
 
-def similarity_pairwise_documents(doc1, doc2):
-    text1 = doc1[text]
-    text2 = doc2[text]
-    labels1 = doc1[labels]
-    labels2 = doc2[labels]
-
-    def iou(l1, l2):
-        union_len = len(l1)+len(l2)
-        intersection = []
-        for x in l1:
-            if x in l2:
-                intersection.append(x)
-                l2.remove(x)
-        union_len -= len(intersection)
-        return len(intersection)/union_len
-
-    return iou(labels1, labels2)
-
-
-def tf_idf(docs):
+def tf_idf(df):
     """[summary]
     https://towardsdatascience.com/natural-language-processing-feature-engineering-using-tf-idf-e8b9d00e7e76
     Args:
         docs ([type]): [description]
     """
+
+    docs = []
+    for _, item in df.iterrows():
+        docs += [item[0]]
 
     vectorizer = TfidfVectorizer()
     vectors = vectorizer.fit_transform(docs)
@@ -70,14 +77,19 @@ def tf_idf(docs):
 
 if __name__ == "__main__":
     import sys
-    sys.path.insert(0, "/home/abhi/Desktop/gcn/Processing/")
+    sys.path.insert(0, "/home/abhi/Desktop/gcn/text_gcn/loaders/")
 
-    from processing import Processing
-    processor = Processing()
-    data = processor.parse_twitter("../Twitter-acl-14-short-data/train.txt")
+    from loader_gcn import GCNLoader
 
-    docs = []
+    train_loader = GCNLoader(
+        "../../data/SemEval16_gold_Laptops/train.txt", dataset_name="SemEval")
 
-    for _, item in data.iterrows():
-        docs += [item[0]]
-    pmi(docs)
+    df = train_loader.get_dataframe()
+
+    tf_df = tf_idf(df)
+    # print(tf_df)
+
+    for index, row in tf_df.iterrows():
+        for i, v in row.items():
+            print(i, v)
+        # print(type(item))

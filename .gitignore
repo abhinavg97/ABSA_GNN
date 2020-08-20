@@ -114,3 +114,6 @@ data/
 
 # saved graph
 bin/data.bin
+
+# vscode
+.vscode/

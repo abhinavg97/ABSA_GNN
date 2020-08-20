@@ -22,7 +22,8 @@ class GCNLoader():
             file_name: file containing the sem eval dataset in XML format
 
         Returns:
-            parsed_data: pandas dataframe for the parsed data containing labels and text
+            parsed_data: pandas dataframe for the parsed
+            data containing labels and text
         """
         tree = ET.parse(self.file_path)
         root = tree.getroot()
@@ -31,7 +32,7 @@ class GCNLoader():
             for sentences in review:
                 for sentence in sentences:
                     temp_row = ['lorem ipsum', []]
-                    temp_row[0] = sentence.find('text').text
+                    temp_row[0] = sentence.find('text').text.lower()
                     for opinions in sentence.findall('Opinions'):
                         for opinion in opinions:
                             polarity = opinion.get('polarity')
@@ -50,18 +51,19 @@ class GCNLoader():
             file_name: file containing the twitter dataset
 
         Returns:
-            parsed_data: pandas dataframe for the parsed data containing labels and text
+            parsed_data: pandas dataframe for the parsed data
+            containing labels and text
         """
         count = 0
         data_row = []
         with open(self.file_path, "r") as file1:
             for line in file1:
-                stripped_line = line.strip()
+                stripped_line = line.strip().lower()
                 if count % 3 == 0:
-                    temp_row = ['lorem ipsum', 0]
+                    temp_row = ['lorem ipsum', []]
                     temp_row[0] = stripped_line
                 elif count % 3 == 2:
-                    temp_row[1] = int(stripped_line)
+                    temp_row[1] += [int(stripped_line)]
                     data_row += [temp_row]
                 count += 1
         parsed_data = pd.DataFrame(data_row, columns=['text', 'label'])
@@ -73,7 +75,7 @@ class GCNLoader():
         """
         if(self.dataset_name == "Twitter"):
             return self.parse_twitter()
-        elif(dataset_name == "SemEval"):
+        elif(self.dataset_name == "SemEval"):
             return self.parse_sem_eval()
         else:
             logging.error(
