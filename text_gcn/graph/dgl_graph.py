@@ -4,6 +4,7 @@ import torch
 import numpy as np
 from ..utils import graph_utils
 from ..utils import utils
+import logging
 
 
 class DGLGraph(object):
@@ -16,22 +17,23 @@ class DGLGraph(object):
         self.total_nodes = 0
         self.id_to_vector = {}
         self.word_to_id = {}
-        self.nlp = spacy.load("en_core_web_lg")
+        self.nlp = spacy.load('en_core_web_lg')
         words = {}
         counter = 0
         for _, item in data.iterrows():
             tokens = self.nlp(item[0])
             for token in tokens:
-                if token.lower_ not in words:
-                    words[token.lower_] = 1
+                try:
+                    words[token.text]
+                except KeyError:
+                    words[token.text] = 1
                     self.id_to_vector[counter] = token.vector
-                    self.word_to_id[token.lower_] = counter
+                    self.word_to_id[token.text] = counter
                     counter += 1
-                else:
-                    words[token.lower_] = 1
 
         self.total_nodes = counter + data.shape[0]
         self.dataframe = data
+        logging.info("Processed {} tokens.".format(len(self.word_to_id)))
 
     def create_individual_dgl_graphs(self):
         """
@@ -50,10 +52,10 @@ class DGLGraph(object):
         Args:
             graph: dgl graph
         """
-        graph_utils._visualize_dgl_graph_as_networkx(graph)
+        graph_utils.visualize_dgl_graph_as_networkx(graph)
 
     def save_graphs(self, graphs):
-        graph_utils._save_graphs("../../bin/graph.bin", graphs)
+        graph_utils.save_graphs("../../bin/graph.bin", graphs)
 
     def create_single_dgl_graph(self, text):
         """
@@ -74,7 +76,9 @@ class DGLGraph(object):
         token_ids = []              # global unique ids for the tokens
 
         for token in tokens:
-            if token.lower_ not in uniq_ids:
+            try:
+                uniq_ids[token.lower_]
+            except KeyError:
                 uniq_ids[token.lower_] = counter
                 embedding.append(token.vector)
                 counter += 1
@@ -86,7 +90,7 @@ class DGLGraph(object):
                 edges_dest.append(uniq_ids[child.lower_])
 
         # add edges and node embeddings to the graph
-        g.add_nodes(len(uniq_ids.keys()))
+        g.add_nodes(len(uniq_ids))
         g.add_edges(torch.tensor(edges_sources), torch.tensor(edges_dest))
         g.ndata['feat'] = torch.tensor(embedding)
         # add token id attribute to node
@@ -101,12 +105,28 @@ class DGLGraph(object):
         g.add_nodes(self.total_nodes)
 
         # add node data for vocab nodes
-        for id in self.word_to_id.values():
-            g.nodes[id].data['id'] = np.array([id])
-            g.nodes[id].data['feat'] = np.array([self.id_to_vector[id]])
+        ids = []
+        embedding = []
+        for id in range(len(self.word_to_id)):
+            ids += [id]
+            embedding += [self.id_to_vector[id]]
+
+        # add node data for doc nodes
+        # at least one word is expected in the corpus
+        # doc embeddings is a zero vector of size word vector embedding
+        doc_embedding = [0 for i in range(len(self.id_to_vector[0]))]
+
+        for id in range(len(self.word_to_id), self.total_nodes):
+            ids += [id]
+            embedding += [doc_embedding]
+        g.ndata['id'] = torch.tensor(ids)
+        g.ndata['feat'] = torch.tensor(embedding)
 
         pmi = utils.pmi(self.dataframe)
         # add edges and edge data betweem vocab words in the dgl graph
+        edges_sources = []
+        edges_dest = []
+        edge_data = []
         for tuples in pmi:
             word_pair = tuples[0]
             pmi_score = tuples[1]
@@ -114,29 +134,49 @@ class DGLGraph(object):
             word2 = word_pair[1]
             word1_id = self.word_to_id[word1]
             word2_id = self.word_to_id[word2]
-            g.add_edge(word1_id, word2_id)
-            g.edges[word1_id, word2_id].data['weight'] = np.array([pmi_score])
+            edges_sources += [word1_id]
+            edges_dest += [word2_id]
+            edge_data += [[pmi_score]]
+        g.add_edges(torch.tensor(edges_sources), torch.tensor(
+            edges_dest), {'weight': torch.tensor(edge_data)})
+
+        labels = utils.get_labels(self.dataframe)
+        # extract document ids which contain labels
+        doc_ids = []
+        for doc_id in range(len(labels)):
+            if(len(labels[doc_id]) != 0):
+                doc_ids += [doc_id]
 
         # add edges and edge data between documents
-        for index1, doc1 in self.dataframe.iterrows():
-            for index2, doc2 in self.dataframe.iterrows():
-                if index1 != index2:
-                    doc1_id = len(self.word_to_id.keys()) + index1
-                    doc2_id = len(self.word_to_id.keys()) + index2
-                    weight = utils.iou(doc1[1], doc2[1])
-                    g.add_edge(doc1_id, doc2_id)
-                    g.edges[doc1_id, doc2_id].data['weight'] = np.array([weight])
-                    g.nodes[doc1_id].data['id'] = np.array([doc1_id])
+        edges_sources = []
+        edges_dest = []
+        edge_data = []
+        for i1 in range(len(doc_ids)):
+            for i2 in range(i1 + 1, len(doc_ids)):
+                doc1_index = doc_ids[i1]
+                doc2_index = doc_ids[i2]
+                doc1_id = len(self.word_to_id) + doc1_index
+                doc2_id = len(self.word_to_id) + doc2_index
+                weight = utils.iou(
+                    list(labels[doc1_index]), list(labels[doc2_index]))
+                edges_sources += [doc1_id, doc2_id]
+                edges_dest += [doc2_id, doc1_id]
+                edge_data += [[weight], [weight]]
+        g.add_edges(torch.tensor(edges_sources), torch.tensor(
+            edges_dest), {'weight': torch.tensor(edge_data)})
 
-        tf_idf_df = utils.tf_idf(self.dataframe)
+        tf_idf_df = utils.tf_idf(self.dataframe, self.word_to_id)
         # add edges and edge data between word and documents
+        edges_sources = []
+        edges_dest = []
+        edge_data = []
         for index, doc_row in tf_idf_df.iterrows():
-
-            doc_id = len(self.word_to_id.keys()) + index
-
+            doc_id = len(self.word_to_id) + index
             for word, tf_idf_value in doc_row.items():
                 word_id = self.word_to_id[word]
-                g.add_edge(doc_id, word_id)
-                g.edges[doc_id, word_id].data['weight'] = np.array([tf_idf_value])
-
+                edges_sources += [doc_id]
+                edges_dest += [word_id]
+                edge_data += [[tf_idf_value]]
+        g.add_edges(torch.tensor(edges_sources), torch.tensor(
+            edges_dest), {'weight': torch.tensor(edge_data)})
         return g
