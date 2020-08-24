@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*.pyc
 *$py.class
 
 # C extensions
@@ -103,9 +104,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# datasets
-data/
-
 # configuration files
 *.yml
 
@@ -113,7 +111,7 @@ data/
 *~
 
 # saved graph
-bin/data.bin
+*.bin
 
 # vscode
 .vscode/

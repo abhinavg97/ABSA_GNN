@@ -1,11 +1,12 @@
 from xml.etree import ElementTree as ET
 import pandas as pd
 import logging
+from ..utils import TextProcessing
 
 
 class GCNLoader():
     """
-    Class for parsing datasets and storing dataframe
+    Class for parsing data from files and storing dataframe
     """
 
     def __init__(self, file_path, dataset_name):
@@ -14,6 +15,7 @@ class GCNLoader():
             "file_path and dataset_name should be specified"
         self.file_path = file_path
         self.dataset_name = dataset_name
+        self.text_processor = TextProcessing()
 
     def parse_sem_eval(self):
         """
@@ -32,7 +34,8 @@ class GCNLoader():
             for sentences in review:
                 for sentence in sentences:
                     temp_row = ['lorem ipsum', []]
-                    temp_row[0] = sentence.find('text').text.lower()
+                    text = sentence.find('text').text
+                    temp_row[0] = self.text_processor.process_text(text)
                     for opinions in sentence.findall('Opinions'):
                         for opinion in opinions:
                             polarity = opinion.get('polarity')
@@ -58,10 +61,10 @@ class GCNLoader():
         data_row = []
         with open(self.file_path, "r") as file1:
             for line in file1:
-                stripped_line = line.strip().lower()
+                stripped_line = line.strip()
                 if count % 3 == 0:
                     temp_row = ['lorem ipsum', []]
-                    temp_row[0] = stripped_line
+                    temp_row[0] = self.text_processor.process_text(stripped_line)
                 elif count % 3 == 2:
                     temp_row[1] += [int(stripped_line)]
                     data_row += [temp_row]
