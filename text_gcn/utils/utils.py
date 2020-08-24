@@ -2,9 +2,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 import itertools
 import nltk
-from nltk.collocations import *
 import pandas as pd
 import spacy
+
+
+nlp = spacy.load("en_core_web_lg")
 
 
 def pmi(df):
@@ -15,21 +17,15 @@ def pmi(df):
         list_of_tuples: tuples containing word pair and their associated pmi
     """
 
-    docs = []
-    for _, item in df.iterrows():
-        docs += [item[0]]
-
-    separator = ', '
-    text = separator.join(docs)
     bigram_measures = nltk.collocations.BigramAssocMeasures()
 
-    nlp = spacy.load("en_core_web_lg")
-    tokens = nlp(text)
     tokenized = []
-    for token in tokens:
-        tokenized += [token.lower_]
+
+    for _, item in df.iterrows():
+        tokenized += token_list(item[0])
+
     # Bigrams
-    finder = BigramCollocationFinder.from_words(tokenized)
+    finder = nltk.collocations.BigramCollocationFinder.from_words(tokenized)
     # only bigrams that appear 3+ times
     # finder.apply_freq_filter(3)
 
@@ -41,8 +37,16 @@ def pmi(df):
 
 
 def iou(l1, l2):
+    """
+    Calculate the ious given two lists
+    Args:
+        l1: list1 containing labels
+        l2: list2 containing labels
 
-    if(len(l1) == 0 and len(l2) == 0):
+    Returns:
+        iou_score: IOU for the two labels lists
+    """
+    if(len(l1) == 0 or len(l2) == 0):
         return 0.0
 
     union_len = len(l1) + len(l2)
@@ -52,10 +56,12 @@ def iou(l1, l2):
             intersection.append(x)
             l2.remove(x)
     union_len -= len(intersection)
-    return len(intersection)/union_len
+    iou_score = len(intersection)/union_len
+
+    return iou_score
 
 
-def tf_idf(df):
+def tf_idf(df, vocab):
     """[summary]
     https://towardsdatascience.com/natural-language-processing-feature-engineering-using-tf-idf-e8b9d00e7e76
     Args:
@@ -66,13 +72,39 @@ def tf_idf(df):
     for _, item in df.iterrows():
         docs += [item[0]]
 
-    vectorizer = TfidfVectorizer()
+    vectorizer = TfidfVectorizer(tokenizer=token_list, lowercase=False, vocabulary=vocab)
     vectors = vectorizer.fit_transform(docs)
     feature_names = vectorizer.get_feature_names()
     dense = vectors.todense()
     denselist = dense.tolist()
     tfidf_matrix = pd.DataFrame(denselist, columns=feature_names)
     return tfidf_matrix
+
+
+def token_list(text):
+    """
+    Tokenizes text into individual tokens
+    Returns a list of tokens from the text
+    """
+    tokens = []
+
+    doc = nlp(text)
+    for token in doc:
+        tokens += [token.text]
+
+    return tokens
+
+
+def get_labels(df):
+    """
+    Fetches labels for the documents in the dataframe
+    Args:
+        df: dataframe to fetch the labels from
+    """
+    labels = []
+    for index, doc in df.iterrows():
+        labels += [doc[1]]
+    return labels
 
 
 if __name__ == "__main__":

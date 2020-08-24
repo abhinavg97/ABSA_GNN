@@ -4,18 +4,18 @@ import matplotlib.pyplot as plt
 from dgl.data.utils import save_graphs
 
 
-def _visulaize_dependancy_tree(doc):
+def visulaize_dependancy_tree(doc):
     from pathlib import Path
     svg = spacy.displacy.render(doc, style='dep', jupyter=False)
     output_path = Path("/home/abhi/Desktop/temp.svg")
     output_path.open("w", encoding="utf-8").write(svg)
 
 
-def _save_graphs(path, graphs):
-    graph_utils._save_graphs("../bin/graph.bin", graphs)
+def save_graphs(path, graphs):
+    graph_utils._save_graphs("../output/graph.bin", graphs)
 
 
-def _visualize_dgl_graph_as_networkx(graph):
+def visualize_dgl_graph_as_networkx(graph):
     graph = graph.to_networkx().to_undirected()
     pos = nx.kamada_kawai_layout(graph)
     # pos = nx.nx_agraph.graphviz_layout(graph, prog='dot')
@@ -23,7 +23,7 @@ def _visualize_dgl_graph_as_networkx(graph):
     plt.show()
 
 
-def _nltk_spacy_tree(sent):
+def nltk_spacy_tree(sent):
     """
     Visualize the SpaCy dependency tree with nltk.tree
     """

@@ -1,27 +1,19 @@
-
 from text_gcn.graph import DGLGraph
 from text_gcn.loaders import GCNLoader
 
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
-# self.processor.dgl_graph(data)
-# for _, item in data.iterrows():
-#     print(item[0])
-# self.processor.nltk_spacy_tree(item[0])
-# self.processor.large_dgl_graph(data)
-
-
 parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
 
 # data argument
-parser.add_argument('--data_file', type=str, required=True,
+parser.add_argument('--data-file', type=str, required=True,
                     help="""File path for dataset.
                     Must contain the dataset for
                     Twitter dataset or SemEval Dataset""")
 
 parser.add_argument('--dataset_name', type=str, required=True,
-                    help='Must be either Twitter or SemEval')
+                    help='Must be either "Twitter" or "SemEval"')
 
 # parser.add_arguement('--output_dir', type=str, help='Output directory')
 

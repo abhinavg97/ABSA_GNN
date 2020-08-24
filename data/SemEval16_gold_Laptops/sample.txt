@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Reviews>
+    <Review rid="B0074703CM_108_ANONYMOUS">
+        <sentences>
+            <sentence id="B0074703CM_108_ANONYMOUS:0">
+                <text>Well, my first apple computer and I am impressed.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#GENERAL" polarity="positive"  />
+                </Opinions>
+            </sentence>
+            <sentence id="B0074703CM_108_ANONYMOUS:1">
+                <text>Works well, fast and no reboots.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#OPERATION_PERFORMANCE" polarity="positive"  />
+                </Opinions>
+            </sentence>
+            <sentence id="B0074703CM_108_ANONYMOUS:2">
+                <text>Waiting to install MS Office and see how it goes from there.</text>
+                <Opinions/>
+            </sentence>
+            <sentence id="B0074703CM_108_ANONYMOUS:3">
+                <text>Have always been a PC guy, but decided to try Apple.</text>
+                <Opinions/>
+            </sentence>
+            <sentence id="B0074703CM_108_ANONYMOUS:4">
+                <text>Glad I did so far.</text>
+                <Opinions>
+                    <Opinion category="COMPANY#GENERAL" polarity="positive"  />
+                    <Opinion category="LAPTOP#GENERAL" polarity="positive"  />
+                </Opinions>
+            </sentence>
+        </sentences>
+    </Review>
+    <Review rid="B00GJUQ4Z0_10_ANONYMOUS">
+        <sentences>
+            <sentence id="B00GJUQ4Z0_10_ANONYMOUS:0">
+                <text>s.... L .... o..... w....  rea......llllyy  slow.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#OPERATION_PERFORMANCE" polarity="negative"  />
+                </Opinions>
+            </sentence>
+            <sentence id="B00GJUQ4Z0_10_ANONYMOUS:1">
+                <text>like seriously  - really slow.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#OPERATION_PERFORMANCE" polarity="negative"  />
+                </Opinions>
+            </sentence>
+            <sentence id="B00GJUQ4Z0_10_ANONYMOUS:2">
+                <text>impossible to use.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#USABILITY" polarity="negative"  />
+                </Opinions>
+            </sentence>
+            <sentence id="B00GJUQ4Z0_10_ANONYMOUS:3">
+                <text>cant even read properly.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#USABILITY" polarity="negative"  />
+                </Opinions>
+            </sentence>
+            <sentence id="B00GJUQ4Z0_10_ANONYMOUS:4">
+                <text>plus - no russian input ??  wtf</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#MISCELLANEOUS" polarity="negative"  />
+                </Opinions>
+            </sentence>
+        </sentences>
+    </Review>
+</Reviews>
