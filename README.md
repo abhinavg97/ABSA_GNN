@@ -61,5 +61,5 @@ $ python gcn.py --help
 For example:
 
 ```bash
-$ python gcn.py --data-file data/SemEval16_gold_Laptops/sample.txt --dataset_name SemEval
+$ python gcn.py --data_file data/SemEval16_gold_Laptops/sample.txt --dataset_name SemEval
 ```
