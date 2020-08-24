@@ -7,7 +7,7 @@ parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
 
 # data argument
-parser.add_argument('--data-file', type=str, required=True,
+parser.add_argument('--data_file', type=str, required=True,
                     help="""File path for dataset.
                     Must contain the dataset for
                     Twitter dataset or SemEval Dataset""")
