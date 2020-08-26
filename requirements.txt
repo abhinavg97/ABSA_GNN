@@ -1,0 +1,14 @@
+'torch'==1.6.0
+'numpy'==1.19.1
+'dgl'==0.4.3.post2
+'spacy'==2.3.2
+'pandas'==1.1.0
+'networkx'==2.4
+'scikit-learn'==0.23.2
+'nltk'==3.5
+'editdistance'==0.5.3          # required for contextualspellcheck
+'transformers'==3.0.2          # required for contextualspellcheck
+'contextualSpellCheck'==0.2.0
+'word2number'==1.1
+'pycontractions'==2.0.1
+'unidecode'==1.1.1

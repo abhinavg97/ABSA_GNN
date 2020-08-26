@@ -1,10 +1,10 @@
 import spacy
 import dgl
 import torch
-import numpy as np
 from ..utils import graph_utils
 from ..utils import utils
 import logging
+import numpy as np
 
 
 class DGLGraph(object):
@@ -20,17 +20,19 @@ class DGLGraph(object):
         self.nlp = spacy.load('en_core_web_lg')
         words = {}
         counter = 0
-        for _, item in data.iterrows():
+        self.docs = [[] for i in range(data.shape[0])]
+        for index, item in data.iterrows():
             tokens = self.nlp(item[0])
             for token in tokens:
                 try:
                     words[token.text]
+                    self.docs[index] += [self.word_to_id[token.text]]
                 except KeyError:
                     words[token.text] = 1
                     self.id_to_vector[counter] = token.vector
                     self.word_to_id[token.text] = counter
+                    self.docs[index] += [self.word_to_id[token.text]]
                     counter += 1
-
         self.total_nodes = counter + data.shape[0]
         self.dataframe = data
         logging.info("Processed {} tokens.".format(len(self.word_to_id)))
@@ -54,8 +56,8 @@ class DGLGraph(object):
         """
         graph_utils.visualize_dgl_graph_as_networkx(graph)
 
-    def save_graphs(self, graphs):
-        graph_utils.save_graphs("../../bin/graph.bin", graphs)
+    def save_graphs(self, path, graphs):
+        graph_utils.save_dgl_graphs(path, graphs)
 
     def create_single_dgl_graph(self, text):
         """
@@ -77,17 +79,17 @@ class DGLGraph(object):
 
         for token in tokens:
             try:
-                uniq_ids[token.lower_]
+                uniq_ids[token.text]
             except KeyError:
-                uniq_ids[token.lower_] = counter
+                uniq_ids[token.text] = counter
                 embedding.append(token.vector)
                 counter += 1
-                token_ids += [self.word_to_id[token.lower_]]
+                token_ids += [self.word_to_id[token.text]]
 
         for token in tokens:
             for child in token.children:
-                edges_sources.append(uniq_ids[token.lower_])
-                edges_dest.append(uniq_ids[child.lower_])
+                edges_sources.append(uniq_ids[token.text])
+                edges_dest.append(uniq_ids[child.text])
 
         # add edges and node embeddings to the graph
         g.add_nodes(len(uniq_ids))
@@ -96,6 +98,24 @@ class DGLGraph(object):
         # add token id attribute to node
         g.ndata['token_id'] = torch.tensor(token_ids)
         return g
+
+    def _compute_doc_embedding(self, node_id):
+        """
+        computes doc embedding by taking average of all word vectors in a document
+        Args:
+            node_id: id of the node in the graph
+
+        Returns:
+            embedding: averaged vector of all words vectors in the doc
+        """
+        doc_id = node_id - len(self.word_to_id)
+        embedding = np.zeros(len(self.id_to_vector[0]))
+
+        for word_id in self.docs[doc_id]:
+            embedding += np.array(self.id_to_vector[word_id])
+
+        embedding = embedding / len(self.docs[doc_id])
+        return embedding
 
     def create_complete_dgl_graph(self):
         """
@@ -109,16 +129,15 @@ class DGLGraph(object):
         embedding = []
         for id in range(len(self.word_to_id)):
             ids += [id]
-            embedding += [self.id_to_vector[id]]
+            embedding += [np.array(self.id_to_vector[id])]
 
         # add node data for doc nodes
         # at least one word is expected in the corpus
-        # doc embeddings is a zero vector of size word vector embedding
-        doc_embedding = [0 for i in range(len(self.id_to_vector[0]))]
 
         for id in range(len(self.word_to_id), self.total_nodes):
             ids += [id]
-            embedding += [doc_embedding]
+            embedding += [self._compute_doc_embedding(id)]
+
         g.ndata['id'] = torch.tensor(ids)
         g.ndata['feat'] = torch.tensor(embedding)
 

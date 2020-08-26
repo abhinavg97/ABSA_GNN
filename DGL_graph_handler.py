@@ -49,7 +49,7 @@ class GATModel(torch.nn.Module):
 
     def forward(self, g, h):
         h = self.layer1(g, h)
-        ## Concatenating multiple head embeddings
+        # Concatenating multiple head embeddings
         h = h.view(-1, h.size(1) * h.size(2))
         h = F.elu(h)
         h = self.layer2(g, h).squeeze()
@@ -81,6 +81,7 @@ def node_binary_classification(hid_feats=4, out_feats=7, num_heads=2):
 
     def load_cora_data():
         data = citegrh.load_cora()
+        # from data
         features = torch.FloatTensor(data.features)
         labels = torch.LongTensor(data.labels)
         mask = torch.BoolTensor(data.train_mask)
@@ -120,8 +121,9 @@ class GAT_Graph_Classifier(torch.nn.Module):
 
     def forward(self, g, h=None):
         if h is None:
-            # Use node degree as the initial node feature. For undirected graphs,
-            # the in-degree is the same as the out_degree.
+            # Use node degree as the initial node feature.
+            # For undirected graphs, the in-degree is the
+            # same as the out_degree.
             h = g.in_degrees().view(-1, 1).float()
 
         # Perform graph convolution and activation function.
@@ -162,7 +164,7 @@ def graph_multiclass_classification(in_feats=1, hid_feats=4, num_heads=2):
 
     # Create training and test sets.
     trainset = MiniGCDataset(320, 10, 20)
-    testset = MiniGCDataset(80, 10, 20)
+    # testset = MiniGCDataset(80, 10, 20)
 
     # # Use PyTorch's DataLoader and the collate function defined before.
     data_loader = DataLoader(trainset, batch_size=32, shuffle=True,
@@ -189,10 +191,10 @@ def main():
         Read Only
     :return:
     """
-    ## Binary Node Classification:
+    # Binary Node Classification:
     node_binary_classification(hid_feats=4, out_feats=7, num_heads=2)
 
-    ## Multi-Class Graph Classification:
+    # Multi-Class Graph Classification:
     graph_multiclass_classification(in_feats=1, hid_feats=4, num_heads=2)
 
 
