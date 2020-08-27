@@ -2,6 +2,7 @@ import networkx as nx
 from nltk.tree import Tree
 import matplotlib.pyplot as plt
 from dgl.data.utils import save_graphs
+import spacy
 
 
 def visulaize_dependancy_tree(doc):
@@ -11,8 +12,8 @@ def visulaize_dependancy_tree(doc):
     output_path.open("w", encoding="utf-8").write(svg)
 
 
-def save_graphs(path, graphs):
-    graph_utils._save_graphs("../output/graph.bin", graphs)
+def save_dgl_graphs(path, graphs):
+    save_graphs(path, graphs)
 
 
 def visualize_dgl_graph_as_networkx(graph):
@@ -27,7 +28,8 @@ def nltk_spacy_tree(sent):
     """
     Visualize the SpaCy dependency tree with nltk.tree
     """
-    doc = self.nlp(sent)
+    nlp = spacy.download("en_core_web_sm")
+    doc = nlp(sent)
 
     def token_format(token):
         return "_".join([token.orth_, token.tag_, token.dep_])

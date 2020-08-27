@@ -19,9 +19,6 @@ requirements = [
     'word2number',
     'pycontractions',
     'unidecode',
-    'xml-python',
-    'json',
-    'logging'
 ]
 
 extra_requirements = [
@@ -34,7 +31,7 @@ setup(
     name='text_gcn',
     version=VERSION,
     url='https://github.com/abhinavg97/GCN',
-    description='Python module designed for text GCN'
+    description='Python module designed for text GCN',
     packages=find_packages(),
     zip_safe=True,
     install_requires=requirements,

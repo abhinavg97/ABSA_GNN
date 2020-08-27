@@ -2,6 +2,7 @@ from xml.etree import ElementTree as ET
 import pandas as pd
 import logging
 from ..utils import TextProcessing
+import re
 
 
 class GCNLoader():
@@ -59,14 +60,19 @@ class GCNLoader():
         """
         count = 0
         data_row = []
+        entity = "lorem ipsum"
         with open(self.file_path, "r") as file1:
             for line in file1:
                 stripped_line = line.strip()
                 if count % 3 == 0:
                     temp_row = ['lorem ipsum', []]
                     temp_row[0] = self.text_processor.process_text(stripped_line)
+                elif count % 3 == 1:
+                    entity = stripped_line
                 elif count % 3 == 2:
                     temp_row[1] += [int(stripped_line)]
+                    # replace $T$ with entity in temp_row[0]
+                    temp_row[0] = re.sub(r'$T$', entity, temp_row[0])
                     data_row += [temp_row]
                 count += 1
         parsed_data = pd.DataFrame(data_row, columns=['text', 'label'])

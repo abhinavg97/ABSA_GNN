@@ -1,6 +1,4 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
-import numpy as np
-import itertools
 import nltk
 import pandas as pd
 import spacy
@@ -72,7 +70,8 @@ def tf_idf(df, vocab):
     for _, item in df.iterrows():
         docs += [item[0]]
 
-    vectorizer = TfidfVectorizer(tokenizer=token_list, lowercase=False, vocabulary=vocab)
+    vectorizer = TfidfVectorizer(tokenizer=token_list, lowercase=False,
+                                 vocabulary=vocab)
     vectors = vectorizer.fit_transform(docs)
     feature_names = vectorizer.get_feature_names()
     dense = vectors.todense()
