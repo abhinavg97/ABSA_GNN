@@ -1,4 +1,4 @@
-from .loader_gcn import GCNLoader
+from .loader_graph import GraphDataset
 
 # These are not required
-del loader_gcn
+del loader_graph
