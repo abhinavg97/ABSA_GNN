@@ -13,8 +13,8 @@ class TextProcessing:
     Class to clean text
     """
 
-    def __init__(self):
-        self.nlp = spacy.load("en_core_web_sm")
+    def __init__(self, nlp=spacy.load("en_core_web_sm")):
+        self.nlp = nlp
         contextualSpellCheck.add_to_pipe(self.nlp)
         model = api.load("glove-twitter-25")
         self.cont = Contractions(kv_model=model)
@@ -26,15 +26,17 @@ class TextProcessing:
     def process_text(self, text):
         """
         Processes text as follows:
-        1. decode to unicode
-        2. lower case the string
-        3. expand contractions of english words like ain't
-        4. correct spelling mistakes
-        5. replace acronyms
-        6. replace NE in the text
+        1. Remove extra whitespaces
+        2. decode to unicode
+        3. replace acronyms
+        4. lower case the string
+        5. expand contractions of english words like ain't
+        6. correct spelling mistakes
+        7. replace NE in the text
         Args:
             text: text to be processed
         """
+        text = self.remove_extra_whitespaces(text)
         text = self.unidecode(text)
         text = self.replace_acronyms(text)
         text = self.lower_case(text)
@@ -42,6 +44,14 @@ class TextProcessing:
         text = self.correct_spellings(text)
         text = self.replace_named_entity(text)
         return text
+
+    def remove_extra_whitespaces(self, text):
+        """
+        Removes extra whitespaces from the text
+        Args:
+            text: text to be processes
+        """
+        return text.strip()
 
     def unidecode(self, text):
         """

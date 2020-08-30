@@ -4,7 +4,8 @@ This project is under works. It aims to do sentiment analysis using text GCN.
 
 ## Backlog:
 
-1. Create GCN
+1.  Modularize training of Graph Classifier
+2.  Rewrite the main file
 
 ## Setup
 
@@ -26,7 +27,7 @@ This is required for language check package
 #### Install the spacy Dependancies
 ```
 sudo apt install python3-tk
-python - m spacy download en_core_web_lg en_core_web_sm
+python -m spacy download en_core_web_lg en_core_web_sm
 ```
 
 #### Clone the repository
@@ -55,11 +56,5 @@ $ pip install -e .
 A description of the options available can be found using:
 
 ```bash
-$ python gcn.py --help
-```
-
-For example:
-
-```bash
-$ python gcn.py --data_file data/SemEval16_gold_Laptops/sample.txt --dataset_name SemEval
+$ python DGL_graph_handler.py
 ```

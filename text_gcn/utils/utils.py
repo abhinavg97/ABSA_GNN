@@ -20,7 +20,7 @@ def pmi(df):
     tokenized = []
 
     for _, item in df.iterrows():
-        tokenized += token_list(item[0])
+        tokenized += token_list(item[1])
 
     # Bigrams
     finder = nltk.collocations.BigramCollocationFinder.from_words(tokenized)
@@ -34,28 +34,24 @@ def pmi(df):
     return list_of_tuples
 
 
-def iou(l1, l2):
+def iou(label_ohv1, label_ohv2):
     """
     Calculate the ious given two lists
     Args:
-        l1: list1 containing labels
-        l2: list2 containing labels
+        l1: list1 containing one hot vector of labels
+        l2: list2 containing one hot vectot of labels
 
     Returns:
         iou_score: IOU for the two labels lists
     """
-    if(len(l1) == 0 or len(l2) == 0):
-        return 0.0
 
-    union_len = len(l1) + len(l2)
-    intersection = []
-    for x in l1:
-        if x in l2:
-            intersection.append(x)
-            l2.remove(x)
-    union_len -= len(intersection)
-    iou_score = len(intersection)/union_len
+    union = len(label_ohv1)
+    intersection = 0
+    for i in range(len(label_ohv1)):
+        if label_ohv1[i] != 0 and label_ohv2[i] != 0:
+            intersection += 1
 
+    iou_score = intersection/union
     return iou_score
 
 
@@ -68,10 +64,9 @@ def tf_idf(df, vocab):
 
     docs = []
     for _, item in df.iterrows():
-        docs += [item[0]]
+        docs += [item[1]]
 
-    vectorizer = TfidfVectorizer(tokenizer=token_list, lowercase=False,
-                                 vocabulary=vocab)
+    vectorizer = TfidfVectorizer(tokenizer=token_list, lowercase=False, vocabulary=vocab)
     vectors = vectorizer.fit_transform(docs)
     feature_names = vectorizer.get_feature_names()
     dense = vectors.todense()
@@ -102,7 +97,7 @@ def get_labels(df):
     """
     labels = []
     for index, doc in df.iterrows():
-        labels += [doc[1]]
+        labels += [doc[2]]
     return labels
 
 
@@ -110,9 +105,9 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(0, "/home/abhi/Desktop/gcn/text_gcn/loaders/")
 
-    from loader_gcn import GCNLoader
+    from loader_gcn import GraphDataset
 
-    train_loader = GCNLoader(
+    train_loader = GraphDataset(
         "../../data/SemEval16_gold_Laptops/train.txt", dataset_name="SemEval")
 
     df = train_loader.get_dataframe()

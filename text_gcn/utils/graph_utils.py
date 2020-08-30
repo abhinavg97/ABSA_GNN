@@ -1,7 +1,7 @@
 import networkx as nx
 from nltk.tree import Tree
 import matplotlib.pyplot as plt
-from dgl.data.utils import save_graphs
+from dgl.data.utils import save_graphs, load_graphs
 import spacy
 
 
@@ -12,8 +12,12 @@ def visulaize_dependancy_tree(doc):
     output_path.open("w", encoding="utf-8").write(svg)
 
 
-def save_dgl_graphs(path, graphs):
-    save_graphs(path, graphs)
+def save_dgl_graphs(path, graphs, labels_dict=None):
+    save_graphs(path, graphs, labels_dict)
+
+
+def load_dgl_graphs(path, idx_list=None):
+    load_graphs(path, idx_list)
 
 
 def visualize_dgl_graph_as_networkx(graph):
