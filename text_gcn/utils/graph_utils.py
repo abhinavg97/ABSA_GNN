@@ -17,7 +17,12 @@ def save_dgl_graphs(path, graphs, labels_dict=None):
 
 
 def load_dgl_graphs(path, idx_list=None):
-    load_graphs(path, idx_list)
+    graphs, labels_dict = load_graphs(path, idx_list)
+    labels_tensor_list = labels_dict["glabel"]
+    labels_list = []
+    for label in labels_tensor_list:
+        labels_list += [label.tolist()]
+    return graphs, labels_list
 
 
 def visualize_dgl_graph_as_networkx(graph):

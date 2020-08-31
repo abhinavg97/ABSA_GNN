@@ -130,11 +130,9 @@ class GraphDataset(torch.utils.data.Dataset):
             assert file_path is not None, file_path + "does not exist!"
             self.file_path = file_path
             self.text_processor = TextProcessing()
-            self.dataset_info = dataset_info
             df = self.get_dataset_df()
             token_graph_ob = DGLGraph(df)
             self.graphs, labels_dict = token_graph_ob.create_instance_dgl_graphs()
-
             # TODO Take user input where to take save graphs
             # TODO dataset-name_[train-1]_graph.bin
             # TODO dataset-name_labels_ohv.bin
@@ -144,13 +142,17 @@ class GraphDataset(torch.utils.data.Dataset):
             # TODO Put user inputted location here
             logging.info("Graph generated and stored at /home/abhi/Desktop/gcn/output/graph.bin")
         else:
-            self.graphs, labels_dict = graph_utils.load_dgl_graphs(graph_path)
-            self.labels = labels_dict["glabel"]
+            # TODO read the label id to word mapping from the file saved while generating labels
+            self.graphs, self.labels = graph_utils.load_dgl_graphs(graph_path)
+
+        self.dataset_info = dataset_info
+        # atleast one document is expected
+        self.classes = len(self.labels[0])
 
     @property
     def num_classes(self):
         """Number of classes."""
-        return self.dataset_info["num_classes"]
+        return self.classes
 
     def __len__(self):
         """Return the number of graphs in the dataset."""

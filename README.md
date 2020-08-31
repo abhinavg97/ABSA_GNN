@@ -1,11 +1,15 @@
-# [Text GCN](https://github.com/abhinavg97/GCN)
+# [Aspect Based Sentiment Analysis with GCN](https://github.com/abhinavg97/GCN)
+
+
 
 This project is under works. It aims to do sentiment analysis using text GCN.
 
+
 ## Backlog:
 
-1.  Modularize training of Graph Classifier
-2.  Rewrite the main file
+1.  Update Adjacency matrix at each iteration
+2.  Write generic function which updates adjacency matrix
+3.  Embedding Visulalization in 2d using TSNE for Glove Embeddings TOP 40
 
 ## Setup
 
@@ -53,7 +57,7 @@ $ pip install -e .
 
 ## Using the scripts
 
-A description of the options available can be found using:
+Only sentiments get predicted for now
 
 ```bash
 $ python DGL_graph_handler.py

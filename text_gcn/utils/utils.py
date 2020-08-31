@@ -3,6 +3,7 @@ import nltk
 import pandas as pd
 import spacy
 
+# TODO remove utils to main folder, put flag for nlp
 
 nlp = spacy.load("en_core_web_lg")
 
