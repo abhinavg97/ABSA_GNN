@@ -183,10 +183,6 @@ class Config(object):
         self.configuration = configuration
 
     def get_config(self):
-        """
-
-        :return:
-        """
         return self.configuration
 
     def print_config(self, indent=4, sort=True):
@@ -220,8 +216,8 @@ class Config(object):
         """
         try:
             import os, pwd
-
             username = pwd.getpwuid(os.getuid()).pw_name
+
         except Exception as e:
             import getpass
 

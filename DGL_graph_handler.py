@@ -41,7 +41,7 @@ model = GAT_Graph_Classifier(in_feats, hid_feats, num_heads=num_heads,
                              n_classes=trainset.num_classes)
 # logger.info(model)
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Trainer Initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Trainer Initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 loss_func = torch.nn.BCEWithLogitsLoss()
 trainer = Trainer(model, loss_func, data_loader)

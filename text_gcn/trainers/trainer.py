@@ -1,6 +1,6 @@
 class Trainer(object):
     """
-    Generic Model class which trains and tests networks
+    Generic Trainer class which trains and tests networks
     """
     def __init__(self, model, loss_func, data_loader):
         self.loss_func = loss_func
