@@ -22,10 +22,10 @@ def tsne_plot(words, vectors):
         y.append(value[1])
 
     plt.figure(figsize=(16, 16))
-    for i in range(len(x)):
-        plt.scatter(x[i], y[i])
+    for i, x_value in enumerate(x):
+        plt.scatter(x_value, y[i])
         plt.annotate(words[i],
-                     xy=(x[i], y[i]),
+                     xy=(x_value, y[i]),
                      xytext=(5, 2),
                      textcoords='offset points',
                      ha='right',

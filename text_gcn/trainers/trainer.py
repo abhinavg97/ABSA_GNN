@@ -24,5 +24,5 @@ class Trainer(object):
             print('Epoch {}, loss {:.4f}'.format(epoch, epoch_loss))
             epoch_losses.append(epoch_loss)
 
-    def test(self):
-        pass
+    def predict(self, test_graph_batch):
+        return self.model(test_graph_batch)

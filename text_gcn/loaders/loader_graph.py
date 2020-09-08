@@ -27,8 +27,7 @@ def _custom_one_hot_vector(labels_doc_dict_list):
     zero_vector = [0 for i in range(len(label_to_id))]
     custom_one_hot_vector = [zero_vector for i in range(len(labels_doc_dict_list))]
 
-    for i in range(len(labels_doc_dict_list)):
-        labels = labels_doc_dict_list[i]
+    for i, labels in enumerate(labels_doc_dict_list):
         for label in labels.keys():
             custom_one_hot_vector[i][label_to_id[label]] = labels[label]
 
@@ -168,10 +167,22 @@ class GraphDataset(torch.utils.data.Dataset):
 
         Returns
         -------
-        (dgl.DGLGraph, int)
+        (dgl.DGLGraph, one hot vector)
             The graph and its label.
         """
         return self.graphs[idx], self.labels[idx]
+
+    def get_graphs(self):
+        """
+        Returns the graphs array
+        """
+        return self.graphs
+
+    def get_labels(self):
+        """
+        Return the labels
+        """
+        return self.labels
 
     def get_dataset_df(self):
         """

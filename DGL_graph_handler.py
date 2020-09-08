@@ -51,3 +51,16 @@ trainer = Trainer(model, loss_func, data_loader)
 epochs = 5
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 trainer.train(epochs, optimizer)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Calculate the metrics ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# TODO make train validation split and report validation set accuracy
+
+test_graphs = trainset.get_graphs()
+test_labels = trainset.get_labels()
+
+test_batch = g_batch(test_graphs)
+
+predictions = trainer.predict(test_batch)
+
+print(predictions)

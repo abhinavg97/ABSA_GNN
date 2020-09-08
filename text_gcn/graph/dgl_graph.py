@@ -131,7 +131,7 @@ class DGLGraph(object):
         # add node data for vocab nodes
         ids = []
         embedding = []
-        for id in range(len(self.word_to_id)):
+        for id, __ in enumerate(self.word_to_id):
             ids += [id]
             embedding += [np.array(self.id_to_vector[id])]
 

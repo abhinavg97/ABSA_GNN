@@ -48,8 +48,8 @@ def iou(label_ohv1, label_ohv2):
 
     union = len(label_ohv1)
     intersection = 0
-    for i in range(len(label_ohv1)):
-        if label_ohv1[i] != 0 and label_ohv2[i] != 0:
+    for i, label1 in enumerate(label_ohv1):
+        if label1 != 0 and label_ohv2[i] != 0:
             intersection += 1
 
     iou_score = intersection/union
@@ -64,7 +64,7 @@ def tf_idf(df, vocab):
     """
 
     docs = []
-    for _, item in df.iterrows():
+    for __, item in df.iterrows():
         docs += [item[1]]
 
     vectorizer = TfidfVectorizer(tokenizer=token_list, lowercase=False, vocabulary=vocab)
