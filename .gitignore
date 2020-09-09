@@ -115,3 +115,6 @@ venv.bak/
 
 # vscode
 .vscode/
+
+# pytorch lightning logs
+lightning_logs/*

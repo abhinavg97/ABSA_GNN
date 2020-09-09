@@ -1,66 +1,31 @@
-import torch
-from dgl import batch as g_batch
-import torch.optim as optim
-from torch.utils.data import DataLoader
-from text_gcn.loaders import GraphDataset
 from text_gcn.models import GAT_Graph_Classifier
-from text_gcn.trainers import Trainer
+import pytorch_lightning as pl
+# from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
 
-def batch_graphs(samples):
-    # The input `samples` is a list of pairs (graph, label).
-    graphs, labels = map(list, zip(*samples))
-    batched_graph = g_batch(graphs)
-    return batched_graph, torch.tensor(labels)
+# parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
+# parser.add_argument('--TRAIN', type=bool, required=False, default=1, help='Switch to train on dataset')
 
+# args = parser.parse_args()
 
-in_feats = 1
-hid_feats = 4
-num_heads = 2
-
-# Create training and test sets.
-graph_path = "./output/graph.bin"
-file_path = "/home/abhi/Desktop/gcn/data/SemEval16_gold_Laptops/sample.txt"
-
-# TODO take the dataset_info info from config file
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Dataloader initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# Dataset is decoupled to allow more flexibility in choosing different types of dataset to train
-dataset_info = {"name": "SemEval"}
-trainset = GraphDataset(graph_path=graph_path, dataset_info=dataset_info)
-# testset = MiniGCDataset(80, 10, 20)
-
-# Use PyTorch's DataLoader and the collate function defined before.
-data_loader = DataLoader(trainset, batch_size=32, shuffle=True, collate_fn=batch_graphs)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Model initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Create the layer
-model = GAT_Graph_Classifier(in_feats, hid_feats, num_heads=num_heads,
-                             n_classes=trainset.num_classes)
-# logger.info(model)
+model = GAT_Graph_Classifier(in_dim=1, hidden_dim=4, num_heads=2,
+                             n_classes=5)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Trainer Initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-loss_func = torch.nn.BCEWithLogitsLoss()
-trainer = Trainer(model, loss_func, data_loader)
+
+trainer = pl.Trainer(max_epochs=10)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Train your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-epochs = 5
-optimizer = optim.Adam(model.parameters(), lr=0.001)
-trainer.train(epochs, optimizer)
+trainer.fit(model)
+
+
+# epochs = 5
+# optimizer = optim.Adam(model.parameters(), lr=0.001)
+# trainer.train(epochs, optimizer)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Calculate the metrics ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# TODO make train validation split and report validation set accuracy
-
-test_graphs = trainset.get_graphs()
-test_labels = trainset.get_labels()
-
-test_batch = g_batch(test_graphs)
-
-predictions = trainer.predict(test_batch)
-
-print(predictions)

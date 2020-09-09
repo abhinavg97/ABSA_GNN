@@ -57,7 +57,7 @@ $ pip install -e .
 
 ## Using the scripts
 
-Only sentiments get predicted for now
+Only aspects of text get predicted for now
 
 ```bash
 $ python DGL_graph_handler.py
