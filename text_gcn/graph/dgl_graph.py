@@ -7,8 +7,7 @@ import logging
 import numpy as np
 
 
-# TODO DGL_Graph
-class DGLGraph(object):
+class DGL_Graph(object):
     """
     Creates a DGL graph with training and testing functionality
     """

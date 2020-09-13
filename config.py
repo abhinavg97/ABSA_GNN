@@ -6,78 +6,31 @@ seed = 0
 
 global configuration
 configuration = {
+
+    "DEBUG":    True,
+
     "data":         {
-        "source":     {
-            'labelled':   'fire16_labeled',
-            'unlabelled': 'fire16_unlabeled'
+        "dataset":     {
+            'name':   'SemEval'
         },
-        "target":     {
-            'labelled':   'smerp17_labeled',
-            'unlabelled': 'smerp17_unlabeled'},
-        # "dataset_name": "fire16_labeled",
-        "val_split":  0.1,
-        "test_split": 0.3,
+        "trainval_test_split": 0.7,
+        "train_val_split":  0.7,
         "show_stat":  False
     },
 
-    "transformer":        {
-        "model_type":           "distilbert",
-        "model_name":           "distilbert-base-uncased-distilled-squad",
-        "num_folds":            5,
-        "max_seq_len":          128,
-        'gradient_accumulation_steps': 1,
-        "max_vec_len":          5000,
-        "dropout":              0.1,
-        "dropout_external":     0.0,
-        "clipnorm":             1.0,
-        "data_slice":           5120,
-        "use_cuda":             True,
-        "normalize_inputs":     False,
-        "kernel_size":          1,
-        "stride":               1,
-        "padding":              1,
-        "context":              10,
-        "classify_count":       0,
-        "fce":                  True,
-        "optimizer":            {
-            "optimizer_type": "AdamW",
-            "learning_rate_scheduler":  "linear_warmup",
-            "learning_rate":  5e-5,
-            "lr_decay":       0,
-            "weight_decay":   0,
-            "max_grad_norm":  1.0,
-            "adam_epsilon":   1e-8,
-            'warmup_ratio':   0.06,
-            'warmup_steps':   0,
-            "momentum":       0.9,
-            "dampening":      0.9,
-            "alpha":          0.99,
-            "rho":            0.9,
-            "centered":       False
-        },
-        "view_grads":           False,
-        "view_train_precision": True
+    "model": {
+        'in_dim': 1,
+        'hidden_dim': 4,
+        'num_heads': 2,
     },
 
-    "model":        {
-        "num_folds":            5,
-        "max_sequence_length":  200,
-        "max_vec_len":          5000,
+    "training":        {
+        "create_dataset":       True,
         "dropout":              0.2,
-        "dropout_external":     0.0,
-        "clipnorm":             1.0,
-        "data_slice":           5120,
-
-        "g_encoder":            "cnn",
-        "use_cuda":             True,
-        "normalize_inputs":     False,
-        "tfidf_avg":            False,
-        "kernel_size":          1,
-        "stride":               1,
-        "padding":              1,
-        "context":              10,
-        "classify_count":       0,
-        "fce":                  True,
+        "max_epochs":           10,
+        "train_batch_size":     30,
+        "val_batch_size":       15,
+        "test_batch_size":      15,
         "optimizer":            {
             "optimizer_type": "adam",
             "learning_rate":  3e-4,
@@ -89,21 +42,11 @@ configuration = {
             "rho":            0.9,
             "centered":       False
         },
-        "view_grads":           False,
-        "view_train_precision": True
     },
 
     "embeddings":   {
-        'embedding_file': 'glove.6B.100d',
+        'embedding_file': 'glove-twitter-25',
         'emb_dim':        100,
-    },
-
-    "lstm_params":  {
-        "num_layers":    2,
-        "bias":          True,
-        "batch_first":   True,
-        "bidirectional": True,
-        "hid_size":      64,
     },
 
     "gnn_params":   {
@@ -113,67 +56,19 @@ configuration = {
         "bias":        True,
     },
 
-    "sampling":     {
-        "num_epochs":            20,
-        "num_train_epoch":       20,
-        "train_batch_size":      128,
-        "eval_batch_size":       256,
-        "categories_per_batch":  2,
-        "supports_per_category": 2,
-        "targets_per_category":  2
-    },
-
-    "prep_vecs":    {
-        "max_nb_words":       20000,
-        "min_word_count":     1,
-        "window":             7,
-        "min_count":          1,
-        "negative":           10,
-        "num_chunks":         10,
-        "vectorizer":         "doc2vec",
-        "sample_repeat_mode": "append",
-        "input_size":         100,
-        "tfidf_avg":          False,
-        "idf":                True
-    },
-
-    "text_process": {
-        "encoding":         'latin-1',
-        "sents_chunk_mode": "word_avg",
-        "workers":          5
-    },
-
+    # These paths are relative to the main directory
     "paths":        {
-        "result_dir":    "results",
-        "log_dir":       "logs",
-        "cache_dir":     "cache",
-
-        "embedding_dir": {
-            "Windows": "D:\\Datasets\\Extreme Classification",
-            "OSX":     "/home/cs16resch01001/datasets/Extreme Classification",
-            "Linux":   {
-                "sam":            "/home/sam/Embeddings",
-                "cs14mtech11017": "/home/cs14mtech11017/Embeddings",
-                "cs16resch01001": "/home/cs16resch01001/Embeddings",
-                ## Code path: /home/cs14resch11001/codes/MNXC
-                "cs14resch11001": "/raid/ravi/pretrain"
-            }
-        },
-
-        "dataset_dir":   {
-            "Windows": "D:\\Datasets\\Extreme Classification",
-            "OSX":     "/home/cs16resch01001/datasets/Extreme Classification",
-            "Linux":   {
-                "sam":            "/home/sam/Datasets/disaster_tweets",
-                "cs14mtech11017": "/home/cs14mtech11017/Datasets/disaster_tweets",
-                "cs16resch01001": "/home/cs16resch01001/datasets/disaster_tweets",
-                "cs14resch11001": "/raid/ravi/Datasets/Extreme Classification"
-            }
-        }
-    },
+        # for saving plots, f1_score
+        "data_root":          "data/SemEval16_gold_Laptops/",
+        "output":    "output/",
+        "log":       "logs/",
+        "dataset":  "train.txt",
+        "saved_graph":    "SemEval_train_graph.bin"
+    }
 }
 
 
+# TODO make utils function for dataset summary
 class Config(object):
     """ Contains all configuration details of the project. """
 
@@ -192,7 +87,7 @@ class Config(object):
                                                   indent=indent,
                                                   sort_keys=sort)))
 
-    @staticmethod
+    @ staticmethod
     def get_platform():
         """ Returns dataset path based on OS.
 
@@ -204,10 +99,10 @@ class Config(object):
             return platform.system()
         elif platform.system() == 'Linux':
             return platform.system()
-        else:  ## OS X returns name 'Darwin'
+        else:  # OS X returns name 'Darwin'
             return "OSX"
 
-    @staticmethod
+    @ staticmethod
     def get_username():
         """
         :returns the current username.
@@ -215,15 +110,16 @@ class Config(object):
         :return: string
         """
         try:
-            import os, pwd
+            import os
+            import pwd
             username = pwd.getpwuid(os.getuid()).pw_name
 
         except Exception as e:
             import getpass
 
             username = getpass.getuser()
-        # finally:
-        #     username = os.environ.get('USER')
+        finally:
+            username = os.environ.get('USER')
 
         return username
 
@@ -235,19 +131,3 @@ global platform
 platform = config_cls.get_platform()
 global username
 username = config_cls.get_username()
-
-
-def main():
-    """
-    Main module to start code
-    :param args:
-        Type: tuple
-        Required
-        Read Only
-    :return:
-    """
-    pass
-
-
-if __name__ == "__main__":
-    main()

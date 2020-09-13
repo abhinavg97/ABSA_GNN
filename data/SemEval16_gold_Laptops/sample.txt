@@ -65,4 +65,41 @@
             </sentence>
         </sentences>
     </Review>
+    <Review rid="B0146DD02G_18_ANONYMOUS">
+        <sentences>
+            <sentence id="B0146DD02G_18_ANONYMOUS:0">
+                <text>What a great laptop, I can run my games and work really fast.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#GENERAL" polarity="positive"  />
+                    <Opinion category="LAPTOP#MISCELLANEOUS" polarity="positive"  />
+                    <Opinion category="LAPTOP#OPERATION_PERFORMANCE" polarity="positive"  />
+                </Opinions>
+            </sentence>
+            <sentence id="B0146DD02G_18_ANONYMOUS:1">
+                <text>Really light you can carry with you everywhere.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#DESIGN_FEATURES" polarity="positive"  />
+                    <Opinion category="LAPTOP#PORTABILITY" polarity="positive"  />
+                </Opinions>
+            </sentence>
+            <sentence id="B0146DD02G_18_ANONYMOUS:2">
+                <text>Great battery life.</text>
+                <Opinions>
+                    <Opinion category="BATTERY#OPERATION_PERFORMANCE" polarity="positive"  />
+                </Opinions>
+            </sentence>
+            <sentence id="B0146DD02G_18_ANONYMOUS:3">
+                <text>Everything at a very great price.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#PRICE" polarity="positive"  />
+                </Opinions>
+            </sentence>
+            <sentence id="B0146DD02G_18_ANONYMOUS:4">
+                <text>I completely recommend it.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#GENERAL" polarity="positive"  />
+                </Opinions>
+            </sentence>
+        </sentences>
+    </Review>
 </Reviews>

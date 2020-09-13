@@ -1,11 +1,15 @@
 from xml.etree import ElementTree as ET
 import pandas as pd
-import logging
+from logger.logger import logger
 from ..utils import TextProcessing
 from ..utils import graph_utils
+from ..utils import utils
 import re
-from ..graph import DGLGraph
+from ..graph import DGL_Graph
 import torch.utils.data
+from config import configuration as cfg
+import json
+import pathlib
 
 
 def _custom_one_hot_vector(labels_doc_dict_list):
@@ -14,7 +18,6 @@ def _custom_one_hot_vector(labels_doc_dict_list):
     Args:
         labels_doc_dict_list: A list of dictionary containing labels
     """
-    # TODO save label_to_id in a file
     label_to_id = {}
     label_counter = 0
     for labels in labels_doc_dict_list:
@@ -31,10 +34,10 @@ def _custom_one_hot_vector(labels_doc_dict_list):
         for label in labels.keys():
             custom_one_hot_vector[i][label_to_id[label]] = labels[label]
 
-    return custom_one_hot_vector
+    return custom_one_hot_vector, label_to_id
 
 
-def _parse_sem_eval(file_path, text_processor):
+def _parse_sem_eval(dataset_path, text_processor=None):
     """
     Parses sem eval dataset
     Args:
@@ -44,7 +47,7 @@ def _parse_sem_eval(file_path, text_processor):
         parsed_data: pandas dataframe for the parsed
         data containing labels and text
     """
-    tree = ET.parse(file_path)
+    tree = ET.parse(dataset_path)
     root = tree.getroot()
     data_row = []
     labels_doc_dict_list = []
@@ -67,15 +70,19 @@ def _parse_sem_eval(file_path, text_processor):
                         except KeyError:
                             labels_dict[category] = polarity_int
         labels_doc_dict_list += [labels_dict]
-        temp_row[1] = text_processor.process_text(text)
+        if cfg['DEBUG']:
+            temp_row[1] = text
+        else:
+            temp_row[1] = text_processor.process_text(text)
         data_row += [temp_row]
 
     parsed_data = pd.DataFrame(data_row, columns=['id', 'text'])
-    parsed_data['labels'] = _custom_one_hot_vector(labels_doc_dict_list)
-    return parsed_data
+    parsed_data['labels'], label_to_id = _custom_one_hot_vector(labels_doc_dict_list)
+    utils.print_dataframe_statistics(parsed_data)
+    return parsed_data, label_to_id
 
 
-def _parse_twitter(file_path, text_processor):
+def _parse_twitter(dataset_path, text_processor):
     """
     Parses twitter dataset
     Args:
@@ -89,7 +96,7 @@ def _parse_twitter(file_path, text_processor):
     data_row = []
     entity = "lorem ipsum"
     index = 0
-    with open(file_path, "r") as file1:
+    with open(dataset_path, "r") as file1:
         for line in file1:
             stripped_line = line.strip()
             if count % 3 == 0:
@@ -113,38 +120,44 @@ class GraphDataset(torch.utils.data.Dataset):
     Class for parsing data from files and storing dataframe
     """
 
-    def __init__(self, file_path=None, dataset_info=None, graph_path=None):
+    def __init__(self, dataset_path=None, dataset_info=None, graph_path=None):
         """
         Initializes the loader
         Args:
-            file_path: Path to the file containing the dataset.
-            dataset_info: Dictionary consisting of two fields 'dataset_name', 'num_classes'
+            dataset_path: Path to the file containing the dataset.
+            dataset_info: Dictionary consisting of one field 'dataset_name'
             graph_path: path to the bin file containing the saved DGL graph
         """
-        assert (file_path is not None and dataset_info is not None) or (
-                graph_path is not None and dataset_info is not None), \
-            "Either file_path and dataset_info should be specified or graph_path should be specified"
-
-        if graph_path is None:
-            assert file_path is not None, file_path + "does not exist!"
-            self.file_path = file_path
-            self.text_processor = TextProcessing()
-            df = self.get_dataset_df()
-            token_graph_ob = DGLGraph(df)
+        assert (graph_path is not None or (dataset_path is not None and dataset_info is not None)), \
+            "Either graph_path should be specified or dataset_path and dataset_info should be specified"
+        self.dataset_info = dataset_info
+        if graph_path is None or cfg['training']['create_dataset']:
+            assert pathlib.Path(dataset_path).exists(), "dataset path is not valid!"
+            self.dataset_path = dataset_path
+            if not cfg['DEBUG']:
+                text_processor = TextProcessing()
+            else:
+                text_processor = None
+            df, self.label_to_id = self.get_dataset_df(text_processor)
+            token_graph_ob = DGL_Graph(df)
             self.graphs, labels_dict = token_graph_ob.create_instance_dgl_graphs()
-            # TODO Take user input where to take save graphs
-            # TODO dataset-name_[train-1]_graph.bin
-            # TODO dataset-name_labels_ohv.bin
-            # TODO use pathlib library to check validity of paths
-            token_graph_ob.save_graphs("/home/abhi/Desktop/gcn/output/graph.bin", self.graphs, labels_dict)
+
+            with open(cfg['paths']['data_root'] + dataset_info['name'] + "_label_to_id.json", "w") as f:
+                json_dict = json.dumps(self.label_to_id)
+                f.write(json_dict)
+
+            token_graph_ob.save_graphs(cfg['paths']['data_root'] + dataset_info['name'] +
+                                       "_train_graph.bin", self.graphs, labels_dict)
             self.labels = labels_dict["glabel"]
-            # TODO Put user inputted location here
-            logging.info("Graph generated and stored at /home/abhi/Desktop/gcn/output/graph.bin")
+            logger.info("Graph and label_to_id generated and stored at " + cfg['paths']['data_root'])
         else:
-            # TODO read the label id to word mapping from the file saved while generating labels
+            label_to_id_path = cfg['paths']['data_root'] + dataset_info['name'] + "_label_to_id.json"
+            assert pathlib.Path(graph_path).exists(), "graph path is not valid!"
+            assert pathlib.Path(label_to_id_path).exists(), "label to id information not available!"
             self.graphs, self.labels = graph_utils.load_dgl_graphs(graph_path)
 
-        self.dataset_info = dataset_info
+            with open(label_to_id_path, "r") as f:
+                self.label_to_id = json.load(f)
         # atleast one document is expected
         self.classes = len(self.labels[0])
 
@@ -184,15 +197,15 @@ class GraphDataset(torch.utils.data.Dataset):
         """
         return self.labels
 
-    def get_dataset_df(self):
+    def get_dataset_df(self, text_processor=None):
         """
         Returns pandas dataframe
         """
         dataset_name = self.dataset_info["name"]
         if(dataset_name == "Twitter"):
-            return _parse_twitter(self.file_path, self.text_processor)
+            return _parse_twitter(self.dataset_path, text_processor)
         elif(dataset_name == "SemEval"):
-            return _parse_sem_eval(self.file_path, self.text_processor)
+            return _parse_sem_eval(self.dataset_path, text_processor)
         else:
-            logging.error(
+            logger.error(
                 "{} dataset not yet supported".format(self.dataset_name))

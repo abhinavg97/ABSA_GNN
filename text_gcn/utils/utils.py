@@ -2,11 +2,24 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import nltk
 import pandas as pd
 import spacy
+from config import configuration as cfg
+from logger.logger import logger
 
-# TODO remove utils to main folder, put flag for nlp
-
-if(0):
+if cfg['training']['create_dataset'] and not cfg['DEBUG']:
     nlp = spacy.load("en_core_web_lg")
+
+
+def print_dataframe_statistics(df):
+
+    labels_series = df['labels']
+
+    total_non_zero_labels = 0
+    for labels in labels_series:
+        for label in labels:
+            if label != 0:
+                total_non_zero_labels += 1
+    logger.info("Total number of labels is {}".format(len(labels_series[0])))
+    logger.info("Average number of labels per sample is {}".format(total_non_zero_labels/len(labels_series)))
 
 
 def pmi(df):

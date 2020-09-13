@@ -116,5 +116,9 @@ venv.bak/
 # vscode
 .vscode/
 
-# pytorch lightning logs
+# logs
 lightning_logs/*
+logs/*
+
+# json in data folder
+/data/**/*.json

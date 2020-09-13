@@ -5,6 +5,7 @@ from pycontractions import Contractions
 import unidecode
 import json
 import os
+from config import configuration as cfg
 # from word2number import w2n
 
 
@@ -16,7 +17,7 @@ class TextProcessing:
     def __init__(self, nlp=spacy.load("en_core_web_sm")):
         self.nlp = nlp
         contextualSpellCheck.add_to_pipe(self.nlp)
-        model = api.load("glove-twitter-25")
+        model = api.load(cfg['embeddings']['embedding_file'])
         self.cont = Contractions(kv_model=model)
         self.cont.load_models()
         dirname = os.path.dirname(__file__)

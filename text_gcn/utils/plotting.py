@@ -2,6 +2,7 @@ from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import spacy
 from nltk.tree import Tree
+from config import configuration as cfg
 
 
 def tsne_plot(words, vectors):
@@ -36,7 +37,7 @@ def tsne_plot(words, vectors):
 def visulaize_dependancy_tree(doc):
     from pathlib import Path
     svg = spacy.displacy.render(doc, style='dep', jupyter=False)
-    output_path = Path("/home/abhi/Desktop/temp.svg")
+    output_path = Path(cfg['paths']['output'] + "dependancy_tree.svg")
     output_path.open("w", encoding="utf-8").write(svg)
 
 
