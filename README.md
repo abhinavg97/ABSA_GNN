@@ -8,8 +8,6 @@ This project is under works. It aims to do sentiment analysis using text GCN.
 ## Backlog:
 
 1.  Update Adjacency matrix at each iteration
-2.  Write generic function which updates adjacency matrix
-3.  Embedding Visulalization in 2d using TSNE for Glove Embeddings TOP 40
 
 ## Setup
 

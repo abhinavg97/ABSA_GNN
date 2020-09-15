@@ -1,14 +1,17 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
 import nltk
 import pandas as pd
+import numpy as np
 import spacy
+from xml.etree import ElementTree as ET
+
+import os
+import glob
+
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 from config import configuration as cfg
 from logger.logger import logger
-import glob
-import numpy as np
-from xml.etree import ElementTree as ET
-import os
-
 
 if cfg['training']['create_dataset'] and not cfg['DEBUG']:
     nlp = spacy.load("en_core_web_lg")
@@ -73,8 +76,10 @@ def print_dataframe_statistics(df, label_to_id):
             if labels[i][j] != -2:
                 labels_frequency[j] += 1
 
-    label_to_id_list = [value for key, value in enumerate(sorted(label_to_id))]
-    labels_frequency_df = pd.DataFrame({'labels': label_to_id_list, 'frequency': labels_frequency})
+    id_to_labels = {value: key for key, value in label_to_id.items()}
+
+    id_to_label_list = [id_to_labels[index] for index in range(len(label_to_id))]
+    labels_frequency_df = pd.DataFrame({'labels': id_to_label_list, 'frequency': labels_frequency})
     average_labels_per_sample = np.count_nonzero(labels != -2) / len(labels)
     average_samples_per_label = sum(labels_frequency)/len(labels_frequency)
 
@@ -83,6 +88,48 @@ def print_dataframe_statistics(df, label_to_id):
     logger.info("Average number of  labels per sample {}".format(average_labels_per_sample))
     logger.info("Average number of samples per label {}".format(average_samples_per_label))
     logger.info("Label frequence data \n{}".format(labels_frequency_df.sort_values(by=['frequency'], ascending=False)))
+
+
+def prune_dataset_df(df, label_to_id):
+    """
+    prune labels which belong to fewer than 3 samples
+    remove samples which don't contain any labels
+    """
+    labels = np.array(df['labels'].tolist())
+
+    labels_frequency = []
+
+    to_prune = []
+    for j in range(len(labels[0])):
+        labels_frequency.append(0)
+        for i in range(len(labels)):
+            if labels[i][j] != -2:
+                labels_frequency[j] += 1
+        if labels_frequency[j] <= cfg["data"]["min_label_occurences"]:
+            to_prune.append(j)
+
+    labels = np.delete(labels, to_prune, axis=1)
+
+    df['labels'] = labels.tolist()
+
+    id_to_labels = {value: key for key, value in label_to_id.items()}
+
+    for index_to_remove in to_prune:
+        del label_to_id[id_to_labels[index_to_remove]]
+
+    accumulate = 0
+    for i in range(len(to_prune)-1):
+        accumulate += 1
+
+        for j in range(to_prune[i]+1, to_prune[i+1]):
+            label_to_id[id_to_labels[j]] -= accumulate
+
+    for j in range(to_prune[-1]+1, len(id_to_labels)):
+        label_to_id[id_to_labels[j]] -= (accumulate + 1)
+
+    df.drop(df[df['labels'].apply(lambda x: x == [-2]*len(labels[0]))].index, inplace=True)
+    df.reset_index(drop=True, inplace=True)
+    return df, label_to_id
 
 
 def pmi(df):

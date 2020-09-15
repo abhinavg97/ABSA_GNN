@@ -13,8 +13,9 @@ configuration = {
         "dataset":     {
             'name':   'SemEval16'
         },
-        "trainval_test_split": 0.7,
-        "train_val_split":  0.7,
+        "trainval_test_split": 0.3,
+        "train_val_split":  0.3,
+        "min_label_occurences": 4,
         "show_stat":  False
     },
 
@@ -113,7 +114,7 @@ class Config(object):
             import pwd
             username = pwd.getpwuid(os.getuid()).pw_name
 
-        except Exception as e:
+        except Exception:
             import getpass
 
             username = getpass.getuser()

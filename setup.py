@@ -13,6 +13,7 @@ requirements = [
     'pandas',
     'networkx',
     'scikit-learn',
+    'scikit-multilearn',
     'nltk',
     'editdistance',          # required for contextualspellcheck
     'transformers',          # required for contextualspellcheck

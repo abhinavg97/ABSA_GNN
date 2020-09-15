@@ -3,9 +3,10 @@ from ..loaders import GraphDataset
 from torch.utils.data import DataLoader
 from dgl import batch as g_batch
 import torch
-from torch.utils.data import random_split
-import math
 from config import configuration as cfg
+
+# When doing distributed training, Datamodules have two optional arguments for
+# granular control over download/prepare/splitting data:
 
 
 class GraphDataModule(pl.LightningDataModule):
@@ -22,10 +23,6 @@ class GraphDataModule(pl.LightningDataModule):
         self.train_batch_size = train_batch_size
         self.val_batch_size = val_batch_size
         self.test_batch_size = test_batch_size
-    # When doing distributed training, Datamodules have two optional arguments for
-    # granular control over download/prepare/splitting data:
-
-    # OPTIONAL, called only on 1 GPU/machine
 
     def batch_graphs(self, samples):
         """
@@ -45,13 +42,10 @@ class GraphDataModule(pl.LightningDataModule):
         Split data into train, val and test
         """
         trainval_test_split = cfg['data']['trainval_test_split']
-        graph_train_val, self.graph_test = random_split(self.graph_data,
-                                                        [math.ceil(trainval_test_split*len(self.graph_data)),
-                                                         math.floor((1-trainval_test_split)*len(self.graph_data))])
+        graph_train_val, self.graph_test = self.graph_data.split_data(test_size=trainval_test_split)
 
         train_val_split = cfg['data']['train_val_split']
-        self.graph_train, self.graph_val = random_split(graph_train_val, [math.floor(
-            train_val_split*len(graph_train_val)), math.ceil((1-train_val_split)*len(graph_train_val))])
+        self.graph_train, self.graph_val = graph_train_val.split_data(test_size=train_val_split)
 
     def train_dataloader(self):
         """

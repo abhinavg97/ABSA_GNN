@@ -1,16 +1,24 @@
-from xml.etree import ElementTree as ET
+import string
+import json
+import re
+import pathlib
+
+import numpy as np
 import pandas as pd
-from logger.logger import logger
+from scipy.sparse import lil_matrix
+import torch.utils.data
+from xml.etree import ElementTree as ET
+
 from ..utils import TextProcessing
 from ..utils import graph_utils
 from ..utils import utils
-import re
 from ..graph import DGL_Graph
-import torch.utils.data
+
 from config import configuration as cfg
-import json
-import pathlib
-import string
+from logger.logger import logger
+
+from sklearn.model_selection import train_test_split
+from skmultilearn.model_selection.iterative_stratification import iterative_train_test_split
 
 
 def _custom_one_hot_vector(labels_doc_dict_list):
@@ -174,7 +182,7 @@ class GraphDataset(torch.utils.data.Dataset):
     Class for parsing data from files and storing dataframe
     """
 
-    def __init__(self, dataset_path=None, dataset_info=None, graph_path=None):
+    def __init__(self, graphs=None, labels=None, dataset_path=None, dataset_info=None, graph_path=None):
         """
         Initializes the loader
         Args:
@@ -182,37 +190,46 @@ class GraphDataset(torch.utils.data.Dataset):
             dataset_info: Dictionary consisting of one field 'dataset_name'
             graph_path: path to the bin file containing the saved DGL graph
         """
-        assert (graph_path is not None or (dataset_path is not None and dataset_info is not None)), \
-            "Either graph_path should be specified or dataset_path and dataset_info should be specified"
+
+        assert (graph_path is not None or (dataset_path is not None and dataset_info is not None)
+                or (graphs is not None and labels is not None)), \
+            "Either labels and graphs array should be given or graph_path \
+            should be specified or dataset_path and dataset_info should be specified"
+
         self.dataset_info = dataset_info
-        if graph_path is None or cfg['training']['create_dataset']:
+        if graphs is not None and labels is not None:
+            self.graphs = graphs
+            self.labels = labels
+            self.classes = len(self.labels)
+
+        elif graph_path is None or cfg['training']['create_dataset']:
             assert pathlib.Path(dataset_path).exists(), "dataset path is not valid!"
             self.dataset_path = dataset_path
-            if not cfg['DEBUG']:
-                text_processor = TextProcessing()
+
+            if cfg['DEBUG']:
+                self.text_processor = None
             else:
-                text_processor = None
-            df, self.label_to_id = self.get_dataset_df(text_processor)
-            self.print_dataframe_statistics(df)
+                self.text_processor = TextProcessing()
+
+            df, label_to_id = self.get_dataset_df(self.text_processor)
+            df, label_to_id = self.prune_dataset_df(df, label_to_id)
+            self.print_dataframe_statistics(df, label_to_id)
+
             token_graph_ob = DGL_Graph(df)
             self.graphs, labels_dict = token_graph_ob.create_instance_dgl_graphs()
 
-            with open(cfg['paths']['data_root'] + dataset_info['name'] + "_label_to_id.json", "w") as f:
-                json_dict = json.dumps(self.label_to_id)
-                f.write(json_dict)
-
-            token_graph_ob.save_graphs(cfg['paths']['data_root'] + dataset_info['name'] +
-                                       "_train_graph.bin", self.graphs, labels_dict)
-            self.labels = labels_dict["glabel"]
+            token_graph_ob.save_graphs(cfg['paths']['data_root'] + dataset_info['name'] + "_train_graph.bin",
+                                       self.graphs, labels_dict)
+            self.save_label_to_id_dict(label_to_id)
             logger.info("Graph and label_to_id generated and stored at " + cfg['paths']['data_root'])
-        else:
-            label_to_id_path = cfg['paths']['data_root'] + dataset_info['name'] + "_label_to_id.json"
-            assert pathlib.Path(graph_path).exists(), "graph path is not valid!"
-            assert pathlib.Path(label_to_id_path).exists(), "label to id information not available!"
-            self.graphs, self.labels = graph_utils.load_dgl_graphs(graph_path)
 
-            with open(label_to_id_path, "r") as f:
-                self.label_to_id = json.load(f)
+            self.labels = labels_dict["glabel"]
+
+        else:
+            assert pathlib.Path(graph_path).exists(), "graph path is not valid!"
+            self.graphs, self.labels = graph_utils.load_dgl_graphs(graph_path)
+            label_to_id = self.read_label_to_id_dict()
+
         # atleast one document is expected
         self.classes = len(self.labels[0])
 
@@ -244,18 +261,20 @@ class GraphDataset(torch.utils.data.Dataset):
         """
         Returns the graphs array
         """
-        return self.graphs
+        return list(self.graphs)
 
     def get_labels(self):
         """
         Return the labels
         """
-        return self.labels
+        return list(self.labels)
 
     def get_dataset_df(self, text_processor=None):
         """
         Returns pandas dataframe
         """
+        if text_processor is None:
+            text_processor = self.text_processor
         dataset_name = self.dataset_info["name"]
         if(dataset_name == "Twitter"):
             return _parse_twitter(self.dataset_path, text_processor)
@@ -267,6 +286,54 @@ class GraphDataset(torch.utils.data.Dataset):
             logger.error(
                 "{} dataset not yet supported".format(self.dataset_name))
 
-    def print_dataframe_statistics(self, df):
+    def save_label_to_id_dict(self, label_to_id):
+        with open(cfg['paths']['data_root'] + self.dataset_info['name'] + "_label_to_id.json", "w") as f:
+            json_dict = json.dumps(label_to_id)
+            f.write(json_dict)
 
-        utils.print_dataframe_statistics(df, self.label_to_id)
+    def read_label_to_id_dict(self):
+        label_to_id_path = cfg['paths']['data_root'] + self.dataset_info['name'] + "_label_to_id.json"
+        assert pathlib.Path(label_to_id_path).exists(), "label to id information not available!"
+        with open(label_to_id_path, "r") as f:
+            label_to_id = json.load(f)
+        return label_to_id
+
+    def print_dataframe_statistics(self, df, label_to_id):
+
+        utils.print_dataframe_statistics(df, label_to_id)
+
+    def prune_dataset_df(self, df, label_to_id):
+
+        df, label_to_id = utils.prune_dataset_df(df, label_to_id)
+        return df, label_to_id
+
+    def split_data(self, test_size=0.3, stratified=False, random_state=0, order=2):
+        """
+        Splits dataframe into train and test with optional stratified splitting
+        returns 2 GraphDataset, one for train, one for test
+        """
+
+        graphs = self.get_graphs()
+        sample_keys = lil_matrix(np.reshape(np.arange(len(graphs)), (len(graphs), -1)))
+
+        labels = self.get_labels()
+        labels = list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels))
+        labels = lil_matrix(np.array(labels))
+
+        if stratified is False:
+            x_split, y_split, x_labels, y_labels = train_test_split(sample_keys, labels, test_size=test_size, random_state=random_state)
+        else:
+            x_split, x_labels, y_split, y_labels = iterative_train_test_split(sample_keys, labels, test_size=test_size)
+
+        x_labels = x_labels.todense().tolist()
+        y_labels = y_labels.todense().tolist()
+        x_split = x_split.todense().tolist()
+        y_split = y_split.todense().tolist()
+
+        x_graphs = list(map(lambda index: graphs[index[0]], x_split))
+        y_graphs = list(map(lambda index: graphs[index[0]], y_split))
+
+        x = GraphDataset(x_graphs, x_labels)
+        y = GraphDataset(y_graphs, y_labels)
+
+        return x, y

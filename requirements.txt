@@ -6,6 +6,7 @@
 'pandas'==1.1.0
 'networkx'==2.4
 'scikit-learn'==0.23.2
+'scikit-multilearn'==0.2.0
 'nltk'==3.5
 'editdistance'==0.5.3          # required for contextualspellcheck
 'transformers'==3.0.2          # required for contextualspellcheck
