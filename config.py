@@ -11,7 +11,7 @@ configuration = {
 
     "data":         {
         "dataset":     {
-            'name':   'SemEval'
+            'name':   'SemEval16'
         },
         "trainval_test_split": 0.7,
         "train_val_split":  0.7,
@@ -59,16 +59,15 @@ configuration = {
     # These paths are relative to the main directory
     "paths":        {
         # for saving plots, f1_score
-        "data_root":          "data/SemEval16_gold_Laptops/",
+        "data_root":          "data/SemEval16/",
         "output":    "output/",
         "log":       "logs/",
-        "dataset":  "train.txt",
+        "dataset":  "train.xml",
         "saved_graph":    "SemEval_train_graph.bin"
     }
 }
 
 
-# TODO make utils function for dataset summary
 class Config(object):
     """ Contains all configuration details of the project. """
 

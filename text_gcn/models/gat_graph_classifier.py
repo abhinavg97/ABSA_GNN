@@ -39,12 +39,14 @@ class GAT_Graph_Classifier(pl.LightningModule):
 
     def shared_step(self, batch):
         graph_batch, labels = batch
-        # convert labels to 1's if label value is not zero
+        # convert labels to 1's if label value is present else convert to 0
         # This is to predict the aspect given text
         for label in labels:
             for i in range(len(label)):
-                if label[i] == -1 or label[i] == 2:
+                if label[i] != -2:
                     label[i] = 1
+                else:
+                    label[i] = 0
         prediction = self(graph_batch)
         labels = labels.type_as(prediction)
         loss = self.loss_function(prediction, labels)
@@ -61,6 +63,12 @@ class GAT_Graph_Classifier(pl.LightningModule):
         val_loss, prediction = self.shared_step(batch)
         metric = F1()
         prediction = torch.sigmoid(prediction)
+        for label in labels:
+            for i in range(len(label)):
+                if label[i] != -2:
+                    label[i] = 1
+                else:
+                    label[i] = 0
         f1_score = metric(prediction, labels)
         # TODO look at graphs of f1_score
         # result = pl.TrainResult(val_loss)

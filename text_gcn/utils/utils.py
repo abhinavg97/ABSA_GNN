@@ -4,22 +4,85 @@ import pandas as pd
 import spacy
 from config import configuration as cfg
 from logger.logger import logger
+import glob
+import numpy as np
+from xml.etree import ElementTree as ET
+import os
+
 
 if cfg['training']['create_dataset'] and not cfg['DEBUG']:
     nlp = spacy.load("en_core_web_lg")
 
 
-def print_dataframe_statistics(df):
+def merge_semEval_16_type(folder):
+    """
+    Takes in a folder and merges all the xml files in it
+    Merge SemEval16 type xml files via this function
+    Args:
+        folder: folder path to merge files
+    """
+    xml_files = glob.glob(folder+"/*.xml")
 
-    labels_series = df['labels']
+    node = None
+    for xmlFile in xml_files:
+        tree = ET.parse(xmlFile)
+        root = tree.getroot()
+        if node is None:
+            node = root
+        else:
+            elements = root.findall("./Review")
+            for element in elements:
+                node[1].append(element)
+    with open("merged_" + cfg["data"]["dataset"]["name"] + ".xml", "wb") as f:
+        f.write(ET.tostring(node))
 
-    total_non_zero_labels = 0
-    for labels in labels_series:
-        for label in labels:
-            if label != 0:
-                total_non_zero_labels += 1
-    logger.info("Total number of labels is {}".format(len(labels_series[0])))
-    logger.info("Average number of labels per sample is {}".format(total_non_zero_labels/len(labels_series)))
+
+def merge_semEval_14_type(folder):
+    """
+    Takes in a folder and merges all the xml files in it
+    Merge SemEval14 type xml files via this function
+    Make sure to delete any uneccesary xml files including any previously merged files
+        from the directory before proceeding
+    Args:
+        folder: folder path to merge files
+    """
+    xml_files = glob.glob(os.path.join(os.path.dirname(__file__), folder)+"*.xml")
+
+    node = None
+    for xmlFile in xml_files:
+        tree = ET.parse(xmlFile)
+        root = tree.getroot()
+        if node is None:
+            node = root
+        else:
+            elements = root.findall("./sentence")
+            for element in elements:
+                node[1].append(element)
+
+    with open(os.path.join(os.path.dirname(__file__), folder+"merged_files/"+"merged_" + "SemEval14" + ".xml"), "wb") as f:
+        f.write(ET.tostring(node))
+
+
+def print_dataframe_statistics(df, label_to_id):
+
+    labels = np.array(df['labels'].tolist())
+    labels_frequency = []
+    for j in range(len(labels[0])):
+        labels_frequency.append(0)
+        for i in range(len(labels)):
+            if labels[i][j] != -2:
+                labels_frequency[j] += 1
+
+    label_to_id_list = [value for key, value in enumerate(sorted(label_to_id))]
+    labels_frequency_df = pd.DataFrame({'labels': label_to_id_list, 'frequency': labels_frequency})
+    average_labels_per_sample = np.count_nonzero(labels != -2) / len(labels)
+    average_samples_per_label = sum(labels_frequency)/len(labels_frequency)
+
+    logger.info("Number of samples in the dataset {}".format(len(labels)))
+    logger.info("Number of labels in the dataset {}".format(len(labels[0])))
+    logger.info("Average number of  labels per sample {}".format(average_labels_per_sample))
+    logger.info("Average number of samples per label {}".format(average_samples_per_label))
+    logger.info("Label frequence data \n{}".format(labels_frequency_df.sort_values(by=['frequency'], ascending=False)))
 
 
 def pmi(df):
@@ -117,20 +180,5 @@ def get_labels(df):
 
 
 if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, "/home/abhi/Desktop/gcn/text_gcn/loaders/")
 
-    from loader_gcn import GraphDataset
-
-    train_loader = GraphDataset(
-        "../../data/SemEval16_gold_Laptops/train.txt", dataset_name="SemEval")
-
-    df = train_loader.get_dataframe()
-
-    tf_df = tf_idf(df)
-    # print(tf_df)
-
-    for index, row in tf_df.iterrows():
-        for i, v in row.items():
-            print(i, v)
-        # print(type(item))
+    merge_semEval_14_type("../../data/SemEval14/")

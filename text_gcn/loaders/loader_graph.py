@@ -10,6 +10,7 @@ import torch.utils.data
 from config import configuration as cfg
 import json
 import pathlib
+import string
 
 
 def _custom_one_hot_vector(labels_doc_dict_list):
@@ -27,8 +28,8 @@ def _custom_one_hot_vector(labels_doc_dict_list):
             except KeyError:
                 label_to_id[label] = label_counter
                 label_counter += 1
-    zero_vector = [0 for i in range(len(label_to_id))]
-    custom_one_hot_vector = [zero_vector for i in range(len(labels_doc_dict_list))]
+    zero_vector = [-2 for i in range(len(label_to_id))]
+    custom_one_hot_vector = [zero_vector[:] for i in range(len(labels_doc_dict_list))]
 
     for i, labels in enumerate(labels_doc_dict_list):
         for label in labels.keys():
@@ -36,10 +37,59 @@ def _custom_one_hot_vector(labels_doc_dict_list):
 
     return custom_one_hot_vector, label_to_id
 
+# TODO clean sem_eval_14 dataset -> labels like windows_xp to operating system
 
-def _parse_sem_eval(dataset_path, text_processor=None):
+
+def _parse_sem_eval_14(dataset_path, text_processor=None):
     """
-    Parses sem eval dataset
+    Parses sem eval 14 format dataset
+    Args:
+        file_name: file containing the sem eval dataset in XML format
+
+    Returns:
+        parsed_data: pandas dataframe for the parsed
+        data containing labels and text
+    """
+    tree = ET.parse(dataset_path)
+    root = tree.getroot()
+    data_row = []
+    labels_doc_dict_list = []
+    for sentence in root.findall('sentence'):
+        rid = sentence.get('id')
+        temp_row = [rid, 'lorem ipsum']
+        text = ''
+        labels_dict = {}
+        aspect_terms_object = sentence.findall('aspectTerms')
+        if len(aspect_terms_object) == 0:
+            continue
+        text += sentence.find('text').text + " "
+        for aspect_terms in aspect_terms_object:
+            for aspect_term in aspect_terms:
+                term = aspect_term.get('term')
+                polarity = aspect_term.get('polarity')
+                polarity_int = 1 if polarity == "positive" else 0 if polarity == "neutral" else -1
+                try:
+                    if labels_dict[term] != polarity_int:
+                        labels_dict[term] = 2
+                except KeyError:
+                    labels_dict[term] = polarity_int
+        # include the review only if the number of words are more than 1
+        if sum([i.strip(string.punctuation).isalpha() for i in text.split()]) > 1:
+            labels_doc_dict_list += [labels_dict]
+            if cfg['DEBUG']:
+                temp_row[1] = text
+            else:
+                temp_row[1] = text_processor.process_text(text)
+            data_row += [temp_row]
+
+    parsed_data = pd.DataFrame(data_row, columns=['id', 'text'])
+    parsed_data['labels'], label_to_id = _custom_one_hot_vector(labels_doc_dict_list)
+    return parsed_data, label_to_id
+
+
+def _parse_sem_eval_16(dataset_path, text_processor=None):
+    """
+    Parses sem eval 16 format dataset
     Args:
         file_name: file containing the sem eval dataset in XML format
 
@@ -58,8 +108,11 @@ def _parse_sem_eval(dataset_path, text_processor=None):
         labels_dict = {}
         for sentences in review:
             for sentence in sentences:
+                opinions_object = sentence.findall('Opinions')
+                if len(opinions_object) == 0:
+                    continue
                 text += sentence.find('text').text + " "
-                for opinions in sentence.findall('Opinions'):
+                for opinions in opinions_object:
                     for opinion in opinions:
                         category = opinion.get('category')
                         polarity = opinion.get('polarity')
@@ -69,16 +122,17 @@ def _parse_sem_eval(dataset_path, text_processor=None):
                                 labels_dict[category] = 2
                         except KeyError:
                             labels_dict[category] = polarity_int
-        labels_doc_dict_list += [labels_dict]
-        if cfg['DEBUG']:
-            temp_row[1] = text
-        else:
-            temp_row[1] = text_processor.process_text(text)
-        data_row += [temp_row]
+        # include the review only if the number of words are more than 1
+        if sum([i.strip(string.punctuation).isalpha() for i in text.split()]) > 1:
+            labels_doc_dict_list += [labels_dict]
+            if cfg['DEBUG']:
+                temp_row[1] = text
+            else:
+                temp_row[1] = text_processor.process_text(text)
+            data_row += [temp_row]
 
     parsed_data = pd.DataFrame(data_row, columns=['id', 'text'])
     parsed_data['labels'], label_to_id = _custom_one_hot_vector(labels_doc_dict_list)
-    utils.print_dataframe_statistics(parsed_data)
     return parsed_data, label_to_id
 
 
@@ -139,6 +193,7 @@ class GraphDataset(torch.utils.data.Dataset):
             else:
                 text_processor = None
             df, self.label_to_id = self.get_dataset_df(text_processor)
+            self.print_dataframe_statistics(df)
             token_graph_ob = DGL_Graph(df)
             self.graphs, labels_dict = token_graph_ob.create_instance_dgl_graphs()
 
@@ -204,8 +259,14 @@ class GraphDataset(torch.utils.data.Dataset):
         dataset_name = self.dataset_info["name"]
         if(dataset_name == "Twitter"):
             return _parse_twitter(self.dataset_path, text_processor)
-        elif(dataset_name == "SemEval"):
-            return _parse_sem_eval(self.dataset_path, text_processor)
+        elif(dataset_name == "SemEval16"):
+            return _parse_sem_eval_16(self.dataset_path, text_processor)
+        elif(dataset_name == "SemEval14"):
+            return _parse_sem_eval_14(self.dataset_path, text_processor)
         else:
             logger.error(
                 "{} dataset not yet supported".format(self.dataset_name))
+
+    def print_dataframe_statistics(self, df):
+
+        utils.print_dataframe_statistics(df, self.label_to_id)
