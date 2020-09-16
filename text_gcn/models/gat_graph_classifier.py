@@ -10,6 +10,10 @@ from config import configuration as cfg
 
 
 class GAT_Graph_Classifier(pl.LightningModule):
+    """
+    GAT model class: This is where the learning happens
+    The boilerplate for learning is abstracted away by Lightning
+    """
     def __init__(self, in_dim, hidden_dim, num_heads, n_classes):
         super(GAT_Graph_Classifier, self).__init__()
         self.conv1 = GATConv(in_dim, hidden_dim, num_heads)

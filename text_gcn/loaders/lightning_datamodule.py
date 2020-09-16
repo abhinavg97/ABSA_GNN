@@ -10,7 +10,10 @@ from config import configuration as cfg
 
 
 class GraphDataModule(pl.LightningDataModule):
-
+    """
+    PyTorch Lightning datamodule to handle training, testing and validation dataloaders
+    https://pytorch-lightning.readthedocs.io/en/latest/datamodules.html
+    """
     def __init__(self, train_batch_size=cfg['training']['train_batch_size'],
                  val_batch_size=cfg['training']['val_batch_size'],
                  test_batch_size=cfg['training']['test_batch_size'],

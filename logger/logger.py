@@ -83,6 +83,5 @@ def create_logger(logger_name: str = 'root',
     return logger
 
 
-logger = create_logger(logger_name='logger',
-                       log_filename=timestamp)
+logger = create_logger(logger_name='logger', log_filename=timestamp)
 logger.info("Logger created succesfully.")

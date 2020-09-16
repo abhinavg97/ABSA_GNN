@@ -4,10 +4,20 @@
 
 This project is under works. It aims to do sentiment analysis using text GCN.
 
+## Currently done:
+
+*   Identified aspects terms from user-generated text content.
+*   Dependency parsing is used to capture syntactical structure.
+*   Graph Convolutional Network is used to capture dependencies of aspect and opinions.
+*   Stratified split is used to ensure even distribution of aspect classes among train, validation and test data
 
 ## Backlog:
 
 1.  Update Adjacency matrix at each iteration
+
+## Folder Structure
+
+Browse into the corresponding folders in the text_gcn module to see the pertaining details
 
 ## Setup
 
@@ -54,8 +64,6 @@ $ pip install -e .
 ```
 
 ## Using the scripts
-
-Only aspects of text get predicted for now
 
 ```bash
 $ python DGL_graph_handler.py
