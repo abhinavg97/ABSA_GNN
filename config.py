@@ -9,13 +9,28 @@ configuration = {
 
     "DEBUG":    True,
 
+    # These paths are relative to the main directory
+    "paths":        {
+        # for saving plots, f1_score
+        # "data_root":          "data/SemEval16/",
+        # 'data_root':  "data/SamsungGalaxy/",
+        # 'data_root':    "data/FourSquared/",
+        'data_root': "data/MAMS-ATSA/",
+        "output":    "output/",
+        "log":       "logs/",
+        "dataset":  "train.xml",
+        "saved_graph":    "SemEval_train_graph.bin"
+    },
+
     "data":         {
         "dataset":     {
-            'name':   'SemEval16'
+            'name':   'MAMS_ATSA'
+            # 'name':       'SamsungGalaxy'
+            # 'name':     'FourSquared'
         },
         "trainval_test_split": 0.3,
         "train_val_split":  0.3,
-        "min_label_occurences": 4,
+        "min_label_occurences": 0,
         "show_stat":  False
     },
 
@@ -55,16 +70,6 @@ configuration = {
         "stride":      1,
         "kernel_size": 1,
         "bias":        True,
-    },
-
-    # These paths are relative to the main directory
-    "paths":        {
-        # for saving plots, f1_score
-        "data_root":          "data/SemEval16/",
-        "output":    "output/",
-        "log":       "logs/",
-        "dataset":  "train.xml",
-        "saved_graph":    "SemEval_train_graph.bin"
     }
 }
 

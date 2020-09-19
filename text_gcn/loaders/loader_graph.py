@@ -5,6 +5,7 @@ import pathlib
 
 import numpy as np
 import pandas as pd
+import spacy
 from scipy.sparse import lil_matrix
 import torch.utils.data
 from xml.etree import ElementTree as ET
@@ -19,6 +20,20 @@ from logger.logger import logger
 
 from sklearn.model_selection import train_test_split
 from skmultilearn.model_selection.iterative_stratification import iterative_train_test_split
+
+nlp = spacy.load('en_core_web_sm')
+
+# TODO clean sem_eval_14 dataset -> labels like windows_xp to operating system
+
+
+def _clean_term(label):
+    label = label.lower()
+    all_stopwords = nlp.Defaults.stop_words
+    label_tokens = nlp(label)
+    label = " ".join([str(word) for word in label_tokens if word not in all_stopwords])
+    label = re.sub('[^A-Za-z0-9 ]+', '', label)
+    label = label[:30]
+    return label
 
 
 def _custom_one_hot_vector(labels_doc_dict_list):
@@ -45,10 +60,8 @@ def _custom_one_hot_vector(labels_doc_dict_list):
 
     return custom_one_hot_vector, label_to_id
 
-# TODO clean sem_eval_14 dataset -> labels like windows_xp to operating system
 
-
-def _parse_sem_eval_14(dataset_path, text_processor=None):
+def _parse_sem_eval_14_type(dataset_path, text_processor=None, label_type="term"):
     """
     Parses sem eval 14 format dataset
     Args:
@@ -67,20 +80,27 @@ def _parse_sem_eval_14(dataset_path, text_processor=None):
         temp_row = [rid, 'lorem ipsum']
         text = ''
         labels_dict = {}
-        aspect_terms_object = sentence.findall('aspectTerms')
-        if len(aspect_terms_object) == 0:
+        if label_type == "term":
+            aspect_object = sentence.findall('aspectTerms')
+        else:
+            aspect_object = sentence.findall('aspectCategories')
+        if len(aspect_object) == 0:
             continue
         text += sentence.find('text').text + " "
-        for aspect_terms in aspect_terms_object:
-            for aspect_term in aspect_terms:
-                term = aspect_term.get('term')
-                polarity = aspect_term.get('polarity')
+        for aspects in aspect_object:
+            for aspect in aspects:
+                if label_type == "term":
+                    label = aspect.get('term')
+                    label = _clean_term(label)
+                else:
+                    label = aspect.get('category')
+                polarity = aspect.get('polarity')
                 polarity_int = 1 if polarity == "positive" else 0 if polarity == "neutral" else -1
                 try:
-                    if labels_dict[term] != polarity_int:
-                        labels_dict[term] = 2
+                    if labels_dict[label] != polarity_int:
+                        labels_dict[label] = 2
                 except KeyError:
-                    labels_dict[term] = polarity_int
+                    labels_dict[label] = polarity_int
         # include the review only if the number of words are more than 1
         if sum([i.strip(string.punctuation).isalpha() for i in text.split()]) > 1:
             labels_doc_dict_list += [labels_dict]
@@ -95,7 +115,7 @@ def _parse_sem_eval_14(dataset_path, text_processor=None):
     return parsed_data, label_to_id
 
 
-def _parse_sem_eval_16(dataset_path, text_processor=None):
+def _parse_sem_eval_16_type(dataset_path, text_processor=None):
     """
     Parses sem eval 16 format dataset
     Args:
@@ -122,7 +142,7 @@ def _parse_sem_eval_16(dataset_path, text_processor=None):
                 text += sentence.find('text').text + " "
                 for opinions in opinions_object:
                     for opinion in opinions:
-                        category = opinion.get('category')
+                        category = opinion.get('category').split('#')[0]
                         polarity = opinion.get('polarity')
                         polarity_int = 1 if polarity == "positive" else -1
                         try:
@@ -276,15 +296,22 @@ class GraphDataset(torch.utils.data.Dataset):
         if text_processor is None:
             text_processor = self.text_processor
         dataset_name = self.dataset_info["name"]
-        if(dataset_name == "Twitter"):
+        if dataset_name == "Twitter":
             return _parse_twitter(self.dataset_path, text_processor)
-        elif(dataset_name == "SemEval16"):
-            return _parse_sem_eval_16(self.dataset_path, text_processor)
-        elif(dataset_name == "SemEval14"):
-            return _parse_sem_eval_14(self.dataset_path, text_processor)
+        elif dataset_name == "SemEval16":
+            return _parse_sem_eval_16_type(self.dataset_path, text_processor)
+        elif dataset_name == "FourSquared":
+            return _parse_sem_eval_16_type(self.dataset_path, text_processor)
+        elif dataset_name == "SemEval14":
+            return _parse_sem_eval_14_type(self.dataset_path, text_processor)
+        elif dataset_name == "MAMS_ACSA":
+            return _parse_sem_eval_14_type(self.dataset_path, text_processor, label_type="category")
+        elif dataset_name == "MAMS_ATSA":
+            return _parse_sem_eval_14_type(self.dataset_path, text_processor)
+        elif dataset_name == "SamsungGalaxy":
+            return _parse_sem_eval_14_type(self.dataset_path, text_processor)
         else:
-            logger.error(
-                "{} dataset not yet supported".format(self.dataset_name))
+            logger.error("{} dataset not yet supported".format(self.dataset_name))
 
     def save_label_to_id_dict(self, label_to_id):
         with open(cfg['paths']['data_root'] + self.dataset_info['name'] + "_label_to_id.json", "w") as f:

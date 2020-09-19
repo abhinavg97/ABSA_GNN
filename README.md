@@ -6,7 +6,7 @@ This project is under works. It aims to do sentiment analysis using text GCN.
 
 ## Currently done:
 
-*   Identified aspects terms from user-generated text content.
+*   Identified aspects terms from user opinions.
 *   Dependency parsing is used to capture syntactical structure.
 *   Graph Convolutional Network is used to capture dependencies of aspect and opinions.
 *   Stratified split is used to ensure even distribution of aspect classes among train, validation and test data

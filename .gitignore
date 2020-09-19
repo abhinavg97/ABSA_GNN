@@ -122,3 +122,6 @@ logs/*
 
 # json in data folder
 /data/**/*.json
+
+# csv files
+*.csv

@@ -83,6 +83,7 @@ def print_dataframe_statistics(df, label_to_id):
     average_labels_per_sample = np.count_nonzero(labels != -2) / len(labels)
     average_samples_per_label = sum(labels_frequency)/len(labels_frequency)
 
+    labels_frequency_df.to_csv(cfg["paths"]["data_root"] + cfg["data"]["dataset"]["name"] + "_bag_of_words.csv")
     logger.info("Number of samples in the dataset {}".format(len(labels)))
     logger.info("Number of labels in the dataset {}".format(len(labels[0])))
     logger.info("Average number of  labels per sample {}".format(average_labels_per_sample))
@@ -117,18 +118,19 @@ def prune_dataset_df(df, label_to_id):
     for index_to_remove in to_prune:
         del label_to_id[id_to_labels[index_to_remove]]
 
-    accumulate = 0
-    for i in range(len(to_prune)-1):
-        accumulate += 1
+    if len(to_prune):
+        accumulate = 0
+        for i in range(len(to_prune)-1):
+            accumulate += 1
 
-        for j in range(to_prune[i]+1, to_prune[i+1]):
-            label_to_id[id_to_labels[j]] -= accumulate
+            for j in range(to_prune[i]+1, to_prune[i+1]):
+                label_to_id[id_to_labels[j]] -= accumulate
 
-    for j in range(to_prune[-1]+1, len(id_to_labels)):
-        label_to_id[id_to_labels[j]] -= (accumulate + 1)
+        for j in range(to_prune[-1]+1, len(id_to_labels)):
+            label_to_id[id_to_labels[j]] -= (accumulate + 1)
 
-    df.drop(df[df['labels'].apply(lambda x: x == [-2]*len(labels[0]))].index, inplace=True)
-    df.reset_index(drop=True, inplace=True)
+        df.drop(df[df['labels'].apply(lambda x: x == [-2]*len(labels[0]))].index, inplace=True)
+        df.reset_index(drop=True, inplace=True)
     return df, label_to_id
 
 
