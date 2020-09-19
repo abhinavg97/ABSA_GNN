@@ -7,24 +7,27 @@ seed = 0
 global configuration
 configuration = {
 
-    "DEBUG":    True,
+    "DEBUG":    False,
 
     # These paths are relative to the main directory
     "paths":        {
         # for saving plots, f1_score
-        # "data_root":          "data/SemEval16/",
+        "data_root":          "data/SemEval16/",
         # 'data_root':  "data/SamsungGalaxy/",
         # 'data_root':    "data/FourSquared/",
-        'data_root': "data/MAMS-ATSA/",
+        # 'data_root': "data/MAMS-ATSA/",
         "output":    "output/",
         "log":       "logs/",
         "dataset":  "train.xml",
-        "saved_graph":    "SemEval_train_graph.bin"
+        "saved_graph":    "SemEval_train_graph.bin",
+        "dataframe": "",
+        "label_to_id": "",
     },
 
     "data":         {
         "dataset":     {
-            'name':   'MAMS_ATSA'
+            'name': 'SemEval16'
+            # 'name':   'MAMS_ATSA'
             # 'name':       'SamsungGalaxy'
             # 'name':     'FourSquared'
         },

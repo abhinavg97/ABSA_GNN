@@ -18,11 +18,12 @@ class GraphDataModule(pl.LightningDataModule):
                  val_batch_size=cfg['training']['val_batch_size'],
                  test_batch_size=cfg['training']['test_batch_size'],
                  data_root=cfg['paths']['data_root'], dataset=cfg['paths']['dataset'],
+                 dataframe=cfg['paths']['dataframe'], label_to_id=cfg['paths']['label_to_id'],
                  graph=cfg['paths']['saved_graph'], dataset_info=cfg['data']['dataset']):
         super().__init__()
         self.dataset_info = dataset_info
-        self.graph_data = GraphDataset(
-            dataset_path=data_root+dataset, graph_path=data_root+graph, dataset_info=self.dataset_info)
+        self.graph_data = GraphDataset(dataframe_df_path=data_root+dataframe, label_to_id_path=data_root+label_to_id,
+                                       dataset_path=data_root+dataset, graph_path=data_root+graph, dataset_info=self.dataset_info)
         self.train_batch_size = train_batch_size
         self.val_batch_size = val_batch_size
         self.test_batch_size = test_batch_size
@@ -55,8 +56,7 @@ class GraphDataModule(pl.LightningDataModule):
         Return the dataloader for each split
         """
         # Use PyTorch's DataLoader and the collate function defined before.
-        graph_train = DataLoader(self.graph_train, batch_size=self.train_batch_size,
-                                 shuffle=True, collate_fn=self.batch_graphs)
+        graph_train = DataLoader(self.graph_train, batch_size=self.train_batch_size, shuffle=True, collate_fn=self.batch_graphs)
         return graph_train
 
     def val_dataloader(self):
@@ -64,8 +64,7 @@ class GraphDataModule(pl.LightningDataModule):
         return graph_val
 
     def test_dataloader(self):
-        graph_test = DataLoader(self.graph_test, batch_size=self.test_batch_size,
-                                collate_fn=self.batch_graphs)
+        graph_test = DataLoader(self.graph_test, batch_size=self.test_batch_size, collate_fn=self.batch_graphs)
         return graph_test
 
     @property

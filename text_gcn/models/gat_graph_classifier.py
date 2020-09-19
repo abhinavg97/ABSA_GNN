@@ -20,22 +20,22 @@ class GAT_Graph_Classifier(pl.LightningModule):
         self.conv2 = GATConv(hidden_dim * num_heads, hidden_dim, num_heads)
         self.classify = torch.nn.Linear(hidden_dim * num_heads, n_classes)
 
-    def forward(self, g, h=None):
-        if h is None:
+    def forward(self, g, emb=None):
+        if emb is None:
             # Use node degree as the initial node feature.
             # For undirected graphs, the in-degree is the
             # same as the out_degree.
-            h = g.in_degrees().view(-1, 1).float()
+            emb = g.ndata['emb']
 
         # Perform graph convolution and activation function.
-        h = F.relu(self.conv1(g, h))
-        h = h.view(-1, h.size(1) * h.size(2)).float()
-        h = F.relu(self.conv2(g, h))
-        h = h.view(-1, h.size(1) * h.size(2)).float()
-        g.ndata['h'] = h
+        emb = F.relu(self.conv1(g, emb))
+        emb = emb.view(-1, emb.size(1) * emb.size(2)).float()
+        emb = F.relu(self.conv2(g, emb))
+        emb = emb.view(-1, emb.size(1) * emb.size(2)).float()
+        g.ndata['emb'] = emb
 
         # Calculate graph representation by averaging all node representations.
-        hg = mean_nodes(g, 'h')
+        hg = mean_nodes(g, 'emb')
         return self.classify(hg)
 
     def loss_function(self, prediction, label):
@@ -65,7 +65,7 @@ class GAT_Graph_Classifier(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         grap_batch, labels = batch
         val_loss, prediction = self.shared_step(batch)
-        metric = F1()
+        metric = F1(class_reduction='macro')
         prediction = torch.sigmoid(prediction)
         for label in labels:
             for i in range(len(label)):

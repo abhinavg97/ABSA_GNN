@@ -202,7 +202,8 @@ class GraphDataset(torch.utils.data.Dataset):
     Class for parsing data from files and storing dataframe
     """
 
-    def __init__(self, graphs=None, labels=None, dataset_path=None, dataset_info=None, graph_path=None):
+    def __init__(self, graphs=None, labels=None, dataframe_df_path=None, label_to_id_path=None,
+                 dataset_path=None, dataset_info=None, graph_path=None):
         """
         Initializes the loader
         Args:
@@ -211,7 +212,9 @@ class GraphDataset(torch.utils.data.Dataset):
             graph_path: path to the bin file containing the saved DGL graph
         """
 
-        assert (graph_path is not None or (dataset_path is not None and dataset_info is not None)
+        assert ((dataframe_df_path is not None and label_to_id_path is not None)
+                or (graph_path is not None and label_to_id_path is not None)
+                or (dataset_path is not None and dataset_info is not None)
                 or (graphs is not None and labels is not None)), \
             "Either labels and graphs array should be given or graph_path \
             should be specified or dataset_path and dataset_info should be specified"
@@ -222,7 +225,7 @@ class GraphDataset(torch.utils.data.Dataset):
             self.labels = labels
             self.classes = len(self.labels)
 
-        elif graph_path is None or cfg['training']['create_dataset']:
+        elif (graph_path is None and dataframe_df_path is None) or cfg['training']['create_dataset']:
             assert pathlib.Path(dataset_path).exists(), "dataset path is not valid!"
             self.dataset_path = dataset_path
 
@@ -233,23 +236,42 @@ class GraphDataset(torch.utils.data.Dataset):
 
             df, label_to_id = self.get_dataset_df(self.text_processor)
             df, label_to_id = self.prune_dataset_df(df, label_to_id)
+            self.save_label_to_id_dict(label_to_id)
+            self.save_dataset_df(df)
+
             self.print_dataframe_statistics(df, label_to_id)
 
             token_graph_ob = DGL_Graph(df)
             self.graphs, labels_dict = token_graph_ob.create_instance_dgl_graphs()
-
             token_graph_ob.save_graphs(cfg['paths']['data_root'] + dataset_info['name'] + "_train_graph.bin",
                                        self.graphs, labels_dict)
-            self.save_label_to_id_dict(label_to_id)
-            logger.info("Graph and label_to_id generated and stored at " + cfg['paths']['data_root'])
 
             self.labels = labels_dict["glabel"]
 
-        else:
+        elif graph_path is not None:
             assert pathlib.Path(graph_path).exists(), "graph path is not valid!"
+            assert pathlib.Path(label_to_id_path).exists(), "Label to id path is not valid!"
             self.graphs, self.labels = graph_utils.load_dgl_graphs(graph_path)
-            label_to_id = self.read_label_to_id_dict()
+            logger.info("Read graphs from " + graph_path)
+            label_to_id = self.read_label_to_id_dict(label_to_id_path)
 
+        else:
+            assert pathlib.Path(dataframe_df_path).exists(), "dataframe path is not valid!"
+            assert pathlib.Path(label_to_id_path).exists(), "Label to id path is not valid!"
+
+            df = pd.read_csv(dataframe_df_path)
+            logger.info("Read dataframe from " + dataframe_df_path)
+
+            label_to_id = self.read_label_to_id_dict(label_to_id_path)
+
+            self.print_dataframe_statistics(df, label_to_id)
+
+            token_graph_ob = DGL_Graph(df)
+            self.graphs, labels_dict = token_graph_ob.create_instance_dgl_graphs()
+            token_graph_ob.save_graphs(cfg['paths']['data_root'] + dataset_info['name'] + "_train_graph.bin",
+                                       self.graphs, labels_dict)
+
+            self.labels = labels_dict["glabel"]
         # atleast one document is expected
         self.classes = len(self.labels[0])
 
@@ -317,12 +339,16 @@ class GraphDataset(torch.utils.data.Dataset):
         with open(cfg['paths']['data_root'] + self.dataset_info['name'] + "_label_to_id.json", "w") as f:
             json_dict = json.dumps(label_to_id)
             f.write(json_dict)
+        logger.info("Generated Label to ID mapping and stored at " + cfg['paths']['data_root'])
 
-    def read_label_to_id_dict(self):
-        label_to_id_path = cfg['paths']['data_root'] + self.dataset_info['name'] + "_label_to_id.json"
-        assert pathlib.Path(label_to_id_path).exists(), "label to id information not available!"
+    def save_dataset_df(self, df):
+        df.to_csv(cfg['paths']['data_root'] + self.dataset_info['name'] + "_dataframe.csv")
+        logger.info("Generated dataframe and stored at " + cfg['paths']['data_root'])
+
+    def read_label_to_id_dict(self, label_to_id_path):
         with open(label_to_id_path, "r") as f:
             label_to_id = json.load(f)
+        logger.info("Read label to id mapping from " + label_to_id_path)
         return label_to_id
 
     def print_dataframe_statistics(self, df, label_to_id):

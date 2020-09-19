@@ -5,6 +5,8 @@ from ..utils import graph_utils
 from ..utils import utils
 import logging
 import numpy as np
+from logger.logger import logger
+from config import configuration as cfg
 
 
 class DGL_Graph(object):
@@ -61,6 +63,7 @@ class DGL_Graph(object):
     def save_graphs(self, path, graphs, labels_dict):
         labels_dict_tensor = {"glabel": torch.tensor(labels_dict["glabel"])}
         graph_utils.save_dgl_graphs(path, graphs, labels_dict_tensor)
+        logger.info("Generated  instance DGL graphs and stored at " + cfg['paths']['data_root'])
 
     def create_instance_dgl_graph(self, text):
         """
