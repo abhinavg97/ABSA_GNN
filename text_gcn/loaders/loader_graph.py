@@ -86,7 +86,13 @@ def _parse_sem_eval_14_type(dataset_path, text_processor=None, label_type="term"
             aspect_object = sentence.findall('aspectCategories')
         if len(aspect_object) == 0:
             continue
-        text += sentence.find('text').text + " "
+
+        found_text = sentence.find('text').text
+        if cfg['DEBUG']:
+            text += found_text + " "
+        else:
+            text += text_processor.process_text(found_text) + " "
+
         for aspects in aspect_object:
             for aspect in aspects:
                 if label_type == "term":
@@ -104,10 +110,7 @@ def _parse_sem_eval_14_type(dataset_path, text_processor=None, label_type="term"
         # include the review only if the number of words are more than 1
         if sum([i.strip(string.punctuation).isalpha() for i in text.split()]) > 1:
             labels_doc_dict_list += [labels_dict]
-            if cfg['DEBUG']:
-                temp_row[1] = text
-            else:
-                temp_row[1] = text_processor.process_text(text)
+            temp_row[1] = text
             data_row += [temp_row]
 
     parsed_data = pd.DataFrame(data_row, columns=['id', 'text'])
@@ -139,7 +142,13 @@ def _parse_sem_eval_16_type(dataset_path, text_processor=None):
                 opinions_object = sentence.findall('Opinions')
                 if len(opinions_object) == 0:
                     continue
-                text += sentence.find('text').text + " "
+
+                found_text = sentence.find('text').text
+                if cfg['DEBUG']:
+                    text += found_text + " "
+                else:
+                    text += text_processor.process_text(found_text) + " "
+
                 for opinions in opinions_object:
                     for opinion in opinions:
                         category = opinion.get('category').split('#')[0]
@@ -153,10 +162,7 @@ def _parse_sem_eval_16_type(dataset_path, text_processor=None):
         # include the review only if the number of words are more than 1
         if sum([i.strip(string.punctuation).isalpha() for i in text.split()]) > 1:
             labels_doc_dict_list += [labels_dict]
-            if cfg['DEBUG']:
-                temp_row[1] = text
-            else:
-                temp_row[1] = text_processor.process_text(text)
+            temp_row[1] = text
             data_row += [temp_row]
 
     parsed_data = pd.DataFrame(data_row, columns=['id', 'text'])
