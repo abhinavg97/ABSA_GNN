@@ -34,13 +34,12 @@ sudo apt install python3-venv
 ```
 sudo apt install openjdk-8-jre-headless
 ```
-This is required for language check package
 
-#### Install the spacy Dependancies
+In case pip install gives wheel related errors:
 ```
-sudo apt install python3-tk
-python -m spacy download en_core_web_lg en_core_web_sm
+sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java 
 ```
+This is required for language check package
 
 #### Clone the repository
 ```bash
@@ -48,9 +47,10 @@ $ git clone https://github.com/abhinavg97/GCN.git
 $ cd gcn
 ```
 
-#### Activate the virtual environment
+#### Create and Activate the virtual environment
 ```
-source venv/bin/activate
+$ python -m venv venv
+$ source venv/bin/activate
 ```
 
 #### Install
@@ -61,6 +61,13 @@ $ pip install -e .[interactive]
 For inferring results
 ```bash
 $ pip install -e .
+```
+
+#### Install the spacy Dependancies
+```
+sudo apt install python3-tk
+python -m spacy download en_core_web_lg 
+python -m spacy download en_core_web_sm
 ```
 
 ## Using the scripts
