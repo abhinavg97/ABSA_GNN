@@ -42,23 +42,23 @@ def _custom_one_hot_vector(labels_doc_dict_list):
     Args:
         labels_doc_dict_list: A list of dictionary containing labels
     """
-    label_to_id = {}
+    label_text_to_label_id = {}
     label_counter = 0
     for labels in labels_doc_dict_list:
         for label in labels.keys():
             try:
-                label_to_id[label]
+                label_text_to_label_id[label]
             except KeyError:
-                label_to_id[label] = label_counter
+                label_text_to_label_id[label] = label_counter
                 label_counter += 1
-    zero_vector = [-2 for i in range(len(label_to_id))]
+    zero_vector = [-2 for i in range(len(label_text_to_label_id))]
     custom_one_hot_vector = [zero_vector[:] for i in range(len(labels_doc_dict_list))]
 
     for i, labels in enumerate(labels_doc_dict_list):
         for label in labels.keys():
-            custom_one_hot_vector[i][label_to_id[label]] = labels[label]
+            custom_one_hot_vector[i][label_text_to_label_id[label]] = labels[label]
 
-    return custom_one_hot_vector, label_to_id
+    return custom_one_hot_vector, label_text_to_label_id
 
 
 def _parse_sem_eval_14_type(dataset_path, text_processor=None, label_type="term"):
@@ -114,8 +114,8 @@ def _parse_sem_eval_14_type(dataset_path, text_processor=None, label_type="term"
             data_row += [temp_row]
 
     parsed_data = pd.DataFrame(data_row, columns=['id', 'text'])
-    parsed_data['labels'], label_to_id = _custom_one_hot_vector(labels_doc_dict_list)
-    return parsed_data, label_to_id
+    parsed_data['labels'], label_text_to_label_id = _custom_one_hot_vector(labels_doc_dict_list)
+    return parsed_data, label_text_to_label_id
 
 
 def _parse_sem_eval_16_type(dataset_path, text_processor=None):
@@ -166,8 +166,8 @@ def _parse_sem_eval_16_type(dataset_path, text_processor=None):
             data_row += [temp_row]
 
     parsed_data = pd.DataFrame(data_row, columns=['id', 'text'])
-    parsed_data['labels'], label_to_id = _custom_one_hot_vector(labels_doc_dict_list)
-    return parsed_data, label_to_id
+    parsed_data['labels'], label_text_to_label_id = _custom_one_hot_vector(labels_doc_dict_list)
+    return parsed_data, label_text_to_label_id
 
 
 def _parse_twitter(dataset_path, text_processor):
@@ -208,7 +208,7 @@ class GraphDataset(torch.utils.data.Dataset):
     Class for parsing data from files and storing dataframe
     """
 
-    def __init__(self, graphs=None, labels=None, dataframe_df_path=None, label_to_id_path=None,
+    def __init__(self, graphs=None, labels=None, dataframe_df_path=None, label_text_to_label_id_path=None,
                  dataset_path=None, dataset_info=None, graph_path=None):
         """
         Initializes the loader
@@ -218,8 +218,8 @@ class GraphDataset(torch.utils.data.Dataset):
             graph_path: path to the bin file containing the saved DGL graph
         """
 
-        assert ((dataframe_df_path is not None and label_to_id_path is not None)
-                or (graph_path is not None and label_to_id_path is not None)
+        assert ((dataframe_df_path is not None and label_text_to_label_id_path is not None)
+                or (graph_path is not None and label_text_to_label_id_path is not None)
                 or (dataset_path is not None and dataset_info is not None)
                 or (graphs is not None and labels is not None)), \
             "Either labels and graphs array should be given or graph_path \
@@ -240,12 +240,12 @@ class GraphDataset(torch.utils.data.Dataset):
             else:
                 self.text_processor = TextProcessing()
 
-            df, label_to_id = self.get_dataset_df(self.text_processor)
-            df, label_to_id = self.prune_dataset_df(df, label_to_id)
-            self.save_label_to_id_dict(label_to_id)
+            df, label_text_to_label_id = self.get_dataset_df(self.text_processor)
+            df, label_text_to_label_id = self.prune_dataset_df(df, label_text_to_label_id)
+            self.save_label_text_to_label_id_dict(label_text_to_label_id)
             self.save_dataset_df(df)
 
-            self.print_dataframe_statistics(df, label_to_id)
+            self.print_dataframe_statistics(df, label_text_to_label_id)
 
             token_graph_ob = DGL_Graph(df)
             self.graphs, labels_dict = token_graph_ob.create_instance_dgl_graphs()
@@ -255,22 +255,31 @@ class GraphDataset(torch.utils.data.Dataset):
             self.labels = labels_dict["glabel"]
 
         elif graph_path is not None:
+            # If DGL graph is given in a file
             assert pathlib.Path(graph_path).exists(), "graph path is not valid!"
-            assert pathlib.Path(label_to_id_path).exists(), "Label to id path is not valid!"
+            assert pathlib.Path(label_text_to_label_id_path).exists(), "Label to id path is not valid!"
+
+            label_text_to_label_id = self.read_label_text_to_label_id_dict(label_text_to_label_id_path)
+
+            try:
+                df = pd.read_csv(dataframe_df_path)
+                logger.info("Read dataframe from " + dataframe_df_path)
+                self.print_dataframe_statistics(df, label_text_to_label_id)
+            except Exception:
+                pass
+
             self.graphs, self.labels = graph_utils.load_dgl_graphs(graph_path)
             logger.info("Read graphs from " + graph_path)
-            label_to_id = self.read_label_to_id_dict(label_to_id_path)
 
         else:
+            # If the dataframe is given
             assert pathlib.Path(dataframe_df_path).exists(), "dataframe path is not valid!"
-            assert pathlib.Path(label_to_id_path).exists(), "Label to id path is not valid!"
+            assert pathlib.Path(label_text_to_label_id_path).exists(), "Label to id path is not valid!"
 
             df = pd.read_csv(dataframe_df_path)
             logger.info("Read dataframe from " + dataframe_df_path)
-
-            label_to_id = self.read_label_to_id_dict(label_to_id_path)
-
-            self.print_dataframe_statistics(df, label_to_id)
+            label_text_to_label_id = self.read_label_text_to_label_id_dict(label_text_to_label_id_path)
+            self.print_dataframe_statistics(df, label_text_to_label_id)
 
             token_graph_ob = DGL_Graph(df)
             self.graphs, labels_dict = token_graph_ob.create_instance_dgl_graphs()
@@ -319,7 +328,17 @@ class GraphDataset(torch.utils.data.Dataset):
 
     def get_dataset_df(self, text_processor=None):
         """
-        Returns pandas dataframe
+        Returns pandas dataframe, label to id mapping
+        INDEX           TEXT                   LABELS
+          0       "Example sentence"     [-1, -2, 2, 0, 1]
+
+         -2 -> label not present in the text
+         -1 -> negative sentiment
+          0 -> neutral sentiment
+          1 -> positive sentiment
+          2 -> ambiguous sentiment
+
+          Label to ID mapping maps index of label list to the label name
         """
         if text_processor is None:
             text_processor = self.text_processor
@@ -341,9 +360,9 @@ class GraphDataset(torch.utils.data.Dataset):
         else:
             logger.error("{} dataset not yet supported".format(self.dataset_name))
 
-    def save_label_to_id_dict(self, label_to_id):
-        with open(cfg['paths']['data_root'] + self.dataset_info['name'] + "_label_to_id.json", "w") as f:
-            json_dict = json.dumps(label_to_id)
+    def save_label_text_to_label_id_dict(self, label_text_to_label_id):
+        with open(cfg['paths']['data_root'] + self.dataset_info['name'] + "_label_text_to_label_id.json", "w") as f:
+            json_dict = json.dumps(label_text_to_label_id)
             f.write(json_dict)
         logger.info("Generated Label to ID mapping and stored at " + cfg['paths']['data_root'])
 
@@ -351,20 +370,20 @@ class GraphDataset(torch.utils.data.Dataset):
         df.to_csv(cfg['paths']['data_root'] + self.dataset_info['name'] + "_dataframe.csv")
         logger.info("Generated dataframe and stored at " + cfg['paths']['data_root'])
 
-    def read_label_to_id_dict(self, label_to_id_path):
-        with open(label_to_id_path, "r") as f:
-            label_to_id = json.load(f)
-        logger.info("Read label to id mapping from " + label_to_id_path)
-        return label_to_id
+    def read_label_text_to_label_id_dict(self, label_text_to_label_id_path):
+        with open(label_text_to_label_id_path, "r") as f:
+            label_text_to_label_id = json.load(f)
+        logger.info("Read label to id mapping from " + label_text_to_label_id_path)
+        return label_text_to_label_id
 
-    def print_dataframe_statistics(self, df, label_to_id):
+    def print_dataframe_statistics(self, df, label_text_to_label_id):
 
-        utils.print_dataframe_statistics(df, label_to_id)
+        utils.print_dataframe_statistics(df, label_text_to_label_id)
 
-    def prune_dataset_df(self, df, label_to_id):
+    def prune_dataset_df(self, df, label_text_to_label_id):
 
-        df, label_to_id = utils.prune_dataset_df(df, label_to_id)
-        return df, label_to_id
+        df, label_text_to_label_id = utils.prune_dataset_df(df, label_text_to_label_id)
+        return df, label_text_to_label_id
 
     def split_data(self, test_size=0.3, stratified=False, random_state=0, order=2):
         """
@@ -376,7 +395,7 @@ class GraphDataset(torch.utils.data.Dataset):
         sample_keys = lil_matrix(np.reshape(np.arange(len(graphs)), (len(graphs), -1)))
 
         labels = self.get_labels()
-        labels = list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels))
+        # labels = list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels))
         labels = lil_matrix(np.array(labels))
 
         if stratified is False:

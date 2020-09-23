@@ -7,7 +7,7 @@ seed = 0
 global configuration
 configuration = {
 
-    "DEBUG":    False,
+    "DEBUG":    True,
 
     # These paths are relative to the main directory
     "paths":        {
@@ -21,7 +21,7 @@ configuration = {
         "dataset":  "train.xml",
         "saved_graph":    "SemEval_train_graph.bin",
         "dataframe": "",
-        "label_to_id": "",
+        "label_text_to_label_id": "",
     },
 
     "data":         {
@@ -38,8 +38,8 @@ configuration = {
     },
 
     "model": {
-        'in_dim': 1,
-        'hidden_dim': 4,
+        'in_dim': 300,
+        'hidden_dim': 150,
         'num_heads': 2,
     },
 
@@ -48,8 +48,8 @@ configuration = {
         "dropout":              0.2,
         "max_epochs":           10,
         "train_batch_size":     30,
-        "val_batch_size":       15,
-        "test_batch_size":      15,
+        "val_batch_size":       60,
+        "test_batch_size":      60,
         "optimizer":            {
             "optimizer_type": "adam",
             "learning_rate":  3e-4,

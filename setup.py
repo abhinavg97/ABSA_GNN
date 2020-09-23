@@ -2,6 +2,8 @@
 https://godatadriven.com/blog/a-practical-guide-to-using-setup-py/
 https://docs.pytest.org/en/latest/goodpractices.html
 """
+import io
+from os import path
 from setuptools import setup, find_packages
 
 requirements = [
@@ -29,11 +31,16 @@ extra_requirements = [
 
 VERSION = '0.0.1'
 
+this_directory = path.abspath(path.dirname(__file__))
+with io.open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    README = f.read()
+
 setup(
     name='text_gcn',
     version=VERSION,
     url='https://github.com/abhinavg97/GCN',
     description='Python module designed for text GCN',
+    long_description=README,
     packages=find_packages(),
     zip_safe=True,
     install_requires=requirements,

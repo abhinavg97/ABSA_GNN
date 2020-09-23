@@ -4,7 +4,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from dgl import mean_nodes
 import pytorch_lightning as pl
-from pytorch_lightning.metrics.classification import F1
+from pytorch_lightning.metrics.sklearns import F1
 from logger.logger import logger
 from config import configuration as cfg
 
@@ -42,6 +42,9 @@ class GAT_Graph_Classifier(pl.LightningModule):
         return F.binary_cross_entropy_with_logits(prediction, label)
 
     def shared_step(self, batch):
+        """
+
+        """
         graph_batch, labels = batch
         # convert labels to 1's if label value is present else convert to 0
         # This is to predict the aspect given text
@@ -65,7 +68,7 @@ class GAT_Graph_Classifier(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         grap_batch, labels = batch
         val_loss, prediction = self.shared_step(batch)
-        metric = F1(class_reduction='macro')
+        metric = F1(average='macro')
         prediction = torch.sigmoid(prediction)
         for label in labels:
             for i in range(len(label)):
@@ -73,11 +76,12 @@ class GAT_Graph_Classifier(pl.LightningModule):
                     label[i] = 1
                 else:
                     label[i] = 0
-        f1_score = metric(prediction, labels)
+
+        f1_score = sum(list(map(lambda pred, y: metric(pred > 0.5, y), prediction, labels)))/prediction.shape[0]
         # TODO look at graphs of f1_score
         # result = pl.TrainResult(val_loss)
         # result.log('val_loss', val_loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
-        logger.info(prediction)
+        # logger.info(prediction)
         return {'val_loss': val_loss, 'f1_score': f1_score}
 
     def validation_epoch_end(self, outputs):

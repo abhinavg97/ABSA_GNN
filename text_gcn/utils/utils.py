@@ -66,7 +66,7 @@ def merge_semEval_14_type(folder):
         f.write(ET.tostring(node))
 
 
-def print_dataframe_statistics(df, label_to_id):
+def print_dataframe_statistics(df, label_text_to_label_id):
 
     labels = np.array(df['labels'].tolist())
     labels_frequency = []
@@ -76,9 +76,9 @@ def print_dataframe_statistics(df, label_to_id):
             if labels[i][j] != -2:
                 labels_frequency[j] += 1
 
-    id_to_labels = {value: key for key, value in label_to_id.items()}
+    label_id_to_label_text = {value: key for key, value in label_text_to_label_id.items()}
 
-    id_to_label_list = [id_to_labels[index] for index in range(len(label_to_id))]
+    id_to_label_list = [label_id_to_label_text[index] for index in range(len(label_text_to_label_id))]
     labels_frequency_df = pd.DataFrame({'labels': id_to_label_list, 'frequency': labels_frequency})
     average_labels_per_sample = np.count_nonzero(labels != -2) / len(labels)
     average_samples_per_label = sum(labels_frequency)/len(labels_frequency)
@@ -91,10 +91,10 @@ def print_dataframe_statistics(df, label_to_id):
     logger.info("Label frequence data \n{}".format(labels_frequency_df.sort_values(by=['frequency'], ascending=False)))
 
 
-def prune_dataset_df(df, label_to_id):
+def prune_dataset_df(df, label_text_to_label_id):
     """
-    prune labels which belong to fewer than 3 samples
-    remove samples which don't contain any labels
+    1. prune labels which belong to fewer than 3 samples
+    2. remove samples which don't contain any labels
     """
     labels = np.array(df['labels'].tolist())
 
@@ -113,10 +113,10 @@ def prune_dataset_df(df, label_to_id):
 
     df['labels'] = labels.tolist()
 
-    id_to_labels = {value: key for key, value in label_to_id.items()}
+    label_id_to_label_text = {value: key for key, value in label_text_to_label_id.items()}
 
     for index_to_remove in to_prune:
-        del label_to_id[id_to_labels[index_to_remove]]
+        del label_text_to_label_id[label_id_to_label_text[index_to_remove]]
 
     if len(to_prune):
         accumulate = 0
@@ -124,14 +124,14 @@ def prune_dataset_df(df, label_to_id):
             accumulate += 1
 
             for j in range(to_prune[i]+1, to_prune[i+1]):
-                label_to_id[id_to_labels[j]] -= accumulate
+                label_text_to_label_id[label_id_to_label_text[j]] -= accumulate
 
-        for j in range(to_prune[-1]+1, len(id_to_labels)):
-            label_to_id[id_to_labels[j]] -= (accumulate + 1)
+        for j in range(to_prune[-1]+1, len(label_id_to_label_text)):
+            label_text_to_label_id[label_id_to_label_text[j]] -= (accumulate + 1)
 
         df.drop(df[df['labels'].apply(lambda x: x == [-2]*len(labels[0]))].index, inplace=True)
         df.reset_index(drop=True, inplace=True)
-    return df, label_to_id
+    return df, label_text_to_label_id
 
 
 def pmi(df):

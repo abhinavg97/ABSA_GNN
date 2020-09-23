@@ -68,6 +68,7 @@ class DGL_Graph(object):
     def create_instance_dgl_graph(self, text):
         """
         Create a single DGL graph
+        NOTE: DGL only supports sequential node ids
         Args:
             text: Input data in string format
 
@@ -100,9 +101,9 @@ class DGL_Graph(object):
         # add edges and node embeddings to the graph
         g.add_nodes(len(uniq_token_ids))
         g.add_edges(torch.tensor(edges_sources), torch.tensor(edges_dest))
-        g.ndata['emb'] = torch.tensor(node_embedding)
+        g.ndata['emb'] = torch.tensor(node_embedding).float()
         # add token id attribute to node
-        g.ndata['token_id'] = torch.tensor(token_ids)
+        g.ndata['token_id'] = torch.tensor(token_ids).long()
         return g
 
     def _compute_doc_embedding(self, node_id):
