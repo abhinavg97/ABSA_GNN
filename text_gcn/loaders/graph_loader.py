@@ -395,7 +395,6 @@ class GraphDataset(torch.utils.data.Dataset):
         sample_keys = lil_matrix(np.reshape(np.arange(len(graphs)), (len(graphs), -1)))
 
         labels = self.get_labels()
-        # labels = list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels))
         labels = lil_matrix(np.array(labels))
 
         if stratified is False:

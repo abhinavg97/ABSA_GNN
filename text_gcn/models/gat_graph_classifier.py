@@ -48,12 +48,7 @@ class GAT_Graph_Classifier(pl.LightningModule):
         graph_batch, labels = batch
         # convert labels to 1's if label value is present else convert to 0
         # This is to predict the aspect given text
-        for label in labels:
-            for i in range(len(label)):
-                if label[i] != -2:
-                    label[i] = 1
-                else:
-                    label[i] = 0
+        labels = torch.Tensor(list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels)))
         prediction = self(graph_batch)
         labels = labels.type_as(prediction)
         loss = self.loss_function(prediction, labels)
@@ -66,22 +61,17 @@ class GAT_Graph_Classifier(pl.LightningModule):
         return {'loss': loss, 'log': log}
 
     def validation_step(self, batch, batch_idx):
-        grap_batch, labels = batch
+        graph_batch, labels = batch
         val_loss, prediction = self.shared_step(batch)
         metric = F1(average='macro')
         prediction = torch.sigmoid(prediction)
-        for label in labels:
-            for i in range(len(label)):
-                if label[i] != -2:
-                    label[i] = 1
-                else:
-                    label[i] = 0
-
         f1_score = sum(list(map(lambda pred, y: metric(pred > 0.5, y), prediction, labels)))/prediction.shape[0]
         # TODO look at graphs of f1_score
         # result = pl.TrainResult(val_loss)
         # result.log('val_loss', val_loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
-        # logger.info(prediction)
+        logger.info(f"prediction , {prediction[0]}")
+        logger.info(f"Label, {labels[0]}")
+
         return {'val_loss': val_loss, 'f1_score': f1_score}
 
     def validation_epoch_end(self, outputs):
