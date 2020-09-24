@@ -7,7 +7,7 @@ seed = 0
 global configuration
 configuration = {
 
-    "DEBUG":    True,
+    "DEBUG":    False,
 
     # These paths are relative to the main directory
     "paths":        {
