@@ -212,6 +212,7 @@ class GraphDataset(torch.utils.data.Dataset):
                  dataset_path=None, dataset_info=None, graph_path=None):
         """
         Initializes the loader
+
         Args:
             dataset_path: Path to the file containing the dataset.
             dataset_info: Dictionary consisting of one field 'dataset_name'
@@ -329,6 +330,7 @@ class GraphDataset(torch.utils.data.Dataset):
     def get_dataset_df(self, text_processor=None):
         """
         Returns pandas dataframe, label to id mapping
+
         INDEX           TEXT                   LABELS
           0       "Example sentence"     [-1, -2, 2, 0, 1]
 

@@ -1,7 +1,7 @@
 import spacy
 import gensim.downloader as api
-import contextualSpellCheck
-from pycontractions import Contractions
+# import contextualSpellCheck
+# from pycontractions import Contractions
 import unidecode
 import json
 import os
@@ -16,10 +16,10 @@ class TextProcessing:
 
     def __init__(self, nlp=spacy.load("en_core_web_sm")):
         self.nlp = nlp
-        contextualSpellCheck.add_to_pipe(self.nlp)
-        model = api.load(cfg['embeddings']['embedding_file'])
-        self.cont = Contractions(kv_model=model)
-        self.cont.load_models()
+        # contextualSpellCheck.add_to_pipe(self.nlp)
+        # model = api.load(cfg['embeddings']['embedding_file'])
+        # self.cont = Contractions(kv_model=model)
+        # self.cont.load_models()
         dirname = os.path.dirname(__file__)
         with open(os.path.join(dirname, 'acronym.json')) as f:
             self.acronyms = json.load(f)
@@ -27,6 +27,7 @@ class TextProcessing:
     def process_text(self, text):
         """
         Processes text as follows:
+
         1. Remove extra whitespaces
         2. decode to unicode
         3. replace acronyms
@@ -41,9 +42,9 @@ class TextProcessing:
         text = self.unidecode(text)
         text = self.replace_acronyms(text)
         text = self.lower_case(text)
-        text = self.expand_contractions(text)
-        text = self.correct_spellings(text)
-        text = self.replace_named_entity(text)
+        # text = self.expand_contractions(text)
+        # text = self.correct_spellings(text)
+        # text = self.replace_named_entity(text)
         return text
 
     def remove_extra_whitespaces(self, text):

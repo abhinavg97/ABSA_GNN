@@ -13,6 +13,7 @@ class DGL_Graph(object):
     """
     Creates a DGL graph with training and testing functionality
     """
+
     def __init__(self, dataset_df, nlp=spacy.load('en_core_web_lg')):
         # counter is the variable storing the total number of docs + tokens
         self.total_nodes = 0
