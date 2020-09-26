@@ -401,9 +401,12 @@ class GraphDataset(torch.utils.data.Dataset):
         labels = lil_matrix(np.array(labels))
 
         if stratified is False:
-            x_split, y_split, x_labels, y_labels = train_test_split(sample_keys, labels, test_size=test_size, random_state=random_state)
+            x_split, y_split, x_labels, y_labels = train_test_split(
+                sample_keys, labels, test_size=test_size,
+                random_state=random_state)
         else:
-            x_split, x_labels, y_split, y_labels = iterative_train_test_split(sample_keys, labels, test_size=test_size)
+            x_split, x_labels, y_split, y_labels = iterative_train_test_split(
+                sample_keys, labels, test_size=test_size, order=order)
 
         x_labels = x_labels.todense().tolist()
         y_labels = y_labels.todense().tolist()

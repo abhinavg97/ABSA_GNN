@@ -3,7 +3,7 @@ import dgl
 import torch
 from ..utils import graph_utils
 from ..utils import utils
-import logging
+# import logging
 import numpy as np
 from logger.logger import logger
 from config import configuration as cfg
@@ -37,7 +37,7 @@ class DGL_Graph(object):
                     counter += 1
         self.total_nodes = counter + dataset_df.shape[0]
         self.dataframe = dataset_df
-        logging.info("Processed {} tokens.".format(len(self.word_to_id)))
+        logger.info("Processed {} tokens.".format(len(self.word_to_id)))
 
     def create_instance_dgl_graphs(self):
         """
@@ -64,7 +64,7 @@ class DGL_Graph(object):
     def save_graphs(self, path, graphs, labels_dict):
         labels_dict_tensor = {"glabel": torch.tensor(labels_dict["glabel"])}
         graph_utils.save_dgl_graphs(path, graphs, labels_dict_tensor)
-        logger.info("Generated  instance DGL graphs and stored at " + cfg['paths']['data_root'])
+        logger.info("Storing instance DGL graphs: " + cfg['paths']['data_root'])
 
     def create_instance_dgl_graph(self, text):
         """

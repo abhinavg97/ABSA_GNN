@@ -68,7 +68,8 @@ class GAT_Graph_Classifier(pl.LightningModule):
         avg_loss = torch.stack([x['loss'] for x in outputs]).mean()
 
         predictions = torch.Tensor()
-        labels = torch.Tensor()
+        # labels = torch.Tensor()
+        labels = torch.LongTensor()
         for x in outputs:
             predictions = torch.cat((predictions, x['prediction']), 0)
             labels = torch.cat((labels, x['labels']), 0)
