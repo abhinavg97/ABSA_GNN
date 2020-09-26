@@ -7,7 +7,7 @@ seed = 0
 global configuration
 configuration = {
 
-    "DEBUG":    False,
+    "DEBUG":    True,
 
     # These paths are relative to the main directory
     "paths":        {
@@ -21,7 +21,7 @@ configuration = {
         "dataset":  "train.xml",
         "saved_graph":    "SemEval_train_graph.bin",
         "dataframe": "",
-        "label_text_to_label_id": "",
+        "label_text_to_label_id": "SemEval16_label_text_to_label_id.json",
     },
 
     "data":         {

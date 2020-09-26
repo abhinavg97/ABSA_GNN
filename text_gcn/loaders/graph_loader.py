@@ -359,6 +359,7 @@ class GraphDataset(torch.utils.data.Dataset):
             return _parse_sem_eval_14_type(self.dataset_path, text_processor)
         else:
             logger.error("{} dataset not yet supported".format(self.dataset_name))
+            return NotImplemented
 
     def save_label_text_to_label_id_dict(self, label_text_to_label_id):
         with open(cfg['paths']['data_root'] + self.dataset_info['name'] + "_label_text_to_label_id.json", "w") as f:
