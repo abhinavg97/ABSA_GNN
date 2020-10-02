@@ -61,9 +61,6 @@ class GAT_Graph_Classifier(pl.LightningModule):
         loss = self.loss_function(prediction, labels)
         return loss, prediction
 
-    def update_adjacency_matrix(self):
-        pass
-
     def _calc_metrics(self, outputs):
         """
         helper function to calculate the metrics
