@@ -37,6 +37,19 @@ class DGL_Graph(object):
         self.dataframe = dataset_df
         logger.info("Processed {} tokens.".format(len(self.word_to_id)))
 
+    def visualize_dgl_graph(self, graph):
+        """
+        visualize single dgl graph
+        Args:
+            graph: dgl graph
+        """
+        graph_utils.visualize_dgl_graph_as_networkx(graph)
+
+    def save_graphs(self, path, graphs, labels_dict):
+        labels_dict_tensor = {"glabel": torch.tensor(labels_dict["glabel"])}
+        graph_utils.save_dgl_graphs(path, graphs, labels_dict_tensor)
+        logger.info("Storing  instance DGL graphs at " + cfg['paths']['data_root'])
+
     def create_instance_dgl_graphs(self):
         """
         Constructs individual DGL graphs for each of the data instance
@@ -51,19 +64,6 @@ class DGL_Graph(object):
         labels_dict = {"glabel": labels}
         return graphs, labels_dict
 
-    def visualize_dgl_graph(self, graph):
-        """
-        visualize single dgl graph
-        Args:
-            graph: dgl graph
-        """
-        graph_utils.visualize_dgl_graph_as_networkx(graph)
-
-    def save_graphs(self, path, graphs, labels_dict):
-        labels_dict_tensor = {"glabel": torch.tensor(labels_dict["glabel"])}
-        graph_utils.save_dgl_graphs(path, graphs, labels_dict_tensor)
-        logger.info("Storing  instance DGL graphs at " + cfg['paths']['data_root'])
-
     def create_instance_dgl_graph(self, text):
         """
         Create a single DGL graph
@@ -74,7 +74,6 @@ class DGL_Graph(object):
         Returns:
             DGL Graph: DGL graph for the input text
         """
-        g = dgl.DGLGraph()
         tokens = self.nlp(text)
         node_embedding = []         # node embedding
         edges_sources = []          # edge data
@@ -98,8 +97,8 @@ class DGL_Graph(object):
                 edges_dest.append(uniq_token_ids[child.text])
 
         # add edges and node embeddings to the graph
-        g.add_nodes(len(uniq_token_ids))
-        g.add_edges(torch.tensor(edges_sources), torch.tensor(edges_dest))
+        g = dgl.graph(data=(edges_sources, edges_dest), num_nodes=len(uniq_token_ids))
+        g = dgl.add_self_loop(g)
         g.ndata['emb'] = torch.tensor(node_embedding).float()
         # add token id attribute to node
         g.ndata['token_id'] = torch.tensor(token_ids).long()
@@ -195,4 +194,32 @@ class DGL_Graph(object):
                 edge_data += [[tf_idf_value]]
         g.add_edges(torch.tensor(edges_sources), torch.tensor(edges_dest),
                     {'weight': torch.tensor(edge_data)})
+
+        g = dgl.add_self_loop(g)
+
         return g
+
+    def update_adjacency_matrix(self, X, A):
+
+        S = torch.empty(A.shape)
+        torch.nn.init.xavier_normal_(S)
+
+        document_size = self.dataframe.shape[0]
+        D = torch.ones(document_size, document_size)
+
+        dropout = torch.nn.Dropout(p=0.5, inplace=False)
+
+        D = dropout(D)
+        D_prime = dropout(A, 0.2)
+
+        ones = torch.ones(D_prime.shape)
+        broadcasted_D = list(map(lambda ones_vec, d_vec: d_vec.tolist()+ones_vec[len(d_vec):].tolist(), ones, D))
+        for i in range(len(broadcasted_D), len(ones)):
+            broadcasted_D += [ones[i].tolist()]
+        broadcasted_D = torch.Tensor(broadcasted_D)
+
+        D_double_prime = torch.mul(D, D_prime)
+        S_prime = torch.mul(D_double_prime, S)
+        A_prime = torch.mul(S_prime, A)
+        X_prime = torch.matmul(A_prime, X)
+        X = torch.matmul(X_prime, W)

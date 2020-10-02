@@ -20,7 +20,7 @@ model = GAT_Graph_Classifier(in_dim=cfg['model']['in_dim'], hidden_dim=cfg['mode
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Trainer Initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-trainer = pl.Trainer(max_epochs=cfg['training']['max_epochs'])
+trainer = pl.Trainer(max_epochs=cfg['training']['max_epochs'], fast_dev_run=True)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Train your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
