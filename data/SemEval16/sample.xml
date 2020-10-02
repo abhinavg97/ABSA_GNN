@@ -1,0 +1,173 @@
+<Reviews>
+    <Review rid="79">
+        <sentences>
+            <sentence id="79:0">
+                <text>Being a PC user my whole life....</text>
+            </sentence>
+            <sentence id="79:1">
+                <text>This computer is absolutely AMAZING!!!</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#GENERAL" polarity="positive" />
+                </Opinions>
+            </sentence>
+            <sentence id="79:2">
+                <text>10 plus hours of battery...</text>
+                <Opinions>
+                    <Opinion category="BATTERY#OPERATION_PERFORMANCE" polarity="positive" />
+                </Opinions>
+            </sentence>
+            <sentence id="79:3">
+                <text>super fast processor and really nice graphics card..</text>
+                <Opinions>
+                    <Opinion category="CPU#OPERATION_PERFORMANCE" polarity="positive" />
+                    <Opinion category="GRAPHICS#GENERAL" polarity="positive" />
+                </Opinions>
+            </sentence>
+            <sentence id="79:4">
+                <text>and plenty of storage with 250 gb(though I will upgrade this and the ram..)</text>
+                <Opinions>
+                    <Opinion category="HARD_DISC#DESIGN_FEATURES" polarity="positive" />
+                </Opinions>
+            </sentence>
+            <sentence id="79:5">
+                <text>This computer is really fast and I'm shocked as to how easy it is to get used to...</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#OPERATION_PERFORMANCE" polarity="positive" />
+                    <Opinion category="LAPTOP#USABILITY" polarity="positive" />
+                </Opinions>
+            </sentence>
+            <sentence id="79:6">
+                <text>I've only had mine a day but I'm already used to it...</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#USABILITY" polarity="positive" />
+                </Opinions>
+            </sentence>
+            <sentence id="79:7" OutOfScope="TRUE">
+                <text>MACS ARE AMAZING!!!</text>
+            </sentence>
+            <sentence id="79:8">
+                <text>GET THIS COMPUTER FOR PORTABILITY AND FAST PROCESSING!!!</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#PORTABILITY" polarity="positive" />
+                    <Opinion category="CPU#OPERATION_PERFORMANCE" polarity="positive" />
+                </Opinions>
+            </sentence>
+        </sentences>
+    </Review>
+    <Review rid="10">
+        <sentences>
+            <sentence id="10:0">
+                <text>the laptop was really good and it goes really fast just the way i thought it would of run.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#GENERAL" polarity="positive" />
+                    <Opinion category="LAPTOP#OPERATION_PERFORMANCE" polarity="positive" />
+                </Opinions>
+            </sentence>
+            <sentence id="10:1">
+                <text>i would really recommend to any person out there to get this laptop cause its really worth it.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#GENERAL" polarity="positive" />
+                </Opinions>
+            </sentence>
+            <sentence id="10:2">
+                <text>and its really cheap and you wont regret buying it.</text>
+                <Opinions>
+                    <Opinion category="LAPTOP#PRICE" polarity="positive" />
+                    <Opinion category="LAPTOP#GENERAL" polarity="positive" />
+                </Opinions>
+            </sentence>
+        </sentences>
+    </Review>
+    <Review rid="73821_30">
+        <sentences>
+            <sentence id="73821_30#0">
+                <text>Room Was Acceptable</text>
+                <Opinions>
+                    <Opinion target="Room" category="ROOMS#GENERAL" polarity="neutral" from="0" to="4" />
+                </Opinions>
+            </sentence>
+            <sentence id="73821_30#1">
+                <text>The room was nice and the furnishings were comfortable.</text>
+                <Opinions>
+                    <Opinion target="room" category="ROOMS#GENERAL" polarity="positive" from="4" to="8" />
+                    <Opinion target="furnishings" category="ROOMS#COMFORT" polarity="positive" from="26" to="37" />
+                </Opinions>
+            </sentence>
+            <sentence id="73821_30#2">
+                <text>The food from the restaurant was very good but pricey which was the standard for everything in this hotel.</text>
+                <Opinions>
+                    <Opinion target="food" category="FOOD_DRINKS#QUALITY" polarity="positive" from="4" to="8" />
+                    <Opinion target="food" category="FOOD_DRINKS#PRICES" polarity="negative" from="4" to="8" />
+                    <Opinion target="hotel" category="HOTEL#PRICES" polarity="negative" from="100" to="105" />
+                </Opinions>
+            </sentence>
+            <sentence id="73821_30#3">
+                <text>The internet access from the room was $9.95 for a 24 hour period.</text>
+				<Opinions>
+                    <Opinion target="internet access" category="ROOMS_AMENITIES#PRICES" polarity="negative" from="4" to="19" />
+                </Opinions>
+            </sentence>
+            <sentence id="73821_30#4">
+                <text>To check in for my flight using the business center cost me $4.59 which included three minutes use of the internet and printing seven pages for my boarding pass.</text>
+				<Opinions>
+                    <Opinion target="business center" category="FACILITIES#PRICES" polarity="negative" from="36" to="51" />
+                </Opinions>
+            </sentence>
+            <sentence id="73821_30#5" OutOfScope="TRUE">
+                <text>I liked the hotel with the exception of being charged for things other hotels provide free.</text>
+            </sentence>
+            <sentence id="73821_30#6">
+                <text>Staff was very pleasant and helpful.</text>
+                <Opinions>
+                    <Opinion target="Staff" category="SERVICE#GENERAL" polarity="positive" from="0" to="5" />
+                </Opinions>
+            </sentence>
+        </sentences>
+    </Review>
+	<Review rid="73821_21">
+        <sentences>
+            <sentence id="73821_21#0">
+                <text>Perfectly Close to the Airport</text>
+                <Opinions>
+                    <Opinion target="NULL" category="LOCATION#GENERAL" polarity="positive" from="0" to="0" />
+                </Opinions>
+            </sentence>
+            <sentence id="73821_21#1">
+                <text>I booked this because of it's proximity to the airport for our departure.</text>
+				<Opinions>
+                    <Opinion target="NULL" category="LOCATION#GENERAL" polarity="positive" from="0" to="0" />
+                </Opinions>
+            </sentence>
+            <sentence id="73821_21#2">
+                <text>The staff was friendly and helpful, they upgraded our room to queen beds without us asking.</text>
+                <Opinions>
+                    <Opinion target="staff" category="SERVICE#GENERAL" polarity="positive" from="4" to="9" />
+                </Opinions>
+            </sentence>
+            <sentence id="73821_21#3">
+                <text>The rooms are lovely, and the hotel is quiet even though it is so close to the airport.</text>
+                <Opinions>
+                    <Opinion target="rooms" category="ROOMS#GENERAL" polarity="positive" from="4" to="9" />
+                    <Opinion target="hotel" category="HOTEL#COMFORT" polarity="positive" from="30" to="35" />
+                </Opinions>
+            </sentence>
+            <sentence id="73821_21#4">
+                <text>The 24 hour shuttle to the airport is very, very convenient and gets you there in about 4 minutes.</text>
+                <Opinions>
+                    <Opinion target="24 hour shuttle" category="FACILITIES#COMFORT" polarity="positive" from="4" to="19" />
+                </Opinions>
+            </sentence>
+            <sentence id="73821_21#5">
+                <text>We ate at the restaurant and the food was good hearty and the best avocado I've ever had.....so all in all you can't beat the deal, the location, the clean rooms, and the service.....</text>
+                <Opinions>
+                    <Opinion target="food" category="FOOD_DRINKS#QUALITY" polarity="positive" from="33" to="37" />
+                    <Opinion target="avocado" category="FOOD_DRINKS#QUALITY" polarity="positive" from="67" to="74" />
+                    <Opinion target="NULL" category="HOTEL#PRICES" polarity="positive" from="0" to="0" />
+                    <Opinion target="location" category="LOCATION#GENERAL" polarity="positive" from="136" to="144" />
+                    <Opinion target="rooms" category="ROOMS#CLEANLINESS" polarity="positive" from="156" to="161" />
+                    <Opinion target="service" category="SERVICE#GENERAL" polarity="positive" from="171" to="178" />
+                </Opinions>
+            </sentence>
+        </sentences>
+    </Review>
+</Reviews>

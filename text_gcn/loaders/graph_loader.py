@@ -18,9 +18,6 @@ from ..graph import DGL_Graph
 from config import configuration as cfg
 from logger.logger import logger
 
-from sklearn.model_selection import train_test_split
-from skmultilearn.model_selection.iterative_stratification import iterative_train_test_split
-
 nlp = spacy.load('en_core_web_sm')
 
 # TODO clean sem_eval_14 dataset -> labels like windows_xp to operating system
@@ -386,7 +383,7 @@ class GraphDataset(torch.utils.data.Dataset):
         df, label_text_to_label_id = utils.prune_dataset_df(df, label_text_to_label_id)
         return df, label_text_to_label_id
 
-    def split_data(self, test_size=0.3, stratified=False, random_state=0, order=2):
+    def split_data(self, test_size=0.3, stratified=False, random_state=0):
         """
         Splits dataframe into train and test with optional stratified splitting
         returns 2 GraphDataset, one for train, one for test
@@ -396,20 +393,19 @@ class GraphDataset(torch.utils.data.Dataset):
         sample_keys = lil_matrix(np.reshape(np.arange(len(graphs)), (len(graphs), -1)))
 
         labels = self.get_labels()
-        labels = lil_matrix(np.array(labels))
+        labels_for_split = list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels))
 
-        if stratified is False:
-            x_split, y_split, x_labels, y_labels = train_test_split(sample_keys, labels, test_size=test_size, random_state=random_state)
-        else:
-            x_split, x_labels, y_split, y_labels = iterative_train_test_split(sample_keys, labels, test_size=test_size)
+        labels_for_split = lil_matrix(np.array(labels_for_split))
 
-        x_labels = x_labels.todense().tolist()
-        y_labels = y_labels.todense().tolist()
-        x_split = x_split.todense().tolist()
-        y_split = y_split.todense().tolist()
+        _, _, x_split, y_split = utils.split_data(sample_keys=sample_keys, labels=labels_for_split,
+                                                  test_size=test_size, stratified=stratified,
+                                                  random_state=random_state)
 
         x_graphs = list(map(lambda index: graphs[index[0]], x_split))
         y_graphs = list(map(lambda index: graphs[index[0]], y_split))
+
+        x_labels = list(map(lambda index: labels[index[0]], x_split))
+        y_labels = list(map(lambda index: labels[index[0]], y_split))
 
         x = GraphDataset(x_graphs, x_labels)
         y = GraphDataset(y_graphs, y_labels)

@@ -9,9 +9,12 @@ import glob
 
 
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from skmultilearn.model_selection.iterative_stratification import iterative_train_test_split
 
 from config import configuration as cfg
 from logger.logger import logger
+
 
 if cfg['training']['create_dataset'] and not cfg['DEBUG']:
     nlp = spacy.load("en_core_web_lg")
@@ -64,6 +67,32 @@ def merge_semEval_14_type(folder):
 
     with open(os.path.join(os.path.dirname(__file__), folder+"merged_files/"+"merged_" + "SemEval14" + ".xml"), "wb") as f:
         f.write(ET.tostring(node))
+
+
+def split_data(sample_keys, labels, test_size, stratified, random_state=0):
+    """
+    Splits the data into 2 parts with optional stratified splitting
+    Args:
+        sample_keys: List of index values for x
+        labels: List of one hot vectors
+        test_size: test size of the split
+        stratified: Toggle to switch on the stratifies split
+        random_state: Defaults to 0.
+
+    Returns:
+        X indices of the split and corresponding y values
+    """
+    if stratified is False:
+        x_split, y_split, x_labels, y_labels = train_test_split(sample_keys, labels, test_size=test_size, random_state=random_state)
+    else:
+        x_split, x_labels, y_split, y_labels = iterative_train_test_split(sample_keys, labels, test_size=test_size)
+
+    x_labels = x_labels.todense().tolist()
+    y_labels = y_labels.todense().tolist()
+    x_split = x_split.todense().tolist()
+    y_split = y_split.todense().tolist()
+
+    return x_labels, y_labels, x_split, y_split
 
 
 def print_dataframe_statistics(df, label_text_to_label_id):

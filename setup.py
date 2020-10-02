@@ -18,11 +18,11 @@ requirements = [
     'scikit-multilearn==0.2.0',
     'nltk==3.5',
     'editdistance==0.5.3',          # required for contextualspellcheck
-    'transformers==3.0.2',          # required for contextualspellcheck
     'contextualSpellCheck==0.2.0',
     'word2number==1.1',
     'pycontractions==2.0.1',
     'unidecode==1.1.1'
+    'simpletransformers==0.48.6'
 ]
 
 extra_requirements = [

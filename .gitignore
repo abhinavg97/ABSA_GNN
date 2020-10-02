@@ -45,9 +45,13 @@ target/
 # pyenv
 .python-version
 
+# cache
+cache_dir/
+
 # Environments
 .env
 .venv
+wandb/
 env/
 venv/
 ENV/
@@ -72,6 +76,9 @@ venv.bak/
 # logs
 lightning_logs/*
 logs/*
+output/
+outputs/
+runs/
 
 # json in data folder
 /data/**/*.json

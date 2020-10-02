@@ -61,6 +61,9 @@ class GAT_Graph_Classifier(pl.LightningModule):
         loss = self.loss_function(prediction, labels)
         return loss, prediction
 
+    def update_adjacency_matrix(self):
+        pass
+
     def _calc_metrics(self, outputs):
         """
         helper function to calculate the metrics
@@ -68,7 +71,7 @@ class GAT_Graph_Classifier(pl.LightningModule):
         avg_loss = torch.stack([x['loss'] for x in outputs]).mean()
 
         predictions = torch.Tensor()
-        labels = torch.Tensor()
+        labels = torch.LongTensor()
         for x in outputs:
             predictions = torch.cat((predictions, x['prediction']), 0)
             labels = torch.cat((labels, x['labels']), 0)
@@ -98,6 +101,7 @@ class GAT_Graph_Classifier(pl.LightningModule):
             f1_score = class_f1_scores_list[index]
             class_name = label_id_to_label_text[index]
             class_f1_scores[class_name] = f1_score
+
         return avg_loss, avg_f1_score, class_f1_scores
 
     def training_step(self, batch, batch_idx):
