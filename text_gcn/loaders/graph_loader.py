@@ -3,11 +3,13 @@ import json
 import re
 import pathlib
 
+import spacy
 import numpy as np
 import pandas as pd
-import spacy
-from scipy.sparse import lil_matrix
 import torch.utils.data
+from scipy.sparse import lil_matrix
+
+from ast import literal_eval
 from xml.etree import ElementTree as ET
 
 from ..utils import TextProcessing
@@ -215,21 +217,63 @@ class GraphDataset(torch.utils.data.Dataset):
             graph_path: path to the bin file containing the saved DGL graph
         """
 
-        assert ((dataframe_df_path is not None and label_text_to_label_id_path is not None)
-                or (graph_path is not None and label_text_to_label_id_path is not None)
-                or (dataset_path is not None and dataset_info is not None)
-                or (graphs is not None and labels is not None)), \
-            "Either labels and graphs array should be given or graph_path \
-            should be specified or dataset_path and dataset_info should be specified"
+        assert ((graphs is not None and labels is not None)
+                or (pathlib.Path(graph_path).is_file() and pathlib.Path(label_text_to_label_id_path).is_file())
+                or (pathlib.Path(dataframe_df_path).is_file() and pathlib.Path(label_text_to_label_id_path).is_file())
+                or (pathlib.Path(dataset_path).is_file() and dataset_info is not None)
+                ), \
+            "Either labels and graphs array should be given or\
+            graph_path should be specified or \
+            dataframe_path should be specified\
+            or dataset_path and dataset_info should be specified "
 
         self.dataset_info = dataset_info
+
+        # If the graphs and labels are provided in an array format
         if graphs is not None and labels is not None:
             self.graphs = graphs
             self.labels = labels
             self.classes = len(self.labels)
 
-        elif (graph_path is None and dataframe_df_path is None) or cfg['training']['create_dataset']:
-            assert pathlib.Path(dataset_path).exists(), "dataset path is not valid!"
+        # If the graphs stored in a file is given
+        elif pathlib.Path(graph_path).is_file() and not cfg['training']['create_dataset']:
+            # If DGL graph is given in a file
+            assert pathlib.Path(label_text_to_label_id_path).exists(), "Label text to label id path is not valid!"
+
+            label_text_to_label_id = self.read_label_text_to_label_id_dict(label_text_to_label_id_path)
+
+            try:
+                df = pd.read_csv(dataframe_df_path, index_col=0)
+                df['labels'] = list(map(lambda label_list: literal_eval(label_list), df['labels'].tolist()))
+                logger.info("Reading dataframe from " + dataframe_df_path)
+                self.print_dataframe_statistics(df, label_text_to_label_id)
+            except Exception:
+                pass
+
+            self.graphs, self.labels = graph_utils.load_dgl_graphs(graph_path)
+            logger.info("Reading graphs from " + graph_path)
+
+        # If the dataset dataframe is given
+        elif pathlib.Path(dataframe_df_path).is_file() and not cfg['training']['create_dataset']:
+            # If the dataframe is given
+            assert pathlib.Path(label_text_to_label_id_path).is_file(), "Label text to label id path is not valid!"
+
+            df = pd.read_csv(dataframe_df_path, index_col=0)
+            df['labels'] = list(map(lambda label_list: literal_eval(label_list), df['labels'].tolist()))
+            logger.info("Reading dataframe from " + dataframe_df_path)
+            label_text_to_label_id = self.read_label_text_to_label_id_dict(label_text_to_label_id_path)
+            self.print_dataframe_statistics(df, label_text_to_label_id)
+
+            token_graph_ob = DGL_Graph(df)
+            self.graphs, labels_dict = token_graph_ob.create_instance_dgl_graphs()
+            token_graph_ob.save_graphs(cfg['paths']['data_root'] + dataset_info['name'] + "_train_graph.bin",
+                                       self.graphs, labels_dict)
+
+            self.labels = labels_dict["glabel"]
+
+        # Otherwise make the graphs from raw data
+        else:
+            assert pathlib.Path(dataset_path).is_file(), "dataset path is not valid!"
             self.dataset_path = dataset_path
 
             if cfg['DEBUG']:
@@ -251,39 +295,6 @@ class GraphDataset(torch.utils.data.Dataset):
 
             self.labels = labels_dict["glabel"]
 
-        elif graph_path is not None:
-            # If DGL graph is given in a file
-            assert pathlib.Path(graph_path).exists(), "graph path is not valid!"
-            assert pathlib.Path(label_text_to_label_id_path).exists(), "Label to id path is not valid!"
-
-            label_text_to_label_id = self.read_label_text_to_label_id_dict(label_text_to_label_id_path)
-
-            try:
-                df = pd.read_csv(dataframe_df_path)
-                logger.info("Read dataframe from " + dataframe_df_path)
-                self.print_dataframe_statistics(df, label_text_to_label_id)
-            except Exception:
-                pass
-
-            self.graphs, self.labels = graph_utils.load_dgl_graphs(graph_path)
-            logger.info("Read graphs from " + graph_path)
-
-        else:
-            # If the dataframe is given
-            assert pathlib.Path(dataframe_df_path).exists(), "dataframe path is not valid!"
-            assert pathlib.Path(label_text_to_label_id_path).exists(), "Label to id path is not valid!"
-
-            df = pd.read_csv(dataframe_df_path)
-            logger.info("Read dataframe from " + dataframe_df_path)
-            label_text_to_label_id = self.read_label_text_to_label_id_dict(label_text_to_label_id_path)
-            self.print_dataframe_statistics(df, label_text_to_label_id)
-
-            token_graph_ob = DGL_Graph(df)
-            self.graphs, labels_dict = token_graph_ob.create_instance_dgl_graphs()
-            token_graph_ob.save_graphs(cfg['paths']['data_root'] + dataset_info['name'] + "_train_graph.bin",
-                                       self.graphs, labels_dict)
-
-            self.labels = labels_dict["glabel"]
         # atleast one document is expected
         self.classes = len(self.labels[0])
 
@@ -371,7 +382,7 @@ class GraphDataset(torch.utils.data.Dataset):
     def read_label_text_to_label_id_dict(self, label_text_to_label_id_path):
         with open(label_text_to_label_id_path, "r") as f:
             label_text_to_label_id = json.load(f)
-        logger.info("Read label to id mapping from " + label_text_to_label_id_path)
+        logger.info("Reading label to id mapping from " + label_text_to_label_id_path)
         return label_text_to_label_id
 
     def print_dataframe_statistics(self, df, label_text_to_label_id):

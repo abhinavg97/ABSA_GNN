@@ -1,9 +1,14 @@
-from simpletransformers.classification import MultiLabelClassificationModel
-from text_gcn.loaders.graph_loader import GraphDataset
-from config import configuration as cfg
-from text_gcn import utils
+import torch
 import numpy as np
 from scipy.sparse import lil_matrix
+from simpletransformers.classification import MultiLabelClassificationModel
+
+from text_gcn import utils
+from text_gcn.loaders.graph_loader import GraphDataset
+from text_gcn.metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores, f1_scores_average
+
+from logger.logger import logger
+from config import configuration as cfg
 
 
 def split_data(df, stratified=True, test_size=0.3, random_state=1):
@@ -31,7 +36,9 @@ def split_data(df, stratified=True, test_size=0.3, random_state=1):
 
 def read_data():
 
-    gd = GraphDataset(dataset_path=cfg['paths']['data_root']+cfg['paths']['dataset'], dataset_info=cfg['data']['dataset'])
+    gd = GraphDataset(label_text_to_label_id_path='',
+                      dataframe_df_path='', dataset_path=cfg['paths']['data_root']+cfg['paths']['dataset'],
+                      dataset_info=cfg['data']['dataset'], graph_path='')
     df, label_test_to_label_id = gd.get_dataset_df()
 
     x_df, y_df = split_data(df=df, test_size=0.3, stratified=True, random_state=1)
@@ -57,6 +64,15 @@ model.train_model(train_df)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Evaluate your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 result, model_outputs, wrong_predictions = model.eval_model(eval_df)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Calculate metrics ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+labels = torch.Tensor(eval_df['labels'].tolist())
+
+logger.info(f"class wise f1 scores: \n {class_wise_f1_scores(model_outputs, labels)}")
+logger.info(f"class wise precision scores: \n {class_wise_precision_scores(model_outputs, labels)}")
+logger.info(f"class wise recall scores: \n {class_wise_recall_scores(model_outputs, labels)}")
+logger.info(f"f1 scores average: \n {f1_scores_average(model_outputs, labels)}")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Use your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

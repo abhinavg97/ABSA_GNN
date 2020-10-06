@@ -2,7 +2,7 @@ from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import spacy
 from nltk.tree import Tree
-from config import configuration as cfg
+# from config import configuration as cfg
 
 
 def tsne_plot(words, vectors):
@@ -36,16 +36,16 @@ def tsne_plot(words, vectors):
 
 def visulaize_dependancy_tree(doc):
     from pathlib import Path
-    svg = spacy.displacy.render(doc, style='dep', jupyter=False)
-    output_path = Path(cfg['paths']['output'] + "dependancy_tree.svg")
-    output_path.open("w", encoding="utf-8").write(svg)
+    png = spacy.displacy.render(doc, style='dep', jupyter=False)
+    output_path = Path('output/dependancy_tree.png')
+    output_path.open("w", encoding="utf-8").write(png)
 
 
 def nltk_spacy_tree(sent):
     """
     Visualize the SpaCy dependency tree with nltk.tree
     """
-    nlp = spacy.download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
     doc = nlp(sent)
 
     def token_format(token):
@@ -61,3 +61,9 @@ def nltk_spacy_tree(sent):
     tree = [to_nltk_tree(sent.root) for sent in doc.sents]
     # The first item in the list is the full tree
     tree[0].draw()
+
+
+if __name__ == "__main__":
+
+    doc = "super fast processor and really nice graphics card. and plenty of storage with 250 gb(though I will upgrade this and the ram.)"
+    nltk_spacy_tree(doc)

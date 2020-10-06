@@ -12,23 +12,25 @@ configuration = {
     # These paths are relative to the main directory
     "paths":        {
         # for saving plots, f1_score
-        "data_root":          "data/SemEval16/",
-        # 'data_root':  "data/SamsungGalaxy/",
-        # 'data_root':    "data/FourSquared/",
-        # 'data_root': "data/MAMS-ATSA/",
+        # 'data_root':    "data/SemEval14/",
+        # 'data_root':    "data/SemEval16/",
+        # 'data_root': "data/MAMS_ACSA/",
+        # 'data_root': "data/FourSquared/",
+        'data_root':  "data/SamsungGalaxy/",
         "output":    "output/",
         "log":       "logs/",
         "dataset":  "train.xml",
-        "saved_graph":    "SemEval_train_graph.bin",
-        "dataframe": "",
-        "label_text_to_label_id": "SemEval16_label_text_to_label_id.json",
+        "saved_graph":    "",
+        "dataframe": "SamsungGalaxy_dataframe.csv",
+        "label_text_to_label_id": "SamsungGalaxy_label_text_to_label_id.json",
     },
 
     "data":         {
+        "num_workers": 4,
         "dataset":     {
-            'name': 'SemEval16'
-            # 'name':   'MAMS_ATSA'
-            # 'name':       'SamsungGalaxy'
+            # 'name': 'SemEval14'
+            # 'name':   'MAMS_ACSA'
+            'name':       'SamsungGalaxy'
             # 'name':     'FourSquared'
         },
         "trainval_test_split": 0.3,
@@ -44,7 +46,7 @@ configuration = {
     },
 
     "training":        {
-        "create_dataset":       True,
+        "create_dataset":       False,
         "dropout":              0.2,
         "max_epochs":           10,
         "train_batch_size":     30,

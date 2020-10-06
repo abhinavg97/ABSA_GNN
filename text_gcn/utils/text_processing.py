@@ -1,10 +1,12 @@
-import spacy
-import gensim.downloader as api
-import contextualSpellCheck
-from pycontractions import Contractions
-import unidecode
-import json
 import os
+import re
+import json
+import spacy
+import unidecode
+import contextualSpellCheck
+import gensim.downloader as api
+from pycontractions import Contractions
+
 from config import configuration as cfg
 # from word2number import w2n
 
@@ -34,23 +36,50 @@ class TextProcessing:
         5. expand contractions of english words like ain't
         6. correct spelling mistakes
         7. replace NE in the text
+        8. add space before '(' and after ')' then remove extra spaces
         Args:
             text: text to be processed
         """
-        text = self.remove_extra_whitespaces(text)
         text = self.unidecode(text)
+        text = self.remove_repeated_chars(text)
+        text = self.put_space_around_special_chars(text)
+        text = self.remove_extra_whitespaces(text)
         text = self.replace_acronyms(text)
-        text = self.lower_case(text)
         text = self.expand_contractions(text)
         text = self.correct_spellings(text)
         text = self.replace_named_entity(text)
+        text = self.lower_case(text)
+        return text
+
+    def remove_repeated_chars(self, text):
+        """
+        Removes repeated instances of consecutive special chars
+        Args:
+            text: text to be processed
+        """
+        text = re.sub(r'([!@#$%^&*,./?\'";:\\])\1+', r'\1', text)
+        return text
+
+    def put_space_around_special_chars(self, text):
+        """
+        Puts space around special chars like '[({$&*#@!'
+        Args:
+            text: text to be processed
+        """
+
+        chars = ['$', '?', '%', '@', '!', '#', '^', '*', '&', '"',
+                 ':', ';', '/', '\\', ',', '+',
+                 '(', ')', '[', ']', '{', '}', '<', '>']
+
+        for char in chars:
+            text = text.replace(char, ' '+char+' ')
         return text
 
     def remove_extra_whitespaces(self, text):
         """
         Removes extra whitespaces from the text
         Args:
-            text: text to be processes
+            text: text to be processed
         """
         return text.strip()
 
@@ -60,7 +89,7 @@ class TextProcessing:
         Args:
             text: text to be processed
         """
-        return unidecode.unidecode(text)
+        return unidecode.unidecode(text.lower())
 
     def lower_case(self, text):
         """
@@ -76,7 +105,7 @@ class TextProcessing:
         Args:
             text: text to be processed
         """
-        return list(self.cont.expand_texts([text], precise=True))[0]
+        return list(self.cont.expand_texts([text.lower()], precise=True))[0]
 
     def correct_spellings(self, text):
         """
@@ -97,7 +126,7 @@ class TextProcessing:
             text: text to be processed
         """
         for acronym, expansion in self.acronyms.items():
-            text = text.replace(acronym.lower(), expansion)
+            text = text.replace(' '+acronym.lower()+' ', ' '+expansion.lower()+' ')
         return text
 
     def replace_named_entity(self, text):

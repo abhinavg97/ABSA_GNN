@@ -1,3 +1,7 @@
+# BUILD IMAGE: docker build -t docker.io/abhi1604/gcn-docker:latest .
+# PUSH IMAGE : docker push abhi1604/gcn-docker:latest
+# EXECUTE CONTAINER: docker run --mount source=gcn-docker,target=/usr/src/app docker.io/abhi1604/gcn-docker:latest
+
 FROM ubuntu:18.04
 WORKDIR /usr/src/app
 RUN apt-get update && apt-get install -y software-properties-common

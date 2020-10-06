@@ -200,26 +200,43 @@ class DGL_Graph(object):
         return g
 
     def update_adjacency_matrix(self, X, A):
+        """
+        updating adjacency matrix according to the logic given in the paper
+        Dropout logic is as given here: https://arxiv.org/pdf/1207.0580.pdf
+        Args:
+            X ([type]): [description]
+            A ([type]): [description]
+        """
 
-        S = torch.empty(A.shape)
-        torch.nn.init.xavier_normal_(S)
-
-        document_size = self.dataframe.shape[0]
-        D = torch.ones(document_size, document_size)
-
+        # document_size is number of documents in the Adj matrix
+        # shape of D is document_size x document_size
+        d = self.dataframe.shape[0]
+        D = torch.ones(d, d)
         dropout = torch.nn.Dropout(p=0.5, inplace=False)
-
         D = dropout(D)
-        D_prime = dropout(A, 0.2)
 
-        ones = torch.ones(D_prime.shape)
-        broadcasted_D = list(map(lambda ones_vec, d_vec: d_vec.tolist()+ones_vec[len(d_vec):].tolist(), ones, D))
-        for i in range(len(broadcasted_D), len(ones)):
-            broadcasted_D += [ones[i].tolist()]
-        broadcasted_D = torch.Tensor(broadcasted_D)
+        # D_prime is dropout matrix applied to Adjacency matrix
+        # shape of D_prime is same as that of Adjacency matrix
+        dropout = torch.nn.Dropout(p=0.2, inplace=False)
+        D_prime = torch.ones(A.shape)
+        D_prime = dropout(D_prime)
 
-        D_double_prime = torch.mul(broadcasted_D, D_prime)
-        S_prime = torch.mul(D_double_prime, S)
-        A_prime = torch.mul(S_prime, A)
-        X_prime = torch.matmul(A_prime, X)
-        X = torch.matmul(X_prime, W)
+        # D_prime has first dxd elements from D with a higher dropout probability
+        # The rest of the elements have a lower dropout probability
+        for i in range(d):
+            for j in range(d):
+                D_prime[i, j] = D[i, j]
+        # this will go to layer class
+
+        # S is a learnable sparse matrix
+        # S = torch.empty(A.shape)
+        # torch.nn.init.xavier_uniform_(S)
+
+        # S_prime = torch.mul(D_prime, S)
+        # A_prime = torch.mul(S_prime, A)
+
+        # X_prime = torch.matmul(A_prime, X)
+        # W = torch.randn(d, A.shape[0])
+        # X = torch.matmul(X_prime, W)
+
+        return A_prime

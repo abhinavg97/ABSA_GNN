@@ -1,16 +1,19 @@
 import torch
-from dgl.nn.pytorch.conv import GATConv
 import torch.optim as optim
 import torch.nn.functional as F
-from dgl import mean_nodes
+
 import pytorch_lightning as pl
-from pytorch_lightning.metrics.sklearns import F1
-from config import configuration as cfg
+
+from dgl import mean_nodes
+from dgl.nn.pytorch.conv import GATConv
 
 import pathlib
 import json
 
+from config import configuration as cfg
 from logger.logger import logger
+
+from ..metrics import f1_scores_average, class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores
 
 
 class GAT_Graph_Classifier(pl.LightningModule):
@@ -74,16 +77,12 @@ class GAT_Graph_Classifier(pl.LightningModule):
             labels = torch.cat((labels, x['labels']), 0)
         # self.logger.experiment._
         labels = torch.Tensor(list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels)))
-        metric = F1(average='macro')
-        avg_f1_score = sum(list(map(lambda pred, y: metric(pred > 0.5, y), predictions, labels)))/predictions.shape[0]
 
-        class_f1_scores_list = torch.Tensor([0 for i in range(len(predictions[0]))])
-        for i, pred in enumerate(predictions):
-            label_list = labels[i]
-            for j, class_pred in enumerate(pred):
-                class_f1_scores_list[j] += metric(class_pred.item() > 0.5, label_list[j].item()).item()
-        class_f1_scores_list /= len(predictions)
+        avg_f1_score = f1_scores_average(predictions, labels)
+
+        class_f1_scores_list = class_wise_f1_scores(predictions, labels)
         class_f1_scores = {}
+
         try:
             label_text_to_label_id_path = cfg['paths']['data_root'] + cfg['paths']['label_text_to_label_id']
             assert pathlib.Path(label_text_to_label_id_path).exists(), "Label to id path is not valid! Using Incremental class names"

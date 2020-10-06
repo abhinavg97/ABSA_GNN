@@ -46,7 +46,10 @@ target/
 .python-version
 
 # cache
+cache/
 cache_dir/
+
+docker-data/
 
 # Environments
 .env
