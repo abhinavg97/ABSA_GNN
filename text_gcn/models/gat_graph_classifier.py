@@ -110,8 +110,13 @@ class GAT_Graph_Classifier(pl.LightningModule):
         avg_train_loss, avg_f1_score, class_f1_scores = self._calc_metrics(outputs)
 
         logger.info(f"Train class f1 scores {class_f1_scores}")
-        log = {'avg_train_loss': avg_train_loss, 'avg_train_f1_score': avg_f1_score}
-        return {'log': log}
+
+        result = pl.TrainResult(minimize=avg_train_loss)
+        result.log('avg_train_loss', avg_train_loss)
+        result.log('avg_train_f1_score', avg_f1_score)
+        result.write('Class f1 scores', class_f1_scores)
+        # log = {'avg_train_loss': avg_train_loss, 'avg_train_f1_score': avg_f1_score}
+        return result
 
     def validation_step(self, batch, batch_idx):
         graph_batch, labels = batch
@@ -124,8 +129,14 @@ class GAT_Graph_Classifier(pl.LightningModule):
     def validation_epoch_end(self, outputs):
         avg_val_loss, avg_f1_score, class_f1_scores = self._calc_metrics(outputs)
         logger.info(f"Train class f1 scores {class_f1_scores}")
-        log = {'avg_val_loss': avg_val_loss, 'avg_val_f1_score': avg_f1_score}
-        return {'log': log}
+
+        result = pl.EvalResult()
+        result.log('avg_val_loss', avg_val_loss)
+        result.log('avg_val_f1_score', avg_f1_score)
+        result.write('Class f1 scores', class_f1_scores)
+
+        # log = {'avg_val_loss': avg_val_loss, 'avg_val_f1_score': avg_f1_score}
+        return result
 
     def test_step(self, batch, batch_idx):
         graph_batch, labels = batch
@@ -136,6 +147,15 @@ class GAT_Graph_Classifier(pl.LightningModule):
     def test_epoch_end(self, outputs):
         avg_test_loss, avg_f1_score, class_f1_scores = self._calc_metrics(outputs)
         logger.info(f"Train class f1 scores {class_f1_scores}")
-        log = {'avg_test_loss': avg_test_loss, 'avg_test_f1_score': avg_f1_score}
-        return {'log': log}
-        # TODO tensorboard for logging metrics
+        # log = {'avg_test_loss': avg_test_loss, 'avg_test_f1_score': avg_f1_score}
+
+        result = pl.EvalResult()
+        result.log('avg_test_loss', avg_test_loss)
+        result.log('avg_test_f1_score', avg_f1_score)
+        result.write('Class f1 scores', class_f1_scores)
+
+        return result
+        # TODO check why train metrics aere not getting logged in tensorboard
+        # TODO check why other additional unknown names are getting logged
+        # TODO tensorboard logging for baseline
+        # TODO custom tensorboard for logging class wise metrics

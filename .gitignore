@@ -70,7 +70,8 @@ venv.bak/
 # backup files
 *~
 
-# saved graph
+# saved graphs
+
 *.bin
 
 # vscode
@@ -83,8 +84,3 @@ output/
 outputs/
 runs/
 
-# json in data folder
-/data/**/*.json
-
-# csv files
-*.csv

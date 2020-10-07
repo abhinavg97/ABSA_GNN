@@ -36,9 +36,9 @@ def tsne_plot(words, vectors):
 
 def visulaize_dependancy_tree(doc):
     from pathlib import Path
-    png = spacy.displacy.render(doc, style='dep', jupyter=False)
-    output_path = Path('output/dependancy_tree.png')
-    output_path.open("w", encoding="utf-8").write(png)
+    svg = spacy.displacy.render(doc, style='dep', jupyter=False)
+    output_path = Path('output/dependancy_tree.svg')
+    output_path.open("w", encoding="utf-8").write(svg)
 
 
 def nltk_spacy_tree(sent):

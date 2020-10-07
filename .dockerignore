@@ -71,7 +71,7 @@ venv.bak/
 *~
 
 # saved graph
-*.bin
+/data/**/*.bin
 
 # vscode
 .vscode/
@@ -87,4 +87,4 @@ runs/
 /data/**/*.json
 
 # csv files
-*.csv
+/data/**/*.csv

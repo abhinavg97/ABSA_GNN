@@ -22,7 +22,8 @@ requirements = [
     'word2number==1.1',
     'pycontractions==2.0.1',
     'unidecode==1.1.1'
-    'simpletransformers==0.48.6'
+    'simpletransformers==0.48.6',
+    'matplotlib'
 ]
 
 extra_requirements = [
