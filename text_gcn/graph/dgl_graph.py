@@ -58,6 +58,7 @@ class DGL_Graph(object):
         """
         graphs = []
         labels = []
+        # TODO create large dgl graph here and get the node embedding vector
         for _, item in self.dataframe.iterrows():
             graphs += [self.create_instance_dgl_graph(item[1])]
             labels += [item[2]]
@@ -75,7 +76,7 @@ class DGL_Graph(object):
             DGL Graph: DGL graph for the input text
         """
         tokens = self.nlp(text)
-        node_embedding = []         # node embedding
+        node_embeddings = []         # node embedding
         edges_sources = []          # edge data
         edges_dest = []             # edge data
         node_counter = 0            # uniq ids for the tokens in the document
@@ -87,7 +88,7 @@ class DGL_Graph(object):
                 uniq_token_ids[token.text]
             except KeyError:
                 uniq_token_ids[token.text] = node_counter
-                node_embedding.append(token.vector)
+                node_embeddings.append(token.vector)
                 node_counter += 1
                 token_ids += [self.word_to_id[token.text]]
 
@@ -99,7 +100,8 @@ class DGL_Graph(object):
         # add edges and node embeddings to the graph
         g = dgl.graph(data=(edges_sources, edges_dest), num_nodes=len(uniq_token_ids))
         g = dgl.add_self_loop(g)
-        g.ndata['emb'] = torch.tensor(node_embedding).float()
+        # TODO take node embedding from the large graph
+        g.ndata['emb'] = torch.tensor(node_embeddings).float()
         # add token id attribute to node
         g.ndata['token_id'] = torch.tensor(token_ids).long()
         return g

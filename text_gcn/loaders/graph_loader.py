@@ -258,9 +258,10 @@ class GraphDataset(torch.utils.data.Dataset):
             # If the dataframe is given
             assert pathlib.Path(label_text_to_label_id_path).is_file(), "Label text to label id path is not valid!"
 
+            logger.info("Reading dataframe from " + dataframe_df_path)
             df = pd.read_csv(dataframe_df_path, index_col=0)
             df['labels'] = list(map(lambda label_list: literal_eval(label_list), df['labels'].tolist()))
-            logger.info("Reading dataframe from " + dataframe_df_path)
+
             label_text_to_label_id = self.read_label_text_to_label_id_dict(label_text_to_label_id_path)
             self.print_dataframe_statistics(df, label_text_to_label_id)
 

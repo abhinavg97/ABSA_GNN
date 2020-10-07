@@ -13,6 +13,12 @@ from config import configuration as cfg
 # TODO write arguement parser and pass the required params to dm
 dm = GraphDataModule()
 
+# OPTIONAL
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Configure logger ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# logger = pl.loggers.TensorBoardLogger("tb_logs", name=cfg['data']['dataset']['name'])
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Model initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 model = GAT_Graph_Classifier(in_dim=cfg['model']['in_dim'], hidden_dim=cfg['model']['hidden_dim'],
@@ -20,7 +26,7 @@ model = GAT_Graph_Classifier(in_dim=cfg['model']['in_dim'], hidden_dim=cfg['mode
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Trainer Initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-trainer = pl.Trainer(max_epochs=cfg['training']['max_epochs'], fast_dev_run=True)
+trainer = pl.Trainer(max_epochs=cfg['training']['max_epochs'], fast_dev_run=False)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Train your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -1,0 +1,2878 @@
+,labels,frequency
+0,decor,78
+1,food,897
+2,prices,106
+3,tables,97
+4,manager,147
+5,menu,504
+6,peanut butter roll,1
+7,classics,1
+8,sushi,48
+9,service,503
+10,brunch,86
+11,eggs served with onions,1
+12,guy,10
+13,server,101
+14,appetizers,146
+15,dinner,400
+16,hostess,113
+17,wait,131
+18,seat,26
+19,waitress,311
+20,water,54
+21,bartender,48
+22,drinks,267
+23,course meal,1
+24,lunch,141
+25,wine,97
+26,eat,2
+27,entrees,82
+28,waitresses,23
+29,table,198
+30,reservations,76
+31,owners,15
+32,french bistro fare,1
+33,steamed mussels with french fr,1
+34,green peppercorn sauce,1
+35,scene,54
+36,spot,22
+37,meal,187
+38,succulent salmon fillet,1
+39,caramelized onions,1
+40,foods,7
+41,veggies,3
+42,sprouts,1
+43,beets,2
+44,waiter,503
+45,lounge,11
+46,seats,14
+47,bar,384
+48,order,2
+49,places,3
+50,bill,53
+51,waiters,101
+52,plates,41
+53,dining room,22
+54,patio,4
+55,mexican,6
+56,hamburger,2
+57,beef,16
+58,host,37
+59,waitstaff,48
+60,served,53
+61,dish,68
+62,pork chop,4
+63,lamb,11
+64,price,125
+65,lights,1
+66,portions,123
+67,coffee,48
+68,tea,11
+69,cream,8
+70,dessert,134
+71,chinese chocolat,1
+72,seinfeld,2
+73,prime dinner,1
+74,crowds,9
+75,waiting,90
+76,desserts,35
+77,chocolate cake,3
+78,cheesecake,7
+79,soft shell crab appetizer,1
+80,cod,5
+81,place,158
+82,atmosphere,128
+83,glass of water,10
+84,whole table,1
+85,chef,58
+86,spices,9
+87,oil,10
+88,dinin room,1
+89,location,5
+90,sides,16
+91,lugers,1
+92,bacon,5
+93,steak,69
+94,priced,15
+95,specials,39
+96,chicken vindaloo,1
+97,cost,13
+98,burgers,20
+99,secret hickory sauce,1
+100,breakfast,16
+101,eggs,11
+102,selections,2
+103,seafood,14
+104,wine list,25
+105,wait staff,67
+106,entree,54
+107,baby back ribs,1
+108,red  beef chili,1
+109,deep  fried onions,1
+110,melissa,1
+111,pastries,7
+112,experience,6
+113,bean burritos,1
+114,beans,10
+115,wines by the glass to,1
+116,jerked chicken dinner,1
+117,check,30
+118,appetizer,73
+119,duck,10
+120,ingredients,25
+121,menus,41
+122,baklava,1
+123,chocolate mousse cake,1
+124,strawberry shortcake,1
+125,italian food,5
+126,pasta dishes,5
+127,shows,2
+128,characters,2
+129,lobster rolls and poached shri,1
+130,crab and roasted red pepper di,1
+131,worldly cuisine,1
+132,staff,135
+133,green curry,1
+134,meat,36
+135,shoots,1
+136,justly  popular lunch buffet,1
+137,gelato,1
+138,chopped hai  white fish ,1
+139,octopus sauteed with ground po,1
+140,rabe,1
+141,lime juice,1
+142,glass of wine,17
+143,corn cake,1
+144,air,7
+145,italian wines,2
+146,olive oil,7
+147,bread,48
+148,sake,4
+149,salmon,22
+150,meals,25
+151,cake,4
+152,lamb with orzo,1
+153,fish,47
+154,eggplant and zucchini,1
+155,comfort food,2
+156,pizza,66
+157,grandma slices,1
+158,reservation,137
+159,sushi options,1
+160,asparagus and cucumber,1
+161,ceviche,4
+162,dishes,88
+163,open tables,1
+164,drink,139
+165,prefix dinner,1
+166,garlic shrimp appetizer,1
+167,fries,20
+168,vegetable carpaccio,1
+169,diner drink,1
+170,chicken with mushroom,1
+171,telephono,1
+172,quality,33
+173,drycleaning bill,1
+174,bottle,10
+175,beer,30
+176,scallops,6
+177,salad,36
+178,water glasses,8
+179,servers,43
+180,cheese,29
+181,steaks,11
+182,house salad,2
+183,fried calamari,2
+184,slices,8
+185,sole,2
+186,clam sauce,1
+187,delivery,13
+188,seating,36
+189,counter space,1
+190,bottom,1
+191,sauce,33
+192,top,1
+193,man,2
+194,space,48
+195,ice cream,8
+196,fois gras,1
+197,rack of lamb,2
+198,ices,1
+199,water and wine glasses,2
+200,root beer,1
+201,ground,2
+202,margarita pizza,1
+203,calamari appetizer,2
+204,salmon entree,1
+205,stuff,4
+206,party space,1
+207,informal dining room,1
+208,goat cheese,6
+209,sun dried tomato ravioli,1
+210,calamari,9
+211,school cocktail,1
+212,ambiance,19
+213,music,26
+214,individual casseroles,1
+215,dense milkshakes,1
+216,fish sauce,1
+217,chopped olive,1
+218,lettuce,4
+219,downstairs,2
+220,portion,17
+221,setting,15
+222,waiting room,1
+223,list,4
+224,chicken,36
+225,pancakes,10
+226,flavor,44
+227,courses,11
+228,garden,7
+229,dining outdoors,1
+230,potatoes,3
+231,stew,1
+232,shredded pork,1
+233,communication,1
+234,lentil avacado salad,1
+235,lunch counter,1
+236,oyster quail egg shooters,1
+237,carts,1
+238,sicilian pizza,1
+239,lbs,1
+240,garlic bread,3
+241,bathroom,8
+242,owner,50
+243,bottle of wine,16
+244,arepas,1
+245,taste,17
+246,value,15
+247,quality of the food,2
+248,egg and cheese,1
+249,bagel,2
+250,live jazz band,3
+251,lobster cobb salad,1
+252,wines,13
+253,rice,23
+254,patrons,6
+255,entertainment,5
+256,filet mignon,6
+257,grilled cornish,1
+258,hen,1
+259,fish kebabs,1
+260,milk,2
+261,coffee  tea,1
+262,apple sourdough pie,1
+263,orange cake,1
+264,bundt cake,1
+265,ground lamb in spicy sauce,1
+266,staffs,1
+267,attitude,14
+268,french food,1
+269,seated,20
+270,dining room table,1
+271,cheeses,3
+272,the cheese course,1
+273,prime rib,2
+274,halibut,2
+275,sauces,10
+276,tuna a la carte,1
+277,wild salmon and chicken breast,1
+278,prix fixe,5
+279,dine,3
+280,flavors,10
+281,tortellini filled with prosciu,1
+282,beef in a porcini  butter sauc,1
+283,dumplings,6
+284,main courses,7
+285,menu choices,2
+286,ambience,35
+287,table waiting,3
+288,snack,3
+289,tapas,14
+290,ribs,15
+291,austrian cuisine,1
+292,money,6
+293,seafood offerings,1
+294,lobster tails  steamed crab le,1
+295,wild alaskan salmon,1
+296,pasta,27
+297,dining,54
+298,delivery range,1
+299,chunk,1
+300,beef short rib,1
+301,room,18
+302,pan  italian menu,1
+303,farm roasted coffee served,1
+304,lengthy menu,1
+305,pork in plum sauce,1
+306,pork with chili and basil leav,1
+307,bean curd coconut milk soup,1
+308,appitizers,4
+309,croquetas,1
+310,main entrees,1
+311,pan roasted new onions,1
+312,specific table,1
+313,glass,23
+314,cheeseburger,2
+315,duck  foie gras,1
+316,new staff,3
+317,duck quesadilla,1
+318,maki roll,1
+319,menu contains,1
+320,japanese fusion,1
+321,italian dishes,2
+322,crab cakes,3
+323,fried oysters and onion rings,1
+324,tables filled with dining patr,1
+325,fare,13
+326,cup,7
+327,table cloths,1
+328,kitchen,38
+329,lit space,1
+330,chips,5
+331,waitress service,1
+332,glass of red wine,1
+333,marscapone version,1
+334,cook,1
+335,brioche french toast,1
+336,sandwich of scrambled eggs and,1
+337,biscuit,1
+338,diner,20
+339,tapas dishes,1
+340,overzealous kitchen,1
+341,dinner special,1
+342,charred squid salad,1
+343,bar scene,4
+344,chicken dishes,1
+345,vegetables,8
+346,singing wait staff,1
+347,crowd,27
+348,veal for main course,1
+349,hanger steak,3
+350,vibe,4
+351,dj,9
+352,crystal,1
+353,management,16
+354,soups,8
+355,area,17
+356,drink sake,1
+357,homestyle italian cooking,1
+358,grilled chicken,2
+359,pork dumplings,1
+360,pie,6
+361,sushi platter,1
+362,lounge area,4
+363,yuckity,1
+364,sangria,15
+365,bar area,8
+366,late  night dinner,1
+367,prix fixe menu,3
+368,baby bottles,1
+369,smallest martini,1
+370,tag,1
+371,slices of sausage,1
+372,veal meatballs,1
+373,vodka glass,1
+374,small shrimp,1
+375,course,3
+376,multiple chef,1
+377,main dining room,5
+378,new york room,1
+379,beer selection,3
+380,grill with pork,1
+381,slopers sipping wines,1
+382,sandwiches,15
+383,multi  course dinner,1
+384,clam miso soup,1
+385,scallions,1
+386,avocado,2
+387,and jalapeno mayonnaise,1
+388,shochu,1
+389,tequila,1
+390,buffet,5
+391,tip,19
+392,smokey baked beans,1
+393,coleslaw,1
+394,furniture,2
+395,bartendars,2
+396,grizzle,1
+397,outdoors,1
+398,drinks includes raspberry lemo,1
+399,assortment of smoothies,1
+400,iced teas,1
+401,shrimp,12
+402,lobster,11
+403,exotic fish,1
+404,flower stuffed,1
+405,lump crab meat,1
+406,chicken fajitas,1
+407,club soda  filled with ice,1
+408,lime,1
+409,seating for dinner,1
+410,chicken makhni,1
+411,indian for butter chicken,1
+412,ka  choori appetizer,1
+413,vegetarian,3
+414,door,8
+415,candle  lit bar,1
+416,rustic  chic dining room,1
+417,curtain,1
+418,main dining area,1
+419,family meal,1
+420,spinach,11
+421,salads,22
+422,dinner specials,1
+423,diner fare,1
+424,food quality,8
+425,priced menu,1
+426,garlic kick,1
+427,weekday lunch,1
+428,basil,3
+429,live scallop,1
+430,choices,7
+431,change,2
+432,lunch specials,4
+433,meats,5
+434,cheese sticks,1
+435,dining area,3
+436,time,30
+437,man chair,1
+438,bartenders,6
+439,corridor,1
+440,counters,1
+441,dining areas,2
+442,wine selection,4
+443,the glass,1
+444,tom s food,1
+445,omelettes,1
+446,chicken dumpling soup,1
+447,portion of brown rice,1
+448,kale,1
+449,carrots,3
+450,seaweed,1
+451,tahini,1
+452,hudson bar,1
+453,mooshu spring rolls,1
+454,steamed dumplings alright,1
+455,dead fish,1
+456,chocolate decoration,1
+457,entree options,2
+458,salmon teriyaki,1
+459,champagne,6
+460,tap,8
+461,cream joint,1
+462,cream shop server,1
+463,ginger root,1
+464,booth,3
+465,noodles with steak,1
+466,boton shrimp,1
+467,sea eel,1
+468,assortment of vegetable,1
+469,seafood spring,1
+470,rolls,16
+471,slices of lemon,1
+472,glasses,9
+473,temperature,2
+474,christmas,1
+475,mexican food,4
+476,hot salsa,1
+477,noise,7
+478,tinned beans,1
+479,point,2
+480,reservation time,1
+481,trendier,1
+482,main chef,1
+483,water guy,1
+484,buffalo,1
+485,sauce over the mozzarella,1
+486,cuisine,13
+487,gesture,1
+488,red wine,4
+489,mexican art,1
+490,dim,2
+491,yuka,1
+492,salmon roe  and cucumber,1
+493,crispy salmon skin,1
+494,employes,1
+495,sci  fi music,1
+496,deserts,2
+497,leisurely dinner,1
+498,spaghetti with ricotta cheese,1
+499,martini,7
+500,mixed vegetables,1
+501,mussels,17
+502,paninis,1
+503,italian sandwiches,1
+504,bowl of french onion soup with,1
+505,plum wine,1
+506,drink orders,1
+507,chips and salsa,1
+508,salad dressing,1
+509,price atmosphere cocktails,1
+510,pork chops,4
+511,fried fish,1
+512,platter,5
+513,ombiance,1
+514,array,3
+515,bakery,2
+516,retro interior,1
+517,glass of sangria each,1
+518,pizzas,5
+519,name,1
+520,house towards cooking,1
+521,care,3
+522,menu prices,3
+523,grill,5
+524,white,3
+525,waiting patrons,1
+526,entree plate with three shrimp,1
+527,soup,18
+528,mix,5
+529,seafood platter,1
+530,chefs,9
+531,quality of food,5
+532,managers,7
+533,sausage,3
+534,pulled pork,1
+535,boiled chunk,1
+536,fat,4
+537,mac,1
+538,event,1
+539,beef tender tips,1
+540,new sushi menu,1
+541,royalty,2
+542,windows,1
+543,fireplaces,2
+544,chairs,12
+545,cafe  romantic,1
+546,cod and chips,1
+547,fried mars,1
+548,bars,2
+549,fried reeses peanut butter cup,1
+550,drink menu,2
+551,fettucine alfredo,1
+552,white clam sauce,2
+553,maitre,12
+554,butter cookies,1
+555,new jazz bar,1
+556,dining garden,1
+557,thin crust pizzas,1
+558,lasagna menu,1
+559,sushi bar,5
+560,argentinian cuisine,1
+561,waiting area,7
+562,serving,10
+563,steepest drink prices,1
+564,environment,7
+565,steamed mussels and clams and,1
+566,vindaloo,1
+567,tikka masala,1
+568,curry,3
+569,servings,2
+570,lemon potatoes,1
+571,korean bbq,1
+572,korean appetizer,1
+573,jukebox,4
+574,square,1
+575,diners,21
+576,drink martinis,1
+577,fried oysters and clams,1
+578,mimosas,2
+579,dining experience,4
+580,mixed greens,1
+581,balsamic vinagrette,1
+582,italian bread,1
+583,eggs with potato pancakes,1
+584,round of drinks,3
+585,half  full wine glass declarin,1
+586,reviewers,1
+587,privacy,4
+588,lighting,7
+589,calimari and fried zucchini,1
+590,chicken marsala,2
+591,spaghetti w meatballs,1
+592,indian food,5
+593,sugar,5
+594,confections,1
+595,pork,12
+596,hearty lunches,1
+597,sushi platters,1
+598,salmon and tuna,1
+599,flavor surprises,1
+600,cuisines,1
+601,service staff,1
+602,interior,7
+603,cocktail,8
+604,white room,1
+605,raz mojito,1
+606,peking duck salad,1
+607,tuna  vegetable fried rice,1
+608,guacamole,7
+609,vegtable,1
+610,asparagus,3
+611,eggs benedict with smoked salm,1
+612,new appetizers,1
+613,tuna tartare,2
+614,shrimp wrapped in prosciutto,1
+615,lamb chops,2
+616,amble sweetbreads,1
+617,goat cheese  caviar ravioli ap,1
+618,scallops in a cream reduction ,1
+619,blue margarita,1
+620,succulent barbecued pork,1
+621,thick salsa cruda,1
+622,pub,1
+623,app,2
+624,dinners,4
+625,terrace,2
+626,food chef,2
+627,crust,15
+628,blackened air,1
+629,american fare,1
+630,potato skins,1
+631,burgers and grilled chicken,1
+632,international cuisine,1
+633,wraps,1
+634,pot stickers,1
+635,cheese cellar,1
+636,portions of rice porridge,1
+637,noodles,4
+638,dim sum atmosphere,1
+639,tomato and onion salad,1
+640,slabs of bacon,1
+641,chinese food,10
+642,oysters,10
+643,bagle,1
+644,pastry,2
+645,chinese cuisine,1
+646,foie gras,3
+647,sauce with chopped asparagus,1
+648,adobo salad,1
+649,concoction,2
+650,kitchen staff,3
+651,cooking chops,1
+652,burger,17
+653,selection,9
+654,austrian,1
+655,american,1
+656,red seats,1
+657,candles,5
+658,cocktail price,1
+659,chili,3
+660,mac cheese,2
+661,ample appetizers,1
+662,word chicken,1
+663,grilled flank steak,1
+664,mayonaisse,1
+665,food runners,1
+666,pastas,9
+667,crust pizza,2
+668,pre  ice cream nourishment,1
+669,lobster salad,1
+670,brioche rolls,1
+671,non  sushi rolls,1
+672,veal,4
+673,handwritten menu,1
+674,rabbit,1
+675,sea bass cakes,1
+676,beverages,3
+677,tuna rolls,1
+678,peruvian corn,1
+679,beers,11
+680,caviar,2
+681,salmon and crab salad,1
+682,white porcelain trays,1
+683,salt cod fritter stuffed with ,1
+684,mix of sherry vinegar,1
+685,cognac,1
+686,argentinian pizza,1
+687,pelligrino,1
+688,blue cheese,1
+689,plate,12
+690,stunning octopus portion,1
+691,sashimi,9
+692,thai,3
+693,spice,3
+694,coat check,1
+695,table service,1
+696,fruit,4
+697,fondu,1
+698,jalepeno slices,1
+699,hamburgers,2
+700,sort of fish roll,1
+701,bollos appetizer,1
+702,roasted corn fritter w a tsty ,1
+703,mahi mahi,1
+704,cheese omelet,1
+705,yellow pancake,1
+706,yellowtail,2
+707,penne and vodka sauce,1
+708,open area kitchen,1
+709,chef  owner,1
+710,shrimp dish,2
+711,jello,1
+712,turkey,1
+713,caucasus,1
+714,lines,7
+715,salmon with horseradish sauce,1
+716,plain slice,1
+717,pre  made multi  topping slice,1
+718,plastic cheese bread,1
+719,champagne glasses,1
+720,main bar,1
+721,fillings,1
+722,chicken to portobello mushroom,1
+723,italian fare,1
+724,prepared,1
+725,fillet minion,1
+726,mekong box,1
+727,pork sandwich,1
+728,asian salad,1
+729,omakase,1
+730,sushi alike,1
+731,maine lobster and rock shrimp,1
+732,wrap,2
+733,lobster man,1
+734,apple chutney,1
+735,reds,1
+736,shared table,1
+737,sushi  sashimi lunch combo,1
+738,veal with goat cheese,1
+739,gnocchi with crab meat,1
+740,rock,2
+741,mesclun,1
+742,veal parmigiana,1
+743,white wine,3
+744,linguini giovanni,1
+745,menu interesting,1
+746,vegetable plate,1
+747,tomato paste,1
+748,bouillabaisse,1
+749,actors,3
+750,crowds drinking wine,1
+751,suits,1
+752,parties,2
+753,legendary big mac,1
+754,menu items,5
+755,chicken parm,2
+756,chicken tikka masala,4
+757,chicken with stewed tomatoes,1
+758,single waiter,1
+759,mixed steamed seafood appetize,1
+760,cold food,1
+761,soda,7
+762,butter,4
+763,new american menu,1
+764,seared scallops atop,1
+765,mix of chili sauce and creme f,1
+766,green,1
+767,results,1
+768,roasted branzino,1
+769,well  charred rib,1
+770,roast suckling pig,1
+771,dinner entrees,2
+772,sunday brunch,1
+773,jazz,1
+774,kobe sashimi salad with coconu,1
+775,lobster ravioli,4
+776,feel,4
+777,billy  cheese steak sandwich,1
+778,greek pastries,1
+779,lobster tail,1
+780,crab,2
+781,mashed potatoes,5
+782,carte,2
+783,basil chicken and shrimp tempu,1
+784,lime and mango chutney,1
+785,fondue,2
+786,price tag,3
+787,pasteis filled with goat chees,1
+788,salt  not garlic,1
+789,gentleman,6
+790,pad thai shrimp and shrimp tem,1
+791,rum,1
+792,goin,1
+793,sweet masala chai,1
+794,rice pudding,5
+795,chicken fajitahs,1
+796,humus pita,1
+797,single serve steak,1
+798,gulab jamun  dessert ,1
+799,size,4
+800,ceiling,6
+801,guacamoleshrimp appetizer,1
+802,frites,1
+803,doors,1
+804,tuna tatare,1
+805,salt,3
+806,pad thai,2
+807,lobster or tofu,1
+808,portugues salmon,1
+809,apetizers,3
+810,french toast,6
+811,granola,1
+812,vegetable samosas,1
+813,chicken wings,2
+814,dining tables,1
+815,papers,1
+816,coffee houses,1
+817,missing appetizer,1
+818,description,2
+819,rabbit chicken,1
+820,paella vallenciana,1
+821,fordham kids,1
+822,family  style dinner,1
+823,front door hostess,1
+824,pre dinner drink,1
+825,tostones,1
+826,garlic,3
+827,pan,1
+828,chicken pot pie,1
+829,dipping sauce,1
+830,cup of coffee,3
+831,portion size,3
+832,desssert,1
+833,greek coffee,1
+834,pre  theater dinner,1
+835,glass bottle,1
+836,alien,1
+837,mounds,1
+838,tomatoes basil,1
+839,thali,1
+840,carnitas de puercos  pork taco,1
+841,baked ziti,1
+842,ny pizza,1
+843,lentils,1
+844,food courses,1
+845,afternoon,3
+846,backyard,2
+847,fried green plantains,1
+848,comfort,5
+849,corner booth table,1
+850,painted ceiling,1
+851,cocktail menu,3
+852,served bread,1
+853,mason  dixon,1
+854,sweet cream,1
+855,cake batter,1
+856,banana,1
+857,out,1
+858,fois gras appetizer,1
+859,chocolate milkshake,2
+860,premixed,1
+861,red borsht,1
+862,margaritas,8
+863,band,5
+864,dylan,1
+865,toppings,4
+866,pepperoni,3
+867,family style salad,1
+868,soda can,1
+869,bbq salmon,1
+870,miso,1
+871,regular items,1
+872,salad s lettuce,1
+873,counter,11
+874,sunday,1
+875,thin  crust individual meat pi,1
+876,pasta with pesto,1
+877,mojito,4
+878,red sauce,1
+879,fruit creme brule,1
+880,vodka cream sauce,1
+881,day pasta,1
+882,gnocchi,4
+883,spicy soup,1
+884,single dishes,1
+885,style,6
+886,bottle of plum wine,1
+887,apple pie,2
+888,sales,1
+889,beer s,2
+890,saturday lunch,2
+891,daily  changing menu,1
+892,family place,1
+893,table space,1
+894,patrons waiting,1
+895,table s,1
+896,scallion pancakes,3
+897,lo mein,1
+898,hot dogs,2
+899,cuties,1
+900,and appetizers,1
+901,fresh spinach pierogies,1
+902,mushrooms,7
+903,citrus dipping sauces,1
+904,white tableclothes,1
+905,rack,2
+906,mixed veggies,1
+907,dogs,1
+908,menu options,1
+909,plain dinner salad,1
+910,salad choices,1
+911,meat dishes,5
+912,drink after dinner,1
+913,rava masala dosa,1
+914,condiments,2
+915,onions,7
+916,textures,1
+917,apple,3
+918,range,3
+919,stir  fries,1
+920,noodle dishes,1
+921,tibetan dumplings,1
+922,appearance,1
+923,pasta dish,3
+924,foie gras and oysters,1
+925,pastry chef,1
+926,water and chips  tostades ,1
+927,items,6
+928,pricing,3
+929,stuffed chicken wings,1
+930,bulletproof glass,1
+931,roast chicken,2
+932,chickens,1
+933,dessert menu,9
+934,black tea rose ice cream,1
+935,jalapeno cheddar,1
+936,cooking,4
+937,martinis,6
+938,glass empties,1
+939,tuna,6
+940,tapioca balls,1
+941,roe,1
+942,coconut water,1
+943,kaffir lime juice,1
+944,cocktails,12
+945,neighborhood,1
+946,chicken fried steak,2
+947,pudding,1
+948,sushi rice,1
+949,dress codes,1
+950,attitudes,2
+951,pho  like broth with dumplings,1
+952,restaurant,2
+953,tseukune  chicken dumplings ,1
+954,black bass special,1
+955,chocolate pudding,1
+956,raisin bagels,1
+957,lox and cream cheese,1
+958,orrechiete with sausage and ch,1
+959,business,1
+960,lounge after dinner,1
+961,bagel owner,1
+962,waiter service,1
+963,chocolate,6
+964,home cooking,1
+965,sliced beef,1
+966,takeout choices plus dishes,1
+967,stewed beef,1
+968,potato salad,1
+969,argentine cuisine,1
+970,plate of smoked meats,1
+971,vegetable toppings,1
+972,egg platter,1
+973,signature breakfast,1
+974,pear appetizer,1
+975,asian pear,1
+976,multigrain rice,1
+977,dinner menu,4
+978,chance,1
+979,tuesdays,1
+980,purity,1
+981,locker room area,1
+982,curry row fare,1
+983,dining experiences,1
+984,food order,1
+985,manner,1
+986,mussels  garlic shrimp,1
+987,jamon serrano,1
+988,spanish blue cheese,1
+989,homemade bread,1
+990,vegetarian dishes,4
+991,karaoke downstairs,1
+992,sesame  crusted tuna with ging,1
+993,rice connotes,1
+994,chinese fruit cake,1
+995,round of mojitos,1
+996,corn bread,1
+997,light,1
+998,noodle soup quantities,1
+999,grilled calimari,1
+1000,cheese plate,2
+1001,roasted fruits,1
+1002,expresso with ice cream,1
+1003,glass wine,1
+1004,house  roasted ham with celery,1
+1005,green bean salad,1
+1006,baby backs,1
+1007,soul chicken,1
+1008,plastic chairs,1
+1009,back room,3
+1010,new server,1
+1011,oyster bar,1
+1012,oyster selection,1
+1013,pies,4
+1014,decore,3
+1015,wine room,1
+1016,traditional thali  sampling pl,1
+1017,final bill,1
+1018,egg whites,1
+1019,pam,1
+1020,pop,1
+1021,hummus,2
+1022,skylight windows,1
+1023,vegetable spring rolls,1
+1024,pad kimow,1
+1025,special dishes,2
+1026,corner,5
+1027,bowl of chips,1
+1028,port,1
+1029,pulled chicken tinga,1
+1030,aztec,1
+1031,side of dressing,1
+1032,new york pizza,1
+1033,cafe,2
+1034,cocktail drink,1
+1035,bangkok fruit punch,1
+1036,market drinks,1
+1037,course pasta,1
+1038,course price,1
+1039,wine cellar,1
+1040,serving brunch,1
+1041,fish soup marseille,1
+1042,to  go drink,1
+1043,beef ribs,1
+1044,cocktail hour,1
+1045,indian cuisine,1
+1046,southern,1
+1047,head  on shrimps with anchovy ,1
+1048,shrimp pasta,1
+1049,sugarcane,1
+1050,pizza dough,1
+1051,new place,1
+1052,korean dish,1
+1053,variety of fish,1
+1054,squid,1
+1055,cuban food,1
+1056,cheese counter,1
+1057,striped bass,1
+1058,side dishes,6
+1059,eggplant dip,1
+1060,priced comfort food,1
+1061,dog,1
+1062,pot,5
+1063,southern comfort,1
+1064,spicy potatoes,1
+1065,fries with red hot sauce,1
+1066,business dinner,1
+1067,bread served,1
+1068,meat dish,1
+1069,corner bistro,1
+1070,chilled beets,1
+1071,volocety pasta,1
+1072,clientele,5
+1073,starter,4
+1074,french onion soup,2
+1075,crab legs,1
+1076,roll,4
+1077,mixed drinks,3
+1078,options,3
+1079,brunch menu,4
+1080,mixed green with mozzarella,1
+1081,pasta with tomatoes anywhere,1
+1082,thai food,4
+1083,quantity of food,1
+1084,noodle dish,1
+1085,bar stools,1
+1086,japanese food,3
+1087,take  out,5
+1088,lemon goat cheesecake,1
+1089,pre  fixe,2
+1090,people waiting,1
+1091,served platters of shrimp,1
+1092,wings,2
+1093,special,3
+1094,ground beef,1
+1095,live jazz,1
+1096,pecan pie,1
+1097,new fall menu,1
+1098,black cod with miso broth,1
+1099,people,4
+1100,apple martini,1
+1101,perfection,1
+1102,trends,1
+1103,gourmet comfort food,1
+1104,chorizo,2
+1105,water glass,3
+1106,lamp,1
+1107,anipasto,1
+1108,wasabi mashed potatoes,1
+1109,adaquate,1
+1110,infamous chicken,1
+1111,chicken kiev,1
+1112,crab croquettes,1
+1113,salade,1
+1114,hovering wait staff,1
+1115,interior decor,1
+1116,black cod,1
+1117,sea bass,1
+1118,staff members,1
+1119,service possible,1
+1120,zen,2
+1121,open kitchen,3
+1122,cooks,5
+1123,reception dinner,1
+1124,dining staff,1
+1125,delivered,1
+1126,wasabi  honey poached garlic s,1
+1127,accordingly,1
+1128,goose fat potatoes,1
+1129,presentation,4
+1130,a chicken sandwich on baguette,1
+1131,trays,2
+1132,busboy,10
+1133,fish selections,1
+1134,buns,1
+1135,caesar salad,4
+1136,bowl of iceberg lettuce,1
+1137,dressing,2
+1138,thin chicken,1
+1139,vintages,1
+1140,the wines,1
+1141,fires,1
+1142,mashed potatoes and salad,1
+1143,take  out pies,1
+1144,hosts,2
+1145,noodles in a butter sauce,1
+1146,texture,5
+1147,tastes,1
+1148,daily specials,2
+1149,lunch menu,3
+1150,steak tartare,4
+1151,escargot,2
+1152,goat cheese tart,1
+1153,noise level,3
+1154,wait time,1
+1155,sushi chef,5
+1156,almond,1
+1157,pepper man,1
+1158,effect,1
+1159,marinara sauce,1
+1160,peruvian style rotisserie chic,1
+1161,side dish,1
+1162,non  alcoholic drink,1
+1163,bruschetta,2
+1164,line,2
+1165,bar finger food,1
+1166,entrees of smoked fish,1
+1167,lamb salad,1
+1168,clay pot salmon,1
+1169,lobster rolls,1
+1170,coconut cake,1
+1171,margarita,4
+1172,shrimp roll,1
+1173,pearl room,2
+1174,iceberg lettuce,3
+1175,vietnamese lemon grass chicken,1
+1176,summer,1
+1177,coffee place,1
+1178,grey dog,1
+1179,seasoning,4
+1180,yoguart  mint  jalipeno sauce,1
+1181,green tea tiramisu,1
+1182,solution,1
+1183,shrimp themselves,1
+1184,bowl of udon,1
+1185,dining rooms,2
+1186,desert,6
+1187,the sauces,1
+1188,sesame,2
+1189,wine next,1
+1190,sommelier,2
+1191,mussles appetizer,1
+1192,cherry lime rickeys,1
+1193,egg creams,1
+1194,gardens,1
+1195,drink s,1
+1196,outdoor tables,1
+1197,suspects,1
+1198,french toast  served,1
+1199,ice tea,1
+1200,glasses of wine,1
+1201,frog,1
+1202,sandwich,3
+1203,lobster mac cheese,1
+1204,octopus salad,1
+1205,tart,1
+1206,spoiled salad,1
+1207,grain salad,1
+1208,calf liver,1
+1209,roast onions,1
+1210,portions of fries,1
+1211,chow bar,1
+1212,shrimp seviche,2
+1213,cocktail sauce shines,1
+1214,fishes,1
+1215,mussels with fries,1
+1216,carmelized onions atop,1
+1217,darn,1
+1218,lobster bisque,6
+1219,greens,5
+1220,champaign,1
+1221,chopsticks,3
+1222,outdoor seating,2
+1223,tap water,2
+1224,spumoni,1
+1225,foi gras empanadas,1
+1226,dumpling,3
+1227,view,3
+1228,food diners,1
+1229,smoked beef brisket,1
+1230,beer and wine,1
+1231,wild mushrooms,1
+1232,guy selling hotdogs,1
+1233,counter service,1
+1234,pastrami,1
+1235,the tea room,1
+1236,tea menus,1
+1237,drink afterward,1
+1238,shrimp tapas,1
+1239,chocolate marquise served with,1
+1240,pistachios,1
+1241,deep fried fish,1
+1242,filet,4
+1243,tire,1
+1244,selection of wines,2
+1245,wine bar,2
+1246,sweet tea,2
+1247,coriander and honey pork ribs,1
+1248,hour meal,1
+1249,fruit salad,1
+1250,omelet,2
+1251,spanish tapas fare,1
+1252,baby eggplants and olives,1
+1253,pre  show dinner,1
+1254,industry,1
+1255,cheese pizza,1
+1256,topping,2
+1257,walls,3
+1258,thai cooking,1
+1259,pinot noir,1
+1260,sizes,2
+1261,ordering,2
+1262,spaced tables,1
+1263,wine menu,2
+1264,halibut cheek appetizer,1
+1265,portion of foie gras,1
+1266,goat cheese ravioli,1
+1267,bar staff,1
+1268,marinara sicilian,1
+1269,specialty pizzas,2
+1270,ravioli,3
+1271,rosas pizza,1
+1272,main course,10
+1273,lunches,1
+1274,chips guac,1
+1275,creamed spinach,2
+1276,frieeees,1
+1277,hint,2
+1278,scene service,1
+1279,shrimps,3
+1280,pork sandwhich,1
+1281,calamari salad,4
+1282,panini,1
+1283,prosciutto,2
+1284,mozzarella,2
+1285,mushroom appetizer,1
+1286,gross mayonnaise like sauce,1
+1287,art,1
+1288,white acrylic tables,1
+1289,spanish music,1
+1290,burrito,1
+1291,refilled,1
+1292,private,1
+1293,dress,1
+1294,vodka,3
+1295,monkfish liver,1
+1296,fava bean hummus chips,1
+1297,soy sauce,4
+1298,sushi rolls,2
+1299,half pie toppings,1
+1300,live,1
+1301,box,3
+1302,artifacts,1
+1303,sicilian slice of pizza,1
+1304,pre  theater,2
+1305,bowls,1
+1306,rosemary roast chicken,1
+1307,springy grilled squid,1
+1308,dinners of salmon,1
+1309,tomato soup,1
+1310,beet salad,3
+1311,melon soup,1
+1312,orange  and  caramel,1
+1313,garlic empowered sauce,1
+1314,veal cutlet,1
+1315,seating lines,1
+1316,apple dessert,1
+1317,apple jelly,1
+1318,salad of frisee,1
+1319,calle,1
+1320,mojitos,7
+1321,braised beef,1
+1322,pounded chicken,1
+1323,garlic shrimp,2
+1324,served with whipped plaintains,1
+1325,individual,1
+1326,tuna carpaccio with wasabi cre,1
+1327,lobster tempura with tarter sa,1
+1328,eggs benedict,4
+1329,noon lunch,1
+1330,family,3
+1331,scallion,1
+1332,shell,1
+1333,falafel,2
+1334,sicilian slice,1
+1335,grilled veggies,1
+1336,takeout spot,1
+1337,edamame,2
+1338,plate of oysters,1
+1339,afternoon tea,1
+1340,pot of tea,2
+1341,tea sandwiches,2
+1342,fish and cajun shrimp app,1
+1343,poo platters,1
+1344,appetizer portions,1
+1345,raspberry martini,1
+1346,steak frites,5
+1347,ribbon sushi,1
+1348,take out window,1
+1349,parmesan fries,1
+1350,house wine selections,1
+1351,duck burrito with mole sauce,1
+1352,homefires,1
+1353,mixed grill,1
+1354,platter with onions,1
+1355,bar bites,1
+1356,decoration,1
+1357,yogurt,1
+1358,norm,1
+1359,chilean sea bass,1
+1360,decorations,1
+1361,mixed crowd,1
+1362,windowed bar,1
+1363,front waiting area,1
+1364,prix fixe pasta,1
+1365,avg food,1
+1366,outdoor garden,2
+1367,spinach dish,1
+1368,back kitchen,1
+1369,deliverymen,1
+1370,bar b  c,1
+1371,chili seared shrimp appetizer,1
+1372,maple turkey breast wrap,1
+1373,yellowfin tuna burger,1
+1374,tofu,3
+1375,usda prime dry  cut steaks,1
+1376,vegetable sides,1
+1377,veal and pork chops,1
+1378,bowl,4
+1379,garlic sauce,1
+1380,duck confit lamb shank,1
+1381,pony,1
+1382,staff member,1
+1383,bbq,2
+1384,cole slaw,1
+1385,herbs,2
+1386,final straw,1
+1387,shanghai gourmet,1
+1388,indian,1
+1389,mediterreanian plate,1
+1390,tea salon,1
+1391,miso soup,2
+1392,baked,1
+1393,helpings,1
+1394,plantains,1
+1395,home  made tomato sauce,1
+1396,chunks of awesome tomatoes,1
+1397,main dishes,4
+1398,vindaloo chicken,1
+1399,mini yorkshires,1
+1400,tung  ting shrimp,1
+1401,sichuan tofu with minced pork,1
+1402,surly staff,1
+1403,pizza place,1
+1404,bacon cheeseburger,1
+1405,treats,3
+1406,eerything,1
+1407,variety of sauces,1
+1408,main dish,1
+1409,tomatoes,4
+1410,pernod,1
+1411,quality pies,1
+1412,deep dishes,1
+1413,wait times,2
+1414,food choices,2
+1415,desert menus,3
+1416,desert order,1
+1417,braised rabbit,1
+1418,thyme,1
+1419,olive gravy,1
+1420,calves,1
+1421,sour onions,1
+1422,chocolate pear tart,1
+1423,mix of italian basil,1
+1424,a butter sage sauce,1
+1425,smoked seitan evokes peking du,1
+1426,wide green  tea noodles,1
+1427,bolognese sauce,1
+1428,quinoa  lentil cakes,1
+1429,pumpkin,1
+1430,fluffy fries,1
+1431,runners,1
+1432,voluptuous porcini mushroom ra,1
+1433,hefty lamb chops,1
+1434,pineapple,2
+1435,sorbet,3
+1436,asian street food,1
+1437,chinese menu,1
+1438,french fries,4
+1439,hummous,1
+1440,pish sauce,1
+1441,garlic  ginger  chicken,1
+1442,baby lamb sotee,1
+1443,kebabs of lamb,1
+1444,turkish coffee,1
+1445,kunefe,1
+1446,corn rows,1
+1447,greek salad,3
+1448,plethora of olives,1
+1449,eponymous falafel,1
+1450,style thai cooking,1
+1451,livelier front dining room,1
+1452,non  smoking back room,1
+1453,collection,1
+1454,sicilian pie,1
+1455,chopped basil,1
+1456,brunch entrees,1
+1457,outdoor table,1
+1458,brazilian bbq,1
+1459,priced place,1
+1460,serving dinners,1
+1461,airy dining room,1
+1462,hot chocolate sauce,1
+1463,menu shrimp cocktail,1
+1464,pecan pie and cheese cake,1
+1465,village salad,1
+1466,greek food,1
+1467,food servers,1
+1468,w fries,1
+1469,views,1
+1470,surprise,1
+1471,entree s,1
+1472,basket,1
+1473,tiramisu,8
+1474,lady,1
+1475,drink prices,1
+1476,long wait,1
+1477,chair,2
+1478,asparagus and egg app,1
+1479,outside,1
+1480,bottles of wine,3
+1481,seasonal fruit and strawberry ,1
+1482,hot coffee,1
+1483,spring rolls,5
+1484,soy protein ham dish,1
+1485,wine service,1
+1486,prix  fixe,1
+1487,sushi lunch,1
+1488,employees,8
+1489,cattle waiting,1
+1490,fritas,1
+1491,spicy shrimp with coconut rice,1
+1492,coconut,1
+1493,dessert tres leches de mango w,1
+1494,beef brisket in a red wine,1
+1495,panko  crusted tofu over hijik,1
+1496,six  spice beef burger,1
+1497,smoke,3
+1498,pepperoncino,1
+1499,cognac  rich duck terrine,1
+1500,well  seasoned steak frites,1
+1501,vegetable,2
+1502,soup choices,1
+1503,chicken curry,1
+1504,mixes egg noodles with eggplan,1
+1505,lemon,4
+1506,dim lighting,1
+1507,family fare,1
+1508,baccala appetizer,1
+1509,pistacchio,1
+1510,saltimbocca,2
+1511,outdoor,1
+1512,clams,3
+1513,zucchini,1
+1514,disco,1
+1515,wood counter,1
+1516,water order,1
+1517,cheese fondue,1
+1518,beef tips,1
+1519,black pepper crab dumplings,1
+1520,goat,1
+1521,chop,2
+1522,plate of chicken,1
+1523,potato,1
+1524,monkfish mousse,1
+1525,round table,1
+1526,booth style seats,1
+1527,chocolate chip cookies,2
+1528,marshmallows,1
+1529,new wine bar,1
+1530,drunken goat cheese salad,1
+1531,lobster empanadas,1
+1532,a pomodoro sauce,1
+1533,turkey burger,1
+1534,food carts with bill,1
+1535,coconut mousse,1
+1536,braised,1
+1537,pork flavor,1
+1538,hollondaise sauce,1
+1539,take  out pizza,1
+1540,julienned vegetables,1
+1541,balsamic vinagarette sauce,1
+1542,margarita chicken salad,1
+1543,steak entrees,1
+1544,dessert options,1
+1545,mac and cheese,4
+1546,pork ribs,1
+1547,scallops and caviar coupled wi,1
+1548,cooked vegetables,1
+1549,theatre crowd,1
+1550,side,1
+1551,apple tarte tatin,1
+1552,times,1
+1553,shacks,1
+1554,dim sum places,1
+1555,captain,5
+1556,baked clams,1
+1557,pumpkin soup,1
+1558,sesame  soy vinaigrette,1
+1559,sauteed tofu noodles,1
+1560,steamboat soup,1
+1561,cabbage,2
+1562,watercress,1
+1563,cherries,1
+1564,yogurt breads,1
+1565,spicy green and orange sauces,1
+1566,crab croqueta,1
+1567,cuban meal,1
+1568,grilled calamari appetizier wi,1
+1569,mixed seafood pasta main cours,1
+1570,house dining,1
+1571,restauarnt,1
+1572,gold mashed potatoes,1
+1573,greens or wilted tomatoes with,1
+1574,greek wine,1
+1575,homemade lasagna,1
+1576,sparkling wine,1
+1577,rooms,1
+1578,spinach pie,1
+1579,feta cheese,1
+1580,stuffed grape,2
+1581,peanuts,2
+1582,red curry shrimp dish,1
+1583,wooden bar,1
+1584,wine rack,1
+1585,breakfast selections,1
+1586,tempura sashimi,1
+1587,entrees rack lamb,1
+1588,kobe tartar,1
+1589,seafood dish,1
+1590, side  dishes,1
+1591,sardines,2
+1592,booths,1
+1593,red snapper,1
+1594,remaining dinner,1
+1595,corner table,2
+1596,parents,1
+1597,steak house,1
+1598,shrimp frittata topped,1
+1599,mayonnaise,2
+1600,corn tamale,1
+1601,homemade sour cream,1
+1602,spiced strips,1
+1603,delivery man,1
+1604,french fare,2
+1605,rice and vegetables,1
+1606,new rolls,1
+1607,turkey burgers,1
+1608,buffalo steak,1
+1609,potatoe gnocchi,1
+1610,spinach with garlic,1
+1611,scallop starter,1
+1612,cheese bread,1
+1613,are a,1
+1614,hot sandwiches,1
+1615,american platters,1
+1616,finest buffalo mozerella and t,1
+1617,solitary waitress,1
+1618,rice beans,1
+1619,whiting,1
+1620,crab sticks,1
+1621,the money,1
+1622,antiques,1
+1623,duck confit hash,1
+1624,beer battered fish chips,1
+1625,pre  theatre dinner menu,1
+1626,quality pizza,1
+1627,belly,1
+1628,grilled panini,1
+1629,the table,2
+1630,chicken tikka,1
+1631,marinated chicken,1
+1632,sunset,1
+1633,braised short ribs,1
+1634,nicoise salad,1
+1635,seared tuna,1
+1636,food taste,1
+1637,served hot,1
+1638,mediterranean,2
+1639,babaganoush,1
+1640,moroccan chicken,1
+1641,merguez lamb sausage,1
+1642,dining choices range,1
+1643,la carte menu,1
+1644,linguine with tomato sauce,1
+1645,homemade cheese ravioli,1
+1646,specialty drinks,1
+1647,souvenirs,1
+1648,waiters fault,1
+1649,pineapple basil,1
+1650,asparagus spears,1
+1651,hour waiting,1
+1652,menu selections,2
+1653,tuna with wasabi  soy vegetabl,1
+1654,light caper vinaigrette,1
+1655,fruits,2
+1656,oregano,1
+1657,egg yolks,1
+1658,traditional scoops,1
+1659,premium,1
+1660,pints,1
+1661,sandwhiches,1
+1662,tea service,1
+1663,scone,1
+1664,realm,1
+1665,the sauce,1
+1666,entrees  chicken and sea bass ,1
+1667,meals desserts,1
+1668,creme brulee,1
+1669,light red sauce,1
+1670,palms,1
+1671,ice cream and pastries,1
+1672,commercial ice cream,1
+1673,cajun food,1
+1674,choice of sauces,1
+1675,white wine  and  garlic broth,1
+1676,beef stewed with beer,2
+1677,downstair lounge,1
+1678,spicy tuna,1
+1679,spider roll,1
+1680,soft shell crab,3
+1681,mein noodles,1
+1682,fish portion,1
+1683,one,1
+1684,portion sizes,1
+1685,nibbles,1
+1686,dessert sampler,1
+1687,the three course meal,1
+1688,roofdeck,1
+1689,quality variety,1
+1690,joe,1
+1691,gnocci,1
+1692,a fried egg,1
+1693,gamey chopped liver mousse,1
+1694,watercress salad with blue che,1
+1695,burrito take  out place,1
+1696,spide,1
+1697,lobster roll,4
+1698,white meat chicken salad,1
+1699,formal upstairs dining room,1
+1700,glass doors,1
+1701,woods,1
+1702,tapas menu,2
+1703,carrot dressing,1
+1704,dinner place,1
+1705,refillable drink,1
+1706,margaritas and appetizers,1
+1707,reserved tables,1
+1708,onion soup gratinee,1
+1709,gruyere cheese,1
+1710,souffle,1
+1711,the food,1
+1712,flavors of different dishes,1
+1713,garden space,1
+1714,egg dishes,1
+1715,muffins,1
+1716,toro appetizer,1
+1717,quail,1
+1718,pumpin puree,1
+1719,glasses of water,1
+1720,upbeat latin music,1
+1721,stools,2
+1722,cocktail napkins,1
+1723,fruity drink menu,1
+1724,spinach fettucine dish served ,1
+1725,pink sauce,1
+1726,baby,1
+1727,eats,1
+1728,latin jazz music,1
+1729,w bisquits,1
+1730,hint of wasabi enlivens the sh,1
+1731,herb dipping sauce,1
+1732,sushi soup,1
+1733,callback,1
+1734,lox,3
+1735,brushetta,1
+1736,cold tomatoes on toasted bread,1
+1737,biscuits,1
+1738,collard greens,3
+1739,ham  hocked lima beans,1
+1740,frozen sushi,1
+1741,rib eye steak,1
+1742,cheesiest music,1
+1743,costs,1
+1744,machine,1
+1745,coffee drinks,1
+1746,array of cakes,1
+1747,chef s appetizers,1
+1748,sesame flavored tile fish with,1
+1749,japanese spiced flan with seaf,1
+1750,tuna tartare with avocado,1
+1751,refills,1
+1752,slice,2
+1753,sicilian,2
+1754,raisin challah french toast,1
+1755,tex  mex scrambled eggs,1
+1756,crisp pork sausage,1
+1757,beige decor,1
+1758,next table,2
+1759,salmon dip,1
+1760,front desk,1
+1761,homemade guac,1
+1762,yellow rice,1
+1763,irving,1
+1764,pommes frites,1
+1765,belgian beers,1
+1766,mules frites,1
+1767,new cocktails,1
+1768,chefs table,1
+1769,food menu,1
+1770,front,2
+1771,rubarb  crisp with basil ice c,1
+1772,duck salad,1
+1773,attendant,1
+1774,dramatic space,1
+1775,wood grilled kalbi,1
+1776,bulgoki  bbq ,1
+1777,korean dishes,1
+1778,lip  smacking dishes,1
+1779,bar keep,1
+1780,elaborate sushi dishes,1
+1781,japanese dinner,1
+1782,mixed cocktail,1
+1783,slant,1
+1784,sammiches,1
+1785,plate space,1
+1786,single mixed drinks,1
+1787,spanish rice,1
+1788,new american food,1
+1789,back patio,1
+1790,main floor space,1
+1791,host downstairs,1
+1792,real olive oil,1
+1793,pizza s,1
+1794,gratuity,1
+1795,orange slices,1
+1796,ice chunks,1
+1797,eggplant,3
+1798,ziti,1
+1799,chicken parmigiana,2
+1800,dal,1
+1801,fattouch,1
+1802,turbot,1
+1803,creamy lemon sauce,1
+1804,hint of dill,1
+1805,price fixe,1
+1806,salt and vinegar chips,1
+1807,choice,1
+1808,dinner in  out,1
+1809,atmostphere,1
+1810,seating arrangment,1
+1811,single room,1
+1812,mirrors,2
+1813,tablecloths,1
+1814,cheese plates with sweet  sour,1
+1815,lamb  stuffed fried olives,1
+1816,tigelle panini,1
+1817,rice with shrimp,1
+1818,lobster tails,2
+1819,stewed root vegetables,1
+1820,soup dumplings,4
+1821,onion rings,1
+1822,cheese selections,1
+1823,drink order,1
+1824,delights,1
+1825,backyard patio spread,1
+1826,bar seating,1
+1827,mozarella,1
+1828,black olives,1
+1829,price of adding lobster meat,1
+1830,frites w marjoram,1
+1831,dining concourse,1
+1832,dining choices,1
+1833,fish dishes,1
+1834,seafood dishes,4
+1835,beverage,2
+1836,grain pancakes,1
+1837,bar manager,1
+1838,special drinks,1
+1839,shrimp with brown sauce,1
+1840,hsared dessert,1
+1841,salad bar,1
+1842,food pizzas,1
+1843,mediterranean goodies,1
+1844,sale,1
+1845,establishment,2
+1846,coat tails,1
+1847,custom,1
+1848,dessert drinks,2
+1849,entree options of mahi,1
+1850,kobe beef ribs,1
+1851,spring roll,1
+1852,pre  fixe dinner,1
+1853,staples,2
+1854,initial drinks,1
+1855,flat pasta with truffle mushro,1
+1856,vicinity,1
+1857,fork,2
+1858,meat pie,1
+1859,meat sauce,1
+1860,persian tea,1
+1861,honey,1
+1862,club,2
+1863,poached fish,1
+1864,flat,1
+1865,fried,3
+1866,motherland,1
+1867,risotto,3
+1868,entree menu,1
+1869,concoctions,1
+1870,banquets,1
+1871,grilled cheese,1
+1872,peanut butter and jelly sandwi,1
+1873,salmon roll,1
+1874,tuna roll,1
+1875,bustelo coffee,1
+1876,sambosas,1
+1877,naan,3
+1878,crepe filled with potatoes,1
+1879,window,2
+1880,heat,1
+1881,beet ravioli,1
+1882,blue oceanic,1
+1883,central meat,1
+1884,tapas  like seafood treats,1
+1885,alcoholic,1
+1886,background,1
+1887,cafeteria room,1
+1888,daily risotto special,1
+1889,wild mushroom day,1
+1890,pho broth,1
+1891,fettuccine alfredo,1
+1892,seafood entree,1
+1893,parmesan,1
+1894,beef belly soup,1
+1895,chow fun noodles,1
+1896,hawaiian bbq  bbq chicken,1
+1897,bacon and chicken club,1
+1898,ingredients like baby portobel,1
+1899,fried green tomatoes,1
+1900,cooked quail appetizer,1
+1901,chocolate mousse dessert,1
+1902,cheesecake or chocolate mousse,1
+1903,fish cake,1
+1904,veggie hot soba entree,1
+1905,cajun  italian menu,1
+1906,cajun spaghetti with meatballs,1
+1907,ricotta,1
+1908,garlic and basil,1
+1909,french fries served,1
+1910,appetizer each,1
+1911,la carte grilled items,1
+1912,chicken with scallion skewers,1
+1913,asparagus with bacon rolls,1
+1914,paella,3
+1915,fat grease,1
+1916,crepe,1
+1917,carciofi,1
+1918,branzino fileted,1
+1919,coffee served,2
+1920,dough,3
+1921,flour,1
+1922,variety,2
+1923,roast lamb,1
+1924,steak au poivre,1
+1925,japanese folk music,1
+1926,speakers,1
+1927,turkey testicles,1
+1928,house,1
+1929,value bottle selections,1
+1930,big chocolate chip cookie,1
+1931,bag of chips,1
+1932,day,4
+1933,floor manager,1
+1934,patroon burger,1
+1935,a roasted tomato,1
+1936,bag,1
+1937,french list,1
+1938,green salad,1
+1939,prix,1
+1940,transformation,1
+1941,environs,1
+1942,spinach with beans and fried p,1
+1943,potato steak fries,1
+1944,champagne toast,1
+1945,soy,1
+1946,oz fillet mignon,1
+1947,toast,1
+1948,eel,1
+1949,trout,1
+1950,actual dining room,1
+1951,waitress  hostess,1
+1952,martini guy,1
+1953,martini with blue cheese olive,1
+1954,chicken in vinegar,1
+1955,breeziness,1
+1956,pooris,1
+1957,humus,1
+1958,cucumber,1
+1959,backyard bbq taste,1
+1960,mozzerella appetizer,1
+1961,accompanying tomato,1
+1962,cultured wait staff,1
+1963,thing,1
+1964,squash,1
+1965,snapper,1
+1966,pho,1
+1967,frozen hot chocolate,1
+1968,slice of cheese,1
+1969,grape juice,1
+1970,alcohol,1
+1971,letters,1
+1972,primi,1
+1973,sausage gumbo,1
+1974,pork tenderloin,1
+1975,korean rice wine,1
+1976,salmon carpaccio,1
+1977,fish special,1
+1978,key lime pie,1
+1979,pesto ravioli,1
+1980,onion puree,1
+1981,smell of butter,1
+1982,seafood sausage,1
+1983,food pies,1
+1984,queens,1
+1985,upstairs,1
+1986,seafood  dominant fusion menu,1
+1987,lobster  mushroom tart with fi,1
+1988,price point,1
+1989,grilled sardines,1
+1990,patties steam  grilled,1
+1991,fried whiting,1
+1992,chicken rice soup,1
+1993,spaghetti and meatballs,1
+1994,eggplant parmesan,1
+1995,freshness,1
+1996,delivery portions,1
+1997,posers,1
+1998,middle eastern menu,1
+1999,platters,3
+2000,dates,1
+2001,white rice,1
+2002,black beans,1
+2003,tomato,2
+2004,dim sum,3
+2005,welcome,1
+2006,chop  away  at  it veal,1
+2007,palak paneer,1
+2008,tandoori,1
+2009,suckling pig,1
+2010,pumkin raviloi,1
+2011,robata,1
+2012,host  manager,1
+2013,dumpling menu,1
+2014,style of cooking,1
+2015,resteraunt staff,1
+2016,apps,1
+2017,ziti bolognese,1
+2018,after  dinner drink,1
+2019,exec,1
+2020,staff service,1
+2021,appetizer selection,1
+2022,iced tea,1
+2023,mariano,1
+2024,glass of champagne,1
+2025,portion smothered with sauce,1
+2026,owner recommended,1
+2027,raw bar special,1
+2028,raw oysters,1
+2029,twister shrimp,1
+2030,mango sorbet,1
+2031,cheesecake factory,1
+2032,percentage,1
+2033,others,1
+2034,bean,1
+2035,mexican spot,1
+2036,salsa,2
+2037,onion pieces,1
+2038,ping,1
+2039,dessert chef,1
+2040,festive crew,1
+2041,baked potatoes,1
+2042,club sandwiches,1
+2043,foie gras mousse,1
+2044,tender grilled calamari,1
+2045,shrimp with spinach in puff pa,1
+2046,fried brie,1
+2047,wonton noodle soup,1
+2048,shrimp cocktail,1
+2049,marinara  arrabiatta sauce,1
+2050,mozzarella en,1
+2051,pot pie,1
+2052,veal chop,1
+2053,workers,3
+2054,music selection,1
+2055,potato chips,1
+2056,brunch price,1
+2057,chef app,1
+2058,cakebread cabernet,1
+2059,outdoor space,1
+2060,surroundings,1
+2061,hamburgers with caramelized on,1
+2062,tuna  lemon juice,1
+2063,capers,1
+2064,parsley,1
+2065,specialty desserts,1
+2066,zucchini flowers,1
+2067,escargot  topped mushroom,1
+2068,truffle honey,1
+2069,mustard sauce,3
+2070,back,1
+2071,kobe beef,1
+2072,mix of fries,1
+2073,burgers themselves,1
+2074,pepper,1
+2075,eight spice appetizer,1
+2076,outdoor area,1
+2077,potato cubes,1
+2078,corn chowder,1
+2079,gravlax,1
+2080,dining car,1
+2081,clothing,1
+2082,queso,1
+2083,theme,1
+2084,celebratory dinner,1
+2085,cranberry relish,1
+2086,cheese platter,1
+2087,grits,1
+2088,soupy cheese sauce,1
+2089,beef briolle,1
+2090,7a,1
+2091,meatball,1
+2092,eggplant parm heros,1
+2093,peter,1
+2094,wine bottles,1
+2095,frito pie,1
+2096,artichoke served,1
+2097,warm poached egg topped with p,1
+2098,brisket,1
+2099,person,2
+2100,fried chicken,3
+2101,wait list,1
+2102,recipe uses shrimp,1
+2103,juice,1
+2104,feast pizza,1
+2105,meatzza,1
+2106,ham,1
+2107,italian sausage,1
+2108,grand slam breakfast,1
+2109,brunch drinks,1
+2110,wisely,1
+2111,vietnamese cuisine,1
+2112,sushi tuna,1
+2113,wasabi aioli,1
+2114,duck substitution,1
+2115,lamb ribs,1
+2116,design,1
+2117,amount of food,1
+2118,wait staffs,1
+2119,scungilli,1
+2120,calamari served,1
+2121,spicy red sauce atop linguine,1
+2122,portion of tender beef,1
+2123,spaghetti,1
+2124,brunch prix,1
+2125,night,3
+2126,flan,2
+2127,french outdoor bistro,1
+2128,truffles,2
+2129,window  front tables,1
+2130,nan,1
+2131,barbecued ribs,1
+2132,interpretations,1
+2133,wasabi mayo,1
+2134,selection of cakes,1
+2135,salted fried clams,1
+2136,brown sugar  lacquered ribs,1
+2137,delivery guy,1
+2138,mushroom custard,1
+2139,stellar mole,1
+2140,sides on,1
+2141,wines by the glass,1
+2142,yellowtail tuna carpaccio,1
+2143,mint,1
+2144,crab salad partnered with swee,1
+2145,flavor notes,1
+2146,japanese menu,1
+2147,japanese cuisine,1
+2148,latin american food,1
+2149,sir routine,1
+2150,cup of tea,1
+2151,grill fish served,1
+2152,virgin olive oil,1
+2153,toaster,1
+2154,napoleon,1
+2155,shrimp and lobster bisques,1
+2156,pumpkin corn bisque,1
+2157,hot food,1
+2158,fresh juice,1
+2159,twist,1
+2160,baked goods,1
+2161,bagels,6
+2162,mexican restaurant,1
+2163,arugula,1
+2164,grease,1
+2165,outdoors patio,1
+2166,dinner seating,1
+2167,dinner list,1
+2168,owners pat,1
+2169,private area,1
+2170,floor,1
+2171,ratings,1
+2172,overlap,1
+2173,la carte,1
+2174,chilled seafood platters,1
+2175,kosher,1
+2176,new dishes,1
+2177,j erk shrimp,1
+2178,storage room,1
+2179,dining space,1
+2180,lollies,1
+2181,orders,1
+2182,duck dishes,1
+2183,ubiquitious thai tea,1
+2184,takeout,3
+2185,bottle of italian beer,1
+2186,blackboard,1
+2187,sandwhich,1
+2188,wedding,1
+2189,balthazar,1
+2190,runner,1
+2191,lobster course,1
+2192,mango ice cream,1
+2193,journey,1
+2194,ricotta cheese,1
+2195,osso bucco,1
+2196,salted popcorn,1
+2197,foo foo drinks,1
+2198,juices,1
+2199,signature cheese,1
+2200,round cheese bowl,1
+2201,spots,1
+2202,olives served,1
+2203,a la carte menu,1
+2204,multicourse,1
+2205,red meat,1
+2206,lobster risotto,1
+2207,white sheets,1
+2208,marble communal table,1
+2209,hot entrees,1
+2210,sushi lovers,1
+2211,thin organic burger,1
+2212,a prime beef,1
+2213,cheddar,2
+2214,snow crab,1
+2215,food meat,1
+2216,heroes,1
+2217,seating immediately,1
+2218,brunches,1
+2219,seafood salad,1
+2220,sole stuffed,1
+2221,crabmeat,2
+2222,desert menu,1
+2223,crabcake,1
+2224,homemade ravioli,1
+2225,maniccoti,1
+2226,cream of rice,1
+2227,serve,1
+2228,pound cake,1
+2229,oj,2
+2230,pasta bolognese,1
+2231,tile flooring tables,1
+2232,volumous wine list,1
+2233,stuffed mushrooms,1
+2234,cream cheese,1
+2235,torro,1
+2236,w red clam sauce,1
+2237,clam s,1
+2238,diner lines,1
+2239,gourmet,1
+2240,fixins  combos,1
+2241,middle,1
+2242,layering,1
+2243,sauce over mozzarella,1
+2244,ricotta cheesecake,1
+2245,chocolate and kahlua mousse,1
+2246,meat appetizer,1
+2247,cocktail girl,1
+2248,ham fried rice,1
+2249,braised fish,1
+2250,traditional greek,1
+2251,italian cuisine,1
+2252,romano family,1
+2253,beet s,1
+2254,majority,1
+2255,showcasing vegetables,1
+2256,cheddar cheese,1
+2257,apple smoked bacon,1
+2258,sear marks,1
+2259,korean food,2
+2260,food service,1
+2261,plane,1
+2262,salmon ever,1
+2263,garlic knots,1
+2264,priced coffee,1
+2265,french  belgian menu,1
+2266,cajun fries,1
+2267,room temperature food,1
+2268,green papaya salad,1
+2269,non  existent,1
+2270,interest,1
+2271,chicken salad sandwich,1
+2272,sushis,1
+2273,specials  the menu,1
+2274,raspberry  marscapone  stuffed,1
+2275,busline,1
+2276,barbecued chicken,1
+2277,dimsum,2
+2278,chicken verde burrito,1
+2279,overkill,1
+2280,two main dining,1
+2281,latin,1
+2282,yellow rice w chicken red bell,1
+2283,churrasco,2
+2284,citrus shrimp,1
+2285,pot of boiling water,1
+2286,glass noodles,1
+2287,vegs,1
+2288,pasta special,1
+2289,fried soft  shell crab,1
+2290,whole fish with red chiles,1
+2291,sushi  sashimi,1
+2292,wine bottle,1
+2293,techno music,1
+2294,chicken with string beans,1
+2295,steamed stripe bass with ginge,1
+2296,fried rice,1
+2297,diner atmosphere,1
+2298,clientel,1
+2299,steak with pistachio salsa,1
+2300,braised lamb,1
+2301,olives,2
+2302,citrus slices,1
+2303,killer dj,1
+2304,business lunch,1
+2305,cookie,1
+2306,orange or pineapple slice,1
+2307,fruit fondue,1
+2308,prie fixe menu,1
+2309,rizzo,1
+2310,sea paintings,1
+2311,california roll,2
+2312,crab meat,1
+2313,owner staff,1
+2314,ensuing dinner,1
+2315,fried squash blossoms,1
+2316,curry chicken,1
+2317,roast pork,1
+2318,bbq sauce,1
+2319,stir fried cube steak,1
+2320,main course portion sizes,1
+2321,sushi portions,1
+2322,teriyaki,1
+2323,prix  fixe special,1
+2324,onion,1
+2325,seasoned pork,1
+2326,outdoor picnic tables,1
+2327,summertime,1
+2328,cost of beer,1
+2329,ravioli dish,1
+2330,pace,1
+2331,candle  light,1
+2332,food  quality,1
+2333,chicken and veal dishes,1
+2334,bread and salad,1
+2335,daily fresh fish,1
+2336,latin food,1
+2337,fish and tomato sauce,1
+2338,wine dinner,1
+2339,glass separately,1
+2340,pork rolls,1
+2341,rice paper,1
+2342,the chocolate cake,1
+2343,slice of tomato,1
+2344,open doors,1
+2345,abundance of cheese,1
+2346,lamb chop,2
+2347,extra virgnin olive oil,1
+2348,pastaless eggplant lasagna,1
+2349,gnocchi souffle,1
+2350,fulfilling meal,1
+2351,celery root soup,1
+2352,era,1
+2353,portion size  price combo,1
+2354,bartenders management,1
+2355,white wine  based sauce,1
+2356,food variety,1
+2357,waiter spooning butter,1
+2358,miami,1
+2359,martini in,1
+2360,southern cooking,1
+2361,mussels in bread pot,1
+2362,homemade ravioli filled,1
+2363,swordfish,1
+2364,salsa music,1
+2365,mixed bag,1
+2366,lobster soup,1
+2367,fajita,1
+2368,cranberry sauce,1
+2369,mesquite chicken,1
+2370,smoked turkey,1
+2371,philly cheese steaks,1
+2372,indian side items,1
+2373,snail ravioli,1
+2374,mango salad,1
+2375,kashmiri chicken,1
+2376,sushi counter,1
+2377,potato and cheese,1
+2378,polish kielbasa,1
+2379,la carte side vegetable,1
+2380,scones,1
+2381,cakes,2
+2382,mar  tea  nis,1
+2383,served dinner,2
+2384,potion,1
+2385,duck breast with mushroom cane,1
+2386,jumbo shrimp,1
+2387,turnip soup with pureed basil,1
+2388,food cost,1
+2389,nang with coconut milk,1
+2390,club scene,1
+2391,chicken sald w olives,1
+2392,red peppers,1
+2393,noodle,1
+2394,bbq pork rice,1
+2395,duck soy sauce chicken rice,1
+2396,orange valve,1
+2397,dessert plate,1
+2398,chick pea  eggplant dish,1
+2399,saag paneer,2
+2400,tofu  like cheese,1
+2401,okonomiyake,1
+2402,duck spring rolls,1
+2403,lobster and goat cheese quesad,1
+2404,wild mushroom ravioli,1
+2405,concluded dinner,1
+2406,steak special,2
+2407,eggplant parmigiana appetizer,1
+2408,halibut with of course black b,1
+2409,grilled eggplant roll,1
+2410,cripsy squid,1
+2411,basil pepper mojito,1
+2412,watered  down martini,1
+2413,striped button  downs,1
+2414,community dining atmosphere,1
+2415,spinach dip,1
+2416,thai lemonade,1
+2417,bi  level dining room,1
+2418,specimens,1
+2419,wasa,1
+2420,outdoor seating area,1
+2421,thai staples,1
+2422,pad thai and curry dishes,1
+2423,romaine salad,1
+2424,santa fe chopped salad,1
+2425,fish and chips,1
+2426,turnip cake,1
+2427,recipes,1
+2428,obligatory,1
+2429,press coffee,1
+2430,green hair table,1
+2431,front window,1
+2432,almond crusted halibut,1
+2433,sashimi appetizer,1
+2434,humus and cheese plates,1
+2435,busboys,2
+2436,raw fish,1
+2437,engagements,1
+2438,pesto,1
+2439,bananas,1
+2440,pig dog,1
+2441,five  course dinner,1
+2442,signature oysters,1
+2443,waiting tables,1
+2444,weekday,1
+2445,moules frites,1
+2446,salmon burger,1
+2447,hugs,1
+2448,chili guac,1
+2449,main,1
+2450,response,1
+2451,falafel sandwich,1
+2452,grill calamari,1
+2453,rigatoni,1
+2454,table location,1
+2455,hummos platter,1
+2456,brie sandwich,1
+2457,space downstairs,1
+2458,fried egg and avocado,1
+2459,asparagus omelette with truffl,1
+2460,veal cordon blue,1
+2461,menu boards,1
+2462,eggplant in garlic sauce,1
+2463,zen vegi  burger,1
+2464,soy milk,1
+2465,empanadas,1
+2466,batter,1
+2467,chunky blue cheese,1
+2468,frozen margaritas,1
+2469,grilled corn,1
+2470,quantity,1
+2471,shredded chicken breast in gar,1
+2472,greek olives,1
+2473,brunch spot,1
+2474,onion soup,2
+2475,customer,2
+2476,seating people,1
+2477,fragrant sesame oil  scented r,1
+2478,food place,1
+2479,cleaning,1
+2480,savory items served,1
+2481,dinner hours,1
+2482,wood chairs,1
+2483,organic free range chicken,1
+2484,rabbit curry,1
+2485,curry sauce,1
+2486,evening,1
+2487,aspect,1
+2488,red velvet cake,1
+2489,broads,1
+2490,indecision,1
+2491,white  wine  and  garlic broth,1
+2492,beef stewed,1
+2493,diner food,2
+2494,take  out staples,1
+2495,upstairs space,1
+2496,wood tables,1
+2497,flat noodles,1
+2498,discount,1
+2499,value for money,1
+2500,main meals,1
+2501,v  day dinner,1
+2502,wait anyway,1
+2503,vegetable pakora,1
+2504,lamb tikka masala and tandoori,1
+2505,alaska king crab legs and frie,1
+2506,community,1
+2507,breaded veal chop with tomatoe,1
+2508,pea  and  mushroom risotto top,1
+2509,slivers of fried zucchini,1
+2510,doused with truffle oil,1
+2511,top  shelf roasted chicken,1
+2512,flyer,1
+2513,ps450 dishes,1
+2514,sliced steak,1
+2515,poppers,1
+2516,glass of spanish wine,1
+2517,half  full,1
+2518,pasta sides,1
+2519,baby carrots,1
+2520,sun dried tomatoes,1
+2521,yokan,1
+2522,lunch crowd,1
+2523,lobster ravioli in a light aur,1
+2524,double  cut grilled veal chop,1
+2525,aromatic salsa verde,1
+2526,octopus salad with steamed pot,1
+2527,berries,1
+2528,soft shell chicken taco,1
+2529,fried catfish sandwiches,1
+2530,shrimp in cream sauce,1
+2531,eggplant in miso,1
+2532,moments,1
+2533,japanese,2
+2534,sesame noodles,1
+2535,string bean and goat cheese,1
+2536,hunan beef,1
+2537,assortment,1
+2538,price range,1
+2539,table of dishes,1
+2540,mistake,1
+2541,sausage fest,1
+2542,serving staff,1
+2543,drinkers,1
+2544,convesation,1
+2545,garlicky tomato bruschetta,1
+2546,platter of prosciutto with dry,1
+2547,baby spinach salad with shaved,1
+2548,quality fish,1
+2549,appetizers   the rock shrimp a,1
+2550,coffee flan,1
+2551,couches,1
+2552,club soda,1
+2553,ginger iced tea,1
+2554,home  made fresh lemonade,1
+2555,drink wine,1
+2556,cream spinach,1
+2557,german fries,1
+2558,raisins  spinach,1
+2559,mahi,1
+2560,chicken options,1
+2561,spread,1
+2562,lamb pasanda,1
+2563,shrimp and bacon hash,1
+2564,creme brulee  it,1
+2565,blk fettucine,1
+2566,cioppino,1
+2567,mystery drink,1
+2568,the window,1
+2569,lump crab cakes,1
+2570,chopped iceburg  feta salads,1
+2571,burritos,1
+2572,live band,1
+2573,kitchen nails pasta dishes,1
+2574,linguine with clams,1
+2575,curry shrimp w mushrooms,1
+2576,watercress salad,1
+2577,soy noodle soup with chicken,1
+2578,maryland crabcake roll,1
+2579,on poached eggs,1
+2580,omelets,1
+2581,bottled dressing,1
+2582,new general manager,1
+2583,smith,1
+2584,blue tiles,1
+2585,plaster,1
+2586,water or wine,1
+2587,deals,1
+2588,penny,1
+2589,american bistro dishes,1
+2590,soda  fountain,1
+2591,tacos,1
+2592,catfish,2
+2593,pork pipian,1
+2594,tortillas stuffed with guacamo,1
+2595,stupid,1
+2596,chipotle chicken,1
+2597,spicy new zealand mussels,1
+2598,raspberry lemonade,1
+2599,shells,1
+2600,the tomato sauce,1
+2601,hamburger bun,1
+2602,beet ravioli appetizer,1
+2603,hot onion soup,1
+2604,hot appetizers,1
+2605,regular menu,1
+2606,back rooms,1
+2607,environments,1
+2608,whole fish,1
+2609,light tomato broth,1
+2610,sized truffle pizza,1
+2611,blueberry mohitos,1
+2612,veggie spring rolls,1
+2613,tension,1
+2614,oversized bread pudding,1
+2615,sandwich wraps,1
+2616,onions and coconut milk,1
+2617,hair,1
+2618,coconut mojitos,1
+2619,mexican fare,2
+2620,restaraunt,1
+2621,momos  dumplings ,1
+2622,shitake pancakes,1
+2623,steamed greens,1
+2624,thai dishes,1
+2625,vegetable juices,1
+2626,crew,2
+2627,russ pizza,1
+2628,lasagna,1
+2629,ripe pomegranate seeds,1
+2630,grilled octopus,1
+2631,turkey club,1
+2632,snacking,1
+2633,amount of arugula,1
+2634,a balsamic vinegar reduction s,1
+2635,brasserie  style menu,1
+2636,bistro choices,1
+2637,frisee salad with bacon  blue ,1
+2638,a poached egg,1
+2639,moules,2
+2640,bountiful calamari plate,1
+2641,appropriately earthy mushroom ,1
+2642,local dinner,1
+2643,darling,1
+2644,individual pizzas,1
+2645,baked fontina,1
+2646,lentil cake,1
+2647,appreciated,1
+2648,cluding wine,1
+2649,american bar food staples,1
+2650,alternative,1
+2651,chicken breast with mole sauce,1
+2652,sour cream and pico de,1
+2653,buffet lunch,1
+2654,dishes served,2
+2655,cup of fried clams,1
+2656,fried catfish,1
+2657,yams,1
+2658,cold,1
+2659,peanut sauce,1
+2660,candle,1
+2661,holiday dinner,1
+2662,pizza crust,1
+2663,disco balls,1
+2664,dance beats,1
+2665,marinated kobe beef,1
+2666,scallops collapse,1
+2667,eel  soy broth with black truf,1
+2668,cooking of miso soup,1
+2669,freeking pizza,1
+2670,mango salsa with fish cake,1
+2671,apple suace,1
+2672,open  faced sandwich,1
+2673,scrambled eggs,1
+2674,district,1
+2675,blueberry pancakes,1
+2676,otoro tuna,1
+2677,whisper,1
+2678,sea salt,1
+2679,pleasure,1
+2680,round pizza,1
+2681,new bar menu,1
+2682,fennel  fragrant grilled sardi,1
+2683,sweet beet ravioli,1
+2684,brown  butter  slicked squash ,1
+2685,swiss chard  ricotta,1
+2686,drop ceiling,1
+2687,versatile,1
+2688,french,1
+2689,country ham sandwiches,1
+2690,liver terrine,1
+2691,kumquat  cranberry,1
+2692,speck,1
+2693,cheese plates,1
+2694,furnishings,1
+2695,per  slice pizza,1
+2696,calamari app,1
+2697,scallop ceviche,1
+2698,shrimp summer role,1
+2699,shrimp dishes,1
+2700,sheet,1
+2701,new color,1
+2702,duck dish,1
+2703,organic chicken,1
+2704,outdoor patio,1
+2705,blue ribbon menu,1
+2706,range of cheese,1
+2707,vegetable portions,1
+2708,blue shirted cigar,1
+2709,bass,1
+2710,tomato sauce,1
+2711,quality of the buffet,1
+2712,clientelle,1
+2713,korean fare,1
+2714,table in the room,1
+2715,mix of sandwiches,1
+2716,vegetable napoleon,1
+2717,veggie burger,1
+2718,cajun wraps,1
+2719,homemade food,1
+2720,french cosmos,1
+2721,msg dessert,1
+2722,wine garlic bread,1
+2723,answer,1
+2724,beginning appetizers,1
+2725,chocolate souffle with rasberr,1
+2726,menus closed,1
+2727,mussels marina,1
+2728,tomato and onions,1
+2729,lemon juice,1
+2730,ceasar dressing,1
+2731,red pepper hummus,1
+2732,sardinian stuffed squid,1
+2733,guac,1
+2734,lobster spring rolls,1
+2735,shrimp dumplings with citrus s,1
+2736,smoky,1
+2737,filet mignon  pineapple variet,1
+2738,steamed chocolate cake with mi,1
+2739,king crab,1
+2740,shrimp octopus,1
+2741,dining establishment,1
+2742,artworks,1
+2743,gold ceiling,1
+2744,cocktail waiters,1
+2745,lobster ceviche,1
+2746,mango,1
+2747,bathrooms,1
+2748,exotic teas,1
+2749,olive cream cheese,1
+2750,lox spread,1
+2751,eateries,1
+2752,pleasures,1
+2753,teas,1
+2754,deluxe dining room,1
+2755,smoked salmon appetizer,1
+2756,detail,1
+2757,pre  game drink,1
+2758,patties,2
+2759,mixed,1
+2760,italian menu,1
+2761,varieties,1
+2762,tuna sandwhich,1
+2763,foie gras dumpling,1
+2764,somosas,1
+2765,chai,1
+2766,chole,1
+2767,dhosas,1
+2768,dhal,1
+2769,smoked salmon,1
+2770,appys,1
+2771,full bar,1
+2772,abijah s secret sauce,1
+2773,un  beef patties,1
+2774,mediterranean influence,1
+2775,tuna salad,1
+2776,roasted red peppers,1
+2777,apitites,1
+2778,drink list,2
+2779,price category,1
+2780,a bowl of fried chickpeas,1
+2781,lamb skewers,1
+2782,french bread,1
+2783,filo dough,1
+2784,deep fried,1
+2785,nelson,1
+2786,tramezzini,1
+2787,turkey sandwich with avocado a,1
+2788,2 cheese slices,1
+2789,jelly fish,1
+2790,drunken chicken,1
+2791,soupy dumplings,1
+2792,stir fry blue crab,1
+2793,dinner entree,1
+2794,noodle soup,1
+2795,bar crowd,1
+2796,frozen lasagna,1
+2797,tamales,1
+2798,white sangria,1
+2799,lobby,1
+2800,tabs,1
+2801,ceasar salad,1
+2802,steak knife,1
+2803,single drink,1
+2804,kaiseki dinners,1
+2805,fish tacos,1
+2806,pizza with fresh mozzarella,1
+2807,chicken with soba noodles and ,1
+2808,calves liver,1
+2809,fried onions,1
+2810,eggplant parmasean,1
+2811,shrimp with pasta,1
+2812,beverage selection,1
+2813,papaya juice,1
+2814,pompous maitre,1
+2815,jazz bar,1
+2816,garden dining,1
+2817,wine suggestion,1
+2818,turkey melt,1
+2819,broiled scallops,1
+2820,dance,1
+2821,beef negimaki,1
+2822,piano,1
+2823,nachos,1
+2824,onion bloom,1
+2825,ice cream dessert,1
+2826,ice cream scoop,1
+2827,cannoli,1
+2828,cookies,1
+2829,white cakes,1
+2830,bistro food,1
+2831,d al,1
+2832,mix up,1
+2833,black duck,1
+2834,sommlier,1
+2835,back waiters,1
+2836,owner manager,1
+2837,nostalgia,1
+2838,blueberry waffles,1
+2839,brick oven,1
+2840,dance floor,1
+2841,disco music,1
+2842,fish entrees,1
+2843,polish comfort food,1
+2844,veggie,1
+2845,vegan,1
+2846,barbecued lamb,1
+2847,triple  decker roast turkey cl,1
+2848,brioche burger,1
+2849,skin  on fries,1
+2850,curry dishes,1
+2851,sweet potato,1
+2852,serving dinner,1
+2853,rice dishes,1
+2854,dulce de leche ice  cream,1
+2855,chocolate sauce tic  tac  toe,1
+2856,poached pineapple,1
+2857,banquet menu,1
+2858,beef entree with salad,1
+2859,fried dumpling,1
+2860,soul food,1
+2861,bottle of red wine,1
+2862,traditional latin cuisine,1
+2863,green plantains coat,1
+2864,halibut resting,1
+2865,sweet,1
+2866,tart tomato escabeche,1
+2867,hawaiian rib,1
+2868,sinatra,1
+2869,pizza joint,1
+2870,tempura shrimp roll,1
+2871,lobster salad enough,1
+2872,rib appetizer,1
+2873,stained glass,1
+2874,beers on tap,1
+2875,priced wine list,1
+2876,pinot,1
