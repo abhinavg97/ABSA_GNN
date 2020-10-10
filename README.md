@@ -78,14 +78,18 @@ Logging is done by PyTorch lightning which uses Tensorboard by default.
 Visualize the metrics:
 
 ```bash
-$ tensorboard --logdir lightning_logs/vesrion_*/
+$ tensorboard --logdir lightning_logs/
+```
+or
+```bash
+$ python3 -m tensorboard.main --logdir lightning_logs/
 ```
 
 ## Containerize the application
 
 ```bash
-$ docker build -t image_name:tag .
-$ docker run --mount source=volume_name,target=/usr/src/app image_name:tag
+$ docker image build -t image_name:tag .
+$ docker container run --name text_gcn --mount source=volume_name,target=/usr/src/app image_name:tag
 ```
 
 The mounted directory is present at /var/lib/docker/volumes/

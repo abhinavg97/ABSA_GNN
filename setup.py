@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 
 requirements = [
     'torch==1.6.0',
-    'pytorch_lightning==0.9.0',
+    'pytorch_lightning==0.10.0',
     'numpy==1.19.1',
     'dgl==0.5.2',
     'spacy==2.3.2',

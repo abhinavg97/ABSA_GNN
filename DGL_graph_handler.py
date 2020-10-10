@@ -15,9 +15,9 @@ dm = GraphDataModule()
 
 # OPTIONAL
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Configure logger ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Logger initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# logger = pl.loggers.TensorBoardLogger("tb_logs", name=cfg['data']['dataset']['name'])
+# logger = pl.loggers.TensorBoardLogger("lightning_logs", name=cfg['data']['dataset']['name'])
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Model initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -26,7 +26,7 @@ model = GAT_Graph_Classifier(in_dim=cfg['model']['in_dim'], hidden_dim=cfg['mode
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Trainer Initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-trainer = pl.Trainer(max_epochs=cfg['training']['max_epochs'], fast_dev_run=False)
+trainer = pl.Trainer(max_epochs=cfg['training']['max_epochs'], log_every_n_steps=50, fast_dev_run=False)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Train your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

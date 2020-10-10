@@ -11,7 +11,6 @@ import pathlib
 import json
 
 from config import configuration as cfg
-from logger.logger import logger
 
 from ..metrics import f1_scores_average, class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores
 
@@ -75,13 +74,18 @@ class GAT_Graph_Classifier(pl.LightningModule):
         for x in outputs:
             predictions = torch.cat((predictions, x['prediction']), 0)
             labels = torch.cat((labels, x['labels']), 0)
-        # self.logger.experiment._
+
         labels = torch.Tensor(list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels)))
 
         avg_f1_score = f1_scores_average(predictions, labels)
 
         class_f1_scores_list = class_wise_f1_scores(predictions, labels)
+        class_precision_scores_list = class_wise_precision_scores(predictions, labels)
+        class_recall_scores_list = class_wise_recall_scores(predictions, labels)
+
         class_f1_scores = {}
+        class_precision_scores = {}
+        class_recall_scores = {}
 
         try:
             label_text_to_label_id_path = cfg['paths']['data_root'] + cfg['paths']['label_text_to_label_id']
@@ -95,10 +99,16 @@ class GAT_Graph_Classifier(pl.LightningModule):
 
         for index in range(len(label_id_to_label_text)):
             f1_score = class_f1_scores_list[index]
-            class_name = label_id_to_label_text[index]
-            class_f1_scores[class_name] = f1_score
+            precision_score = class_precision_scores_list[index]
+            recall_score = class_recall_scores_list[index]
 
-        return avg_loss, avg_f1_score, class_f1_scores
+            class_name = label_id_to_label_text[index]
+
+            class_f1_scores[class_name] = f1_score
+            class_precision_scores[class_name] = precision_score
+            class_recall_scores[class_name] = recall_score
+
+        return avg_loss, avg_f1_score, class_f1_scores, class_precision_scores, class_recall_scores
 
     def training_step(self, batch, batch_idx):
         graph_batch, labels = batch
@@ -106,37 +116,27 @@ class GAT_Graph_Classifier(pl.LightningModule):
         prediction = torch.sigmoid(prediction)
         return {'loss': batch_train_loss, 'prediction': prediction, 'labels': labels}
 
-    def train_epoch_end(self, outputs):
-        avg_train_loss, avg_f1_score, class_f1_scores = self._calc_metrics(outputs)
-
-        logger.info(f"Train class f1 scores {class_f1_scores}")
-
-        result = pl.TrainResult(minimize=avg_train_loss)
-        result.log('avg_train_loss', avg_train_loss)
-        result.log('avg_train_f1_score', avg_f1_score)
-        result.write('Class f1 scores', class_f1_scores)
-        # log = {'avg_train_loss': avg_train_loss, 'avg_train_f1_score': avg_f1_score}
-        return result
+    def training_epoch_end(self, outputs):
+        avg_train_loss, avg_f1_score, class_f1_scores, class_precision_scores, class_recall_scores = self._calc_metrics(outputs)
+        self.log('avg_train_loss', avg_train_loss)
+        self.log('avg_train_f1_score', avg_f1_score)
+        self.logger.experiment.add_scalars('train_class_f1_scores', class_f1_scores, global_step=self.global_step)
+        self.logger.experiment.add_scalars('train_class_precision_scores', class_precision_scores, global_step=self.global_step)
+        self.logger.experiment.add_scalars('train_class_recall_scores', class_recall_scores, global_step=self.global_step)
 
     def validation_step(self, batch, batch_idx):
         graph_batch, labels = batch
         batch_val_loss, prediction = self.shared_step(batch)
         prediction = torch.sigmoid(prediction)
-        # result = pl.TrainResult(val_loss)
-        # result.log('val_loss', val_loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         return {'loss': batch_val_loss, 'prediction': prediction, 'labels': labels}
 
     def validation_epoch_end(self, outputs):
-        avg_val_loss, avg_f1_score, class_f1_scores = self._calc_metrics(outputs)
-        logger.info(f"Train class f1 scores {class_f1_scores}")
-
-        result = pl.EvalResult()
-        result.log('avg_val_loss', avg_val_loss)
-        result.log('avg_val_f1_score', avg_f1_score)
-        result.write('Class f1 scores', class_f1_scores)
-
-        # log = {'avg_val_loss': avg_val_loss, 'avg_val_f1_score': avg_f1_score}
-        return result
+        avg_val_loss, avg_f1_score, class_f1_scores, class_precision_scores, class_recall_scores = self._calc_metrics(outputs)
+        self.log('avg_val_loss', avg_val_loss)
+        self.log('avg_val_f1_score', avg_f1_score)
+        self.logger.experiment.add_scalars('val_class_f1_scores', class_f1_scores, global_step=self.global_step)
+        self.logger.experiment.add_scalars('val_class_precision_scores', class_precision_scores, global_step=self.global_step)
+        self.logger.experiment.add_scalars('val_class_recall_scores', class_recall_scores, global_step=self.global_step)
 
     def test_step(self, batch, batch_idx):
         graph_batch, labels = batch
@@ -145,17 +145,17 @@ class GAT_Graph_Classifier(pl.LightningModule):
         return {'loss': batch_test_loss, 'prediction': prediction, 'labels': labels}
 
     def test_epoch_end(self, outputs):
-        avg_test_loss, avg_f1_score, class_f1_scores = self._calc_metrics(outputs)
-        logger.info(f"Train class f1 scores {class_f1_scores}")
-        # log = {'avg_test_loss': avg_test_loss, 'avg_test_f1_score': avg_f1_score}
+        avg_test_loss, avg_f1_score, class_f1_scores, class_precision_scores, class_recall_scores = self._calc_metrics(outputs)
+        self.log('avg_test_loss', avg_test_loss)
+        self.log('avg_test_f1_score', avg_f1_score)
+        self.logger.experiment.add_scalars('test_class_f1_scores', class_f1_scores, global_step=self.global_step)
+        self.logger.experiment.add_scalars('test_class_precision_scores', class_precision_scores, global_step=self.global_step)
+        self.logger.experiment.add_scalars('test_class_recall_scores', class_recall_scores, global_step=self.global_step)
 
-        result = pl.EvalResult()
-        result.log('avg_test_loss', avg_test_loss)
-        result.log('avg_test_f1_score', avg_f1_score)
-        result.write('Class f1 scores', class_f1_scores)
+        # TODO check why train metrics are not getting logged in tensorboard
 
-        return result
-        # TODO check why train metrics aere not getting logged in tensorboard
-        # TODO check why other additional unknown names are getting logged
-        # TODO tensorboard logging for baseline
-        # TODO custom tensorboard for logging class wise metrics
+    def get_progress_bar_dict(self):
+        # don't show the version number
+        items = super().get_progress_bar_dict()
+        items.pop("v_num", None)
+        return items

@@ -1,6 +1,6 @@
-# BUILD IMAGE: docker build -t docker.io/abhi1604/gcn-docker:latest .
-# PUSH IMAGE : docker push abhi1604/gcn-docker:latest
-# EXECUTE CONTAINER: docker run --mount source=gcn-docker,target=/usr/src/app docker.io/abhi1604/gcn-docker:latest
+# BUILD IMAGE: docker image build -t docker.io/abhi1604/gcn-docker:latest .
+# PUSH IMAGE : docker image push abhi1604/gcn-docker:latest
+# EXECUTE CONTAINER: docker container run --mount source=gcn-docker,target=/usr/src/app docker.io/abhi1604/gcn-docker:latest
 
 FROM ubuntu:18.04
 WORKDIR /usr/src/app
