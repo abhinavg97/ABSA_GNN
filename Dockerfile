@@ -16,4 +16,4 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install python3-tk
 RUN python3 -m spacy download en_core_web_lg
 RUN python3 -m spacy download en_core_web_sm
 COPY . /usr/src/app
-CMD ["python3", "./DGL_graph_handler.py"]
+CMD ["python3", "./baseline.py"]

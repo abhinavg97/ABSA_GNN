@@ -58,7 +58,6 @@ class DGL_Graph(object):
         """
         graphs = []
         labels = []
-        # TODO create large dgl graph here and get the node embedding vector
         for _, item in self.dataframe.iterrows():
             graphs += [self.create_instance_dgl_graph(item[1])]
             labels += [item[2]]
@@ -100,7 +99,6 @@ class DGL_Graph(object):
         # add edges and node embeddings to the graph
         g = dgl.graph(data=(edges_sources, edges_dest), num_nodes=len(uniq_token_ids))
         g = dgl.add_self_loop(g)
-        # TODO take node embedding from the large graph
         g.ndata['emb'] = torch.tensor(node_embeddings).float()
         # add token id attribute to node
         g.ndata['token_id'] = torch.tensor(token_ids).long()
@@ -201,7 +199,7 @@ class DGL_Graph(object):
 
         return g
 
-    def update_adjacency_matrix(self, X, A):
+    def update_adjacency_matrix(self, X, A, dr=0.1):
         """
         updating adjacency matrix according to the logic given in the paper
         Dropout logic is as given here: https://arxiv.org/pdf/1207.0580.pdf
@@ -214,7 +212,7 @@ class DGL_Graph(object):
         # shape of D is document_size x document_size
         d = self.dataframe.shape[0]
         D = torch.ones(d, d)
-        dropout = torch.nn.Dropout(p=0.5, inplace=False)
+        dropout = torch.nn.Dropout(p=dr, inplace=False)
         D = dropout(D)
 
         # D_prime is dropout matrix applied to Adjacency matrix
@@ -228,17 +226,6 @@ class DGL_Graph(object):
         for i in range(d):
             for j in range(d):
                 D_prime[i, j] = D[i, j]
-        # this will go to layer class
-
-        # S is a learnable sparse matrix
-        # S = torch.empty(A.shape)
-        # torch.nn.init.xavier_uniform_(S)
-
-        # S_prime = torch.mul(D_prime, S)
-        # A_prime = torch.mul(S_prime, A)
-
-        # X_prime = torch.matmul(A_prime, X)
-        # W = torch.randn(d, A.shape[0])
-        # X = torch.matmul(X_prime, W)
-
-        return A_prime
+        # TODO use layers here to learn S
+        # X = call forward of layers
+        return X

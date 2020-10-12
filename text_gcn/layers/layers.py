@@ -25,13 +25,13 @@ class MatrixUpdation(Module):
         if self.bias is not None:
             self.bias.data.uniform_(-stdv, stdv)
 
-    def forward(self, input, adj):
+    def forward(self, A, D_prime, X):
 
         S_prime = torch.mul(D_prime, self.S)
         A_prime = torch.mul(S_prime, A)
         X_prime = torch.matmul(A_prime, X)
 
-        X = torch.matmul(X_prime, self.W)
+        X = torch.matmul(X_prime, self.weight)
 
         if self.bias is not None:
             return X + self.bias

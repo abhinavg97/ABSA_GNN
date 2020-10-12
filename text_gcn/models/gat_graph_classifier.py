@@ -152,8 +152,6 @@ class GAT_Graph_Classifier(pl.LightningModule):
         self.logger.experiment.add_scalars('test_class_precision_scores', class_precision_scores, global_step=self.global_step)
         self.logger.experiment.add_scalars('test_class_recall_scores', class_recall_scores, global_step=self.global_step)
 
-        # TODO check why train metrics are not getting logged in tensorboard
-
     def get_progress_bar_dict(self):
         # don't show the version number
         items = super().get_progress_bar_dict()

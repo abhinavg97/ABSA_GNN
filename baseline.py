@@ -45,22 +45,19 @@ def read_data():
     x_df, y_df = split_data(df=df, test_size=0.3, stratified=True, random_state=1)
     num_classes = len(df['labels'][0])
 
-    return x_df, y_df, num_classes
+    label_text_to_label_id_path = cfg['paths']['data_root'] + cfg['paths']['label_text_to_label_id']
+
+    with open(label_text_to_label_id_path, "r") as f:
+        label_text_to_label_id = json.load(f)
+
+    label_id_to_label_text = {value: key for key, value in label_text_to_label_id.items()}
+
+    return x_df, y_df, num_classes, label_id_to_label_text
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Read data ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-label_text_to_label_id_path = cfg['paths']['data_root'] + cfg['paths']['label_text_to_label_id']
-
-with open(label_text_to_label_id_path, "r") as f:
-    label_text_to_label_id = json.load(f)
-
-label_id_to_label_text = {value: key for key, value in label_text_to_label_id.items()}
-
-
-train_df, eval_df, num_classes = read_data()
-
-train_df = train_df[:4]
+train_df, eval_df, num_classes, label_id_to_label_text = read_data()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Logger initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -72,16 +69,16 @@ model = MultiLabelClassificationModel('distilbert', 'distilbert-base-uncased-dis
                                       use_cuda=False, num_labels=num_classes,
                                       args={'reprocess_input_data': True,
                                             'overwrite_output_dir': True,
-                                            'num_train_epochs': 1,
+                                            'num_train_epochs': 2,
                                             'threshold': 0.5, 'tensorboard_dir': 'lightning_logs/baseline'})
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Train your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-model.train_model(train_df)
+model.train_model(train_df, eval_df=eval_df, output_dir="outputs")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Evaluate your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-result, model_outputs, wrong_predictions = model.eval_model(eval_df)
+result, model_outputs, wrong_predictions = model.eval_model(eval_df, output_dir="outputs")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Calculate metrics ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
