@@ -11,14 +11,12 @@ configuration = {
 
     # These paths are relative to the main directory
     "paths":        {
-        # for saving plots, f1_score
         # 'data_root':    "data/SemEval14/",
         'data_root':    "data/SemEval16/",
         # 'data_root': "data/MAMS_ACSA/",
         # 'data_root': "data/FourSquared/",
         # 'data_root':  "data/SamsungGalaxy/",
         "output":    "output/",
-        "log":       "logs/",
         "dataset":  "train.xml",
         "saved_graph":    "SemEval16_train_graph.bin",
         "dataframe": "SemEval16_dataframe.csv",
@@ -63,6 +61,7 @@ configuration = {
             "rho":            0.9,
             "centered":       False
         },
+        "threshold": 0.5
     },
 
     "embeddings":   {

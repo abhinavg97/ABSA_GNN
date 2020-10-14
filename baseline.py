@@ -9,7 +9,8 @@ from scipy.sparse import lil_matrix
 from simpletransformers.classification import MultiLabelClassificationModel
 
 from text_gcn import utils
-from text_gcn.metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores, f1_scores_average
+from text_gcn.metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores,\
+                             f1_score, accuracy_score, precision_score, recall_score
 
 from config import configuration as cfg
 
@@ -84,10 +85,13 @@ result, model_outputs, wrong_predictions = model.eval_model(eval_df, output_dir=
 
 labels = torch.Tensor(eval_df['labels'].tolist())
 
-class_f1_scores = class_wise_f1_scores(model_outputs > 0.5, labels)
-class_precision_scores = class_wise_precision_scores(model_outputs > 0.5, labels)
-class_recall_scores = class_wise_recall_scores(model_outputs > 0.5, labels)
-f1_scores_average = f1_scores_average(model_outputs > 0.5, labels)
+class_f1_scores = class_wise_f1_scores(model_outputs, labels)
+class_precision_scores = class_wise_precision_scores(model_outputs, labels)
+class_recall_scores = class_wise_recall_scores(model_outputs, labels)
+avg_f1_score = f1_score(model_outputs, labels)
+avg_precision_score = precision_score(model_outputs, labels)
+avg_recall_score = recall_score(model_outputs, labels)
+avg_accuracy_score = accuracy_score(model_outputs, labels)
 
 class_f1_scores_dict = {label_id_to_label_text[i]: class_f1_scores[i] for i in range(len(label_id_to_label_text))}
 class_recall_scores_dict = {label_id_to_label_text[i]: class_recall_scores[i] for i in range(len(label_id_to_label_text))}
@@ -98,7 +102,11 @@ class_precision_scores_dict = {label_id_to_label_text[i]: class_precision_scores
 logger.experiment.add_scalars('test_class_f1_scores', class_f1_scores_dict, global_step=0)
 logger.experiment.add_scalars('test_class_recall_scores', class_recall_scores_dict)
 logger.experiment.add_scalars('test_class_precision_scores', class_precision_scores_dict)
-logger.log_metrics(metrics={'avg_test_f1_score': f1_scores_average.item()})
+logger.log_metrics(metrics={'avg_test_f1_score': avg_f1_score.item()})
+logger.log_metrics(metrics={'avg_test_precision_score': avg_precision_score.item()})
+logger.log_metrics(metrics={'avg_test_recall_score': avg_recall_score.item()})
+logger.log_metrics(metrics={'avg_test_accuracy_score': avg_accuracy_score.item()})
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Use your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -14,8 +14,7 @@ This project is under works. It aims to do sentiment analysis using text GCN.
 
 ## Backlog:
 
-1.  Update Adjacency matrix at each iteration
-2.  Correct metrics calculation
+1.  Connect Updating Adjacency matrix code with the main pipeline
 
 ## Folder Structure
 
