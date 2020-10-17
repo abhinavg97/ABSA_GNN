@@ -43,13 +43,13 @@ configuration = {
 
     "training":        {
         "seed":                 23,
-        "epochs":               20,
+        "epochs":               2,
         "create_dataset":       False,
         "dropout":              0.2,
         "train_batch_size":     30,
         "val_batch_size":       60,
         "test_batch_size":      60,
-        "early_stopping_patience": 3,
+        "early_stopping_patience": 6,
         "early_stopping_delta": 0,
         "optimizer":            {
             "optimizer_type": "adam",

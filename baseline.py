@@ -9,8 +9,8 @@ from scipy.sparse import lil_matrix
 from simpletransformers.classification import MultiLabelClassificationArgs
 from simpletransformers.classification import MultiLabelClassificationModel
 
-from text_gcn import utils
-from text_gcn.metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores,\
+from acsa_gnn import utils
+from acsa_gnn.metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores,\
                              f1_score, accuracy_score, precision_score, recall_score
 
 from config import configuration as cfg

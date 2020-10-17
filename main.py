@@ -2,8 +2,8 @@ import torch
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 
-from text_gcn.models import GAT_Graph_Classifier
-from text_gcn.loaders import GraphDataModule
+from acsa_gnn.models import GAT_Graph_Classifier
+from acsa_gnn.loaders import GraphDataModule
 
 from config import configuration as cfg
 # from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
@@ -42,8 +42,15 @@ early_stop_callback = EarlyStopping(
 
 cuda_available = torch.cuda.is_available()
 
+if cuda_available:
+    accelerator = 'ddp2'
+else:
+    accelerator = None
+
+n_gpu = torch.cuda.device_count()
+
 trainer = pl.Trainer(max_epochs=cfg['training']['epochs'], log_every_n_steps=50, auto_scale_batch_size='binsearch',
-                     gpus=-1, auto_select_gpus=cuda_available, accelerator='ddp2', auto_lr_find=True, fast_dev_run=False,
+                     gpus=n_gpu, auto_select_gpus=cuda_available, accelerator=accelerator, auto_lr_find=True, fast_dev_run=False,
                      num_sanity_val_steps=0, callbacks=[early_stop_callback], deterministic=True)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Train your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

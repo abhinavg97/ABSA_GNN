@@ -18,7 +18,7 @@ This project is under works. It aims to do sentiment analysis using text GCN.
 
 ## Folder Structure
 
-Browse into the corresponding folders in the text_gcn module to see the pertaining details
+Browse into the corresponding folders in the acsa_gnn module to see the pertaining details
 
 ## Setup
 
@@ -98,7 +98,7 @@ $ python3 -m tensorboard.main --logdir lightning_logs/
 
 ```bash
 $ docker image build -t image_name:tag .
-$ docker container run --name text_gcn --mount source=volume_name,target=/usr/src/app image_name:tag
+$ docker container run --name acsa_gnn --mount source=volume_name,target=/usr/src/app image_name:tag
 ```
 
 The mounted directory is present at /var/lib/docker/volumes/
