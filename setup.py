@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 
 requirements = [
     'torch==1.6.0',
-    'pytorch_lightning==0.10.0',
+    'pytorch_lightning==1.0.1',
     'numpy==1.19.1',
     'dgl==0.5.2',
     'spacy==2.3.2',
@@ -19,10 +19,9 @@ requirements = [
     'nltk==3.5',
     'editdistance==0.5.3',          # required for contextualspellcheck
     'contextualSpellCheck==0.2.0',
-    'word2number==1.1',
     'pycontractions==2.0.1',
     'unidecode==1.1.1'
-    'simpletransformers==0.48.6',
+    'simpletransformers==0.48.14',
     'matplotlib'
 ]
 

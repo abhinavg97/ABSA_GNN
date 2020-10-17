@@ -198,34 +198,3 @@ class DGL_Graph(object):
         g = dgl.add_self_loop(g)
 
         return g
-
-    def update_adjacency_matrix(self, X, A, dr=0.1):
-        """
-        updating adjacency matrix according to the logic given in the paper
-        Dropout logic is as given here: https://arxiv.org/pdf/1207.0580.pdf
-        Args:
-            X ([type]): [description]
-            A ([type]): [description]
-        """
-
-        # document_size is number of documents in the Adj matrix
-        # shape of D is document_size x document_size
-        d = self.dataframe.shape[0]
-        D = torch.ones(d, d)
-        dropout = torch.nn.Dropout(p=dr, inplace=False)
-        D = dropout(D)
-
-        # D_prime is dropout matrix applied to Adjacency matrix
-        # shape of D_prime is same as that of Adjacency matrix
-        dropout = torch.nn.Dropout(p=0.2, inplace=False)
-        D_prime = torch.ones(A.shape)
-        D_prime = dropout(D_prime)
-
-        # D_prime has first dxd elements from D with a higher dropout probability
-        # The rest of the elements have a lower dropout probability
-        for i in range(d):
-            for j in range(d):
-                D_prime[i, j] = D[i, j]
-        # TODO use layers here to learn S
-        # X = call forward of layers
-        return X

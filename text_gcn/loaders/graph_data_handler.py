@@ -57,17 +57,17 @@ class GraphDataModule(pl.LightningDataModule):
         """
         # Use PyTorch's DataLoader and the collate function defined before.
         graph_train = DataLoader(self.graph_train, batch_size=self.train_batch_size, shuffle=True, collate_fn=self.batch_graphs,
-                                 num_workers=cfg["data"]["num_workers"])
+                                 num_workers=cfg["hardware"]["num_workers"])
         return graph_train
 
     def val_dataloader(self):
         graph_val = DataLoader(self.graph_val, batch_size=self.val_batch_size, collate_fn=self.batch_graphs,
-                               num_workers=cfg["data"]["num_workers"])
+                               num_workers=cfg["hardware"]["num_workers"])
         return graph_val
 
     def test_dataloader(self):
         graph_test = DataLoader(self.graph_test, batch_size=self.test_batch_size, collate_fn=self.batch_graphs,
-                                num_workers=cfg["data"]["num_workers"])
+                                num_workers=cfg["hardware"]["num_workers"])
         return graph_test
 
     @property

@@ -1,19 +1,19 @@
+import pathlib
+import json
+
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
 
-import pytorch_lightning as pl
-
 from dgl import mean_nodes
 from dgl.nn.pytorch.conv import GATConv
 
-import pathlib
-import json
-
-from config import configuration as cfg
+import pytorch_lightning as pl
 
 from ..metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores,\
                       f1_score, precision_score, recall_score, accuracy_score
+
+from config import configuration as cfg
 
 
 class GAT_Graph_Classifier(pl.LightningModule):
@@ -78,14 +78,14 @@ class GAT_Graph_Classifier(pl.LightningModule):
 
         labels = torch.Tensor(list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels)))
 
-        avg_f1_score = f1_score(predictions, labels)
-        avg_recall_score = recall_score(predictions, labels)
-        avg_precision_score = precision_score(predictions, labels)
-        avg_accuracy_score = accuracy_score(predictions, labels)
+        avg_f1_score = f1_score(labels, predictions)
+        avg_recall_score = recall_score(labels, predictions)
+        avg_precision_score = precision_score(labels, predictions)
+        avg_accuracy_score = accuracy_score(labels, predictions)
 
-        class_f1_scores_list = class_wise_f1_scores(predictions, labels)
-        class_precision_scores_list = class_wise_precision_scores(predictions, labels)
-        class_recall_scores_list = class_wise_recall_scores(predictions, labels)
+        class_f1_scores_list = class_wise_f1_scores(labels, predictions)
+        class_precision_scores_list = class_wise_precision_scores(labels, predictions)
+        class_recall_scores_list = class_wise_recall_scores(labels, predictions)
 
         class_f1_scores = {}
         class_precision_scores = {}
@@ -124,14 +124,15 @@ class GAT_Graph_Classifier(pl.LightningModule):
     def training_epoch_end(self, outputs):
         avg_train_loss, class_f1_scores, class_precision_scores, class_recall_scores,\
          avg_f1_score, avg_precision_score, avg_recall_score, avg_accuracy_score = self._calc_metrics(outputs)
-        self.log('avg_train_loss', avg_train_loss)
-        self.log('avg_train_f1_score', avg_f1_score)
-        self.log('avg_train_precision_score', avg_precision_score)
-        self.log('avg_train_recall_score', avg_recall_score)
-        self.log('avg_train_accuracy_score', avg_accuracy_score)
-        self.logger.experiment.add_scalars('train_class_f1_scores', class_f1_scores, global_step=self.global_step)
-        self.logger.experiment.add_scalars('train_class_precision_scores', class_precision_scores, global_step=self.global_step)
-        self.logger.experiment.add_scalars('train_class_recall_scores', class_recall_scores, global_step=self.global_step)
+
+        self.logger.log_metrics(metrics={'avg_train_loss': avg_train_loss}, step=self.trainer.current_epoch)
+        self.logger.log_metrics(metrics={'avg_train_f1_score': avg_f1_score}, step=self.trainer.current_epoch)
+        self.logger.log_metrics(metrics={'avg_train_precision_score': avg_precision_score}, step=self.trainer.current_epoch)
+        self.logger.log_metrics(metrics={'avg_train_recall_score': avg_recall_score}, step=self.trainer.current_epoch)
+        self.logger.log_metrics(metrics={'avg_train_accuracy_score': avg_accuracy_score}, step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('train_class_f1_scores', class_f1_scores, global_step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('train_class_precision_scores', class_precision_scores, global_step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('train_class_recall_scores', class_recall_scores, global_step=self.trainer.current_epoch)
 
     def validation_step(self, batch, batch_idx):
         graph_batch, labels = batch
@@ -142,14 +143,17 @@ class GAT_Graph_Classifier(pl.LightningModule):
     def validation_epoch_end(self, outputs):
         avg_val_loss, class_f1_scores, class_precision_scores, class_recall_scores,\
          avg_f1_score, avg_precision_score, avg_recall_score, avg_accuracy_score = self._calc_metrics(outputs)
-        self.log('avg_val_loss', avg_val_loss)
-        self.log('avg_val_f1_score', avg_f1_score)
-        self.log('avg_val_precision_score', avg_precision_score)
-        self.log('avg_val_recall_score', avg_recall_score)
-        self.log('avg_val_accuracy_score', avg_accuracy_score)
-        self.logger.experiment.add_scalars('val_class_f1_scores', class_f1_scores, global_step=self.global_step)
-        self.logger.experiment.add_scalars('val_class_precision_scores', class_precision_scores, global_step=self.global_step)
-        self.logger.experiment.add_scalars('val_class_recall_scores', class_recall_scores, global_step=self.global_step)
+
+        # val_f1_score is logged via self.log also so that PL can use early stopping
+        self.log('val_f1_score', avg_f1_score)
+        self.logger.log_metrics(metrics={'avg_val_loss': avg_val_loss}, step=self.trainer.current_epoch)
+        self.logger.log_metrics(metrics={'avg_val_f1_score': avg_f1_score}, step=self.trainer.current_epoch)
+        self.logger.log_metrics(metrics={'avg_val_precision_score': avg_precision_score}, step=self.trainer.current_epoch)
+        self.logger.log_metrics(metrics={'avg_val_recall_score': avg_recall_score}, step=self.trainer.current_epoch)
+        self.logger.log_metrics(metrics={'avg_val_accuracy_score': avg_accuracy_score}, step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('val_class_f1_scores', class_f1_scores, global_step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('val_class_precision_scores', class_precision_scores, global_step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('val_class_recall_scores', class_recall_scores, global_step=self.trainer.current_epoch)
 
     def test_step(self, batch, batch_idx):
         graph_batch, labels = batch
@@ -160,17 +164,20 @@ class GAT_Graph_Classifier(pl.LightningModule):
     def test_epoch_end(self, outputs):
         avg_test_loss, class_f1_scores, class_precision_scores, class_recall_scores,\
          avg_f1_score, avg_precision_score, avg_recall_score, avg_accuracy_score = self._calc_metrics(outputs)
-        self.log('avg_test_loss', avg_test_loss)
-        self.log('avg_test_f1_score', avg_f1_score)
-        self.log('avg_test_precision_score', avg_precision_score)
-        self.log('avg_test_recall_score', avg_recall_score)
-        self.log('avg_test_accuracy_score', avg_accuracy_score)
-        self.logger.experiment.add_scalars('test_class_f1_scores', class_f1_scores, global_step=self.global_step)
-        self.logger.experiment.add_scalars('test_class_precision_scores', class_precision_scores, global_step=self.global_step)
-        self.logger.experiment.add_scalars('test_class_recall_scores', class_recall_scores, global_step=self.global_step)
+
+        self.logger.log_metrics(metrics={'avg_test_loss': avg_test_loss}, step=0)
+        self.logger.log_metrics(metrics={'avg_test_f1_score': avg_f1_score}, step=0)
+        self.logger.log_metrics(metrics={'avg_test_precision_score': avg_precision_score}, step=0)
+        self.logger.log_metrics(metrics={'avg_test_recall_score': avg_recall_score}, step=0)
+        self.logger.log_metrics(metrics={'avg_test_accuracy_score': avg_accuracy_score}, step=0)
+        self.logger.experiment.add_scalars('test_class_f1_scores', class_f1_scores, global_step=0)
+        self.logger.experiment.add_scalars('test_class_precision_scores', class_precision_scores, global_step=0)
+        self.logger.experiment.add_scalars('test_class_recall_scores', class_recall_scores, global_step=0)
 
     def get_progress_bar_dict(self):
         # don't show the version number
         items = super().get_progress_bar_dict()
         items.pop("v_num", None)
         return items
+
+# TODO check large update dgl graph from layers file

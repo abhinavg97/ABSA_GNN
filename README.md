@@ -38,7 +38,7 @@ $ sudo apt install openjdk-8-jre-headless
 
 In case pip install gives wheel related errors:
 ```bash
-$ sudo update-alternatives --set java /usr/lib/jvm java-8-openjdk-amd64/jre/bin/java 
+$ sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java 
 ```
 This is required for language check package
 

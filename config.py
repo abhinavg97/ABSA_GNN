@@ -24,7 +24,6 @@ configuration = {
     },
 
     "data":         {
-        "num_workers": 4,
         "dataset":     {
             'name': 'SemEval16'
             # 'name':   'MAMS_ATSA'
@@ -33,8 +32,7 @@ configuration = {
         },
         "trainval_test_split": 0.3,
         "train_val_split":  0.3,
-        "min_label_occurences": 0,
-        "show_stat":  False
+        "min_label_occurences": 0
     },
 
     "model": {
@@ -44,36 +42,27 @@ configuration = {
     },
 
     "training":        {
+        "epochs":               20,
         "create_dataset":       False,
         "dropout":              0.2,
-        "max_epochs":           10,
         "train_batch_size":     30,
         "val_batch_size":       60,
         "test_batch_size":      60,
+        "early_stopping_patience": 3,
+        "early_stopping_delta": 0,
         "optimizer":            {
             "optimizer_type": "adam",
             "learning_rate":  3e-4,
-            "lr_decay":       0,
-            "weight_decay":   0,
-            "momentum":       0.9,
-            "dampening":      0.9,
-            "alpha":          0.99,
-            "rho":            0.9,
-            "centered":       False
         },
-        "threshold": 0.5
+        "threshold": 0.5,
     },
 
     "embeddings":   {
         'embedding_file': 'glove-twitter-25',
-        'emb_dim':        100,
     },
 
-    "gnn_params":   {
-        "padding":     1,
-        "stride":      1,
-        "kernel_size": 1,
-        "bias":        True,
+    "hardware": {
+        "num_workers": 16
     }
 }
 
