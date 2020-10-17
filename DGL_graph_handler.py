@@ -14,7 +14,8 @@ from config import configuration as cfg
 
 # args = parser.parse_args()
 
-# TODO write arguement parser and pass the required params to dm
+pl.seed_everything(cfg['training']['seed'])
+
 dm = GraphDataModule()
 
 # OPTIONAL
@@ -43,7 +44,7 @@ cuda_available = torch.cuda.is_available()
 
 trainer = pl.Trainer(max_epochs=cfg['training']['epochs'], log_every_n_steps=50, auto_scale_batch_size='binsearch',
                      gpus=-1, auto_select_gpus=cuda_available, accelerator='ddp2', auto_lr_find=True, fast_dev_run=False,
-                     num_sanity_val_steps=0, callbacks=[early_stop_callback])
+                     num_sanity_val_steps=0, callbacks=[early_stop_callback], deterministic=True)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Train your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

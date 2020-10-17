@@ -6,6 +6,7 @@ from pytorch_lightning.loggers import TensorBoardLogger
 
 from ast import literal_eval
 from scipy.sparse import lil_matrix
+from simpletransformers.classification import MultiLabelClassificationArgs
 from simpletransformers.classification import MultiLabelClassificationModel
 
 from text_gcn import utils
@@ -71,32 +72,37 @@ train_df, val_df, test_df, num_classes, label_id_to_label_text = read_data()
 cuda_available = torch.cuda.is_available()
 n_gpu = torch.cuda.device_count()
 
+
+model_args = MultiLabelClassificationArgs()
+
+# model_args.save_model_every_epoch = True
+# model_args.no_save = False
+model_args.n_gpu = n_gpu
+model_args.dataloader_num_workers = cfg['hardware']['num_workers']
+model_args.no_cache = True
+model_args.save_eval_checkpoints = False
+model_args.save_optimizer_and_scheduler = False
+model_args.reprocess_input_data = True
+model_args.overwrite_output_dir = True
+model_args.num_train_epochs = cfg['training']['epochs']
+model_args.evaluate_during_training = True
+model_args.evaluate_during_training_verbose = True
+model_args.evaluate_each_epoch = True
+model_args.use_early_stopping = True
+model_args.early_stopping_consider_epochs = True
+model_args.early_stopping_metric = "avg_val_f1_score"
+model_args.early_stopping_metric_minimize = False
+model_args.early_stopping_patience = cfg['training']['early_stopping_patience']
+model_args.early_stopping_delta = cfg['training']['early_stopping_delta']
+model_args.train_batch_size = cfg['training']['train_batch_size']
+model_args.eval_batch_size = cfg['training']['val_batch_size']
+model_args.threshold = cfg['training']['threshold']
+model_args.tensorboard_dir = 'lightning_logs/baseline'
+model_args.config = {'id2label': label_id_to_label_text}
+model_args.manual_seed = cfg['training']['seed']
+
 model = MultiLabelClassificationModel('distilbert', 'distilbert-base-uncased-distilled-squad',
-                                      use_cuda=cuda_available, num_labels=num_classes,
-                                      args={'n_gpu': n_gpu,
-                                            'dataloader_num_workers': cfg['hardware']['num_workers'],
-                                            'no_cache': True,
-                                            # 'no_save': False,
-                                            'save_eval_checkpoints': False,
-                                            # 'save_model_every_epoch': True,
-                                            'save_optimizer_and_scheduler': False,
-                                            'reprocess_input_data': True,
-                                            'overwrite_output_dir': True,
-                                            'num_train_epochs': cfg['training']['epochs'],
-                                            'evaluate_during_training': True,
-                                            'evaluate_during_training_verbose': True,
-                                            'evaluate_each_epoch': True,
-                                            'use_early_stopping': True,
-                                            'early_stopping_consider_epochs': True,
-                                            'early_stopping_metric': "avg_val_f1_score",
-                                            'early_stopping_metric_minimize': False,
-                                            'early_stopping_patience': cfg['training']['early_stopping_patience'],
-                                            'early_stopping_delta': cfg['training']['early_stopping_delta'],
-                                            'train_batch_size': cfg['training']['train_batch_size'],
-                                            'eval_batch_size': cfg['training']['val_batch_size'],
-                                            'threshold': cfg['training']['threshold'],
-                                            'tensorboard_dir': 'lightning_logs/baseline',
-                                            'config': {'id2label': label_id_to_label_text}})
+                                      use_cuda=cuda_available, num_labels=num_classes, args=model_args)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Train your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

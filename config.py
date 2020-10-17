@@ -42,6 +42,7 @@ configuration = {
     },
 
     "training":        {
+        "seed":                 23,
         "epochs":               20,
         "create_dataset":       False,
         "dropout":              0.2,
