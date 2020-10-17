@@ -68,8 +68,16 @@ $ python -m spacy download en_core_web_sm
 
 ## Using the scripts
 
+Run our model
+
 ```bash
 $ python DGL_graph_handler.py
+```
+
+Run baseline
+
+```bash
+$ python baseline.py
 ```
 
 ## Logging

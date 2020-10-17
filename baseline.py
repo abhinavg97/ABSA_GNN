@@ -15,13 +15,15 @@ from text_gcn.metrics import class_wise_f1_scores, class_wise_precision_scores, 
 from config import configuration as cfg
 
 
-def split_data(df, stratified=True, test_size=0.3, random_state=1):
+def split_data(df, stratified=True, test_size=0.3, random_state=1, custom_one_hot=False):
 
     sample_keys = df.index.values
     sample_keys = lil_matrix(np.reshape(sample_keys, (len(sample_keys), -1)))
 
     labels = df['labels'].tolist()
-    labels = list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels))
+
+    if custom_one_hot:
+        labels = list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels))
     df['labels'] = labels
     labels = lil_matrix(np.array(labels))
 
@@ -43,7 +45,11 @@ def read_data():
     df = pd.read_csv(cfg['paths']['data_root']+cfg['paths']['dataframe'], index_col=0)
     df['labels'] = list(map(lambda label_list: literal_eval(label_list), df['labels'].tolist()))
 
-    x_df, y_df = split_data(df=df, test_size=0.3, stratified=True, random_state=1)
+    train_val_df, test_df = split_data(df=df, test_size=cfg['data']['trainval_test_split'], stratified=True, random_state=1,
+                                       custom_one_hot=True)
+
+    train_df, val_df = split_data(df=train_val_df, test_size=cfg['data']['train_val_split'], stratified=True, random_state=1)
+
     num_classes = len(df['labels'][0])
 
     label_text_to_label_id_path = cfg['paths']['data_root'] + cfg['paths']['label_text_to_label_id']
@@ -53,12 +59,12 @@ def read_data():
 
     label_id_to_label_text = {value: key for key, value in label_text_to_label_id.items()}
 
-    return x_df, y_df, num_classes, label_id_to_label_text
+    return train_df, val_df, test_df, num_classes, label_id_to_label_text
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Read data ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-train_df, eval_df, num_classes, label_id_to_label_text = read_data()
+train_df, val_df, test_df, num_classes, label_id_to_label_text = read_data()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Model initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -94,18 +100,18 @@ model = MultiLabelClassificationModel('distilbert', 'distilbert-base-uncased-dis
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Train your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-model.train_model(train_df, eval_df=eval_df, output_dir="outputs", avg_val_accuracy_score=accuracy_score,
+model.train_model(train_df, eval_df=val_df, output_dir="outputs", avg_val_accuracy_score=accuracy_score,
                   avg_val_f1_score=f1_score, avg_val_precision_score=precision_score, avg_val_recall_score=recall_score,
                   val_class_wise_f1_scores=class_wise_f1_scores, val_class_wise_precision_scores=class_wise_precision_scores,
                   val_class_wise_recall_scores=class_wise_recall_scores)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Evaluate your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-result, model_outputs, wrong_predictions = model.eval_model(eval_df, output_dir="outputs", f1_score=f1_score)
+result, model_outputs, wrong_predictions = model.eval_model(test_df, output_dir="outputs", f1_score=f1_score)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Calculate metrics ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-labels = torch.Tensor(eval_df['labels'].tolist())
+labels = torch.Tensor(test_df['labels'].tolist())
 train_val_metrics = pd.read_csv('outputs/training_progress_scores.csv', index_col=0)
 
 avg_test_f1_score = f1_score(labels, model_outputs)
