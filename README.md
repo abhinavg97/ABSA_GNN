@@ -44,7 +44,7 @@ This is required for language check package
 
 #### Clone the repository
 ```bash
-$ git clone https://github.com/abhinavg97/GCN.git
+$ git clone https://github.com/abhinavg97/ACSA_GNN.git
 $ cd gcn
 ```
 
@@ -71,7 +71,7 @@ $ python -m spacy download en_core_web_sm
 Run our model
 
 ```bash
-$ python DGL_graph_handler.py
+$ python main.py
 ```
 
 Run baseline

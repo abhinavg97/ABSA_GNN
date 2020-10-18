@@ -2,7 +2,7 @@ import torch
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 
-from acsa_gnn.models import GAT_Graph_Classifier
+from acsa_gnn.models import Model
 from acsa_gnn.loaders import GraphDataModule
 
 from config import configuration as cfg
@@ -26,8 +26,8 @@ dm = GraphDataModule()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Model initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-model = GAT_Graph_Classifier(in_dim=cfg['model']['in_dim'], hidden_dim=cfg['model']['hidden_dim'],
-                             num_heads=cfg['model']['num_heads'], n_classes=dm.num_classes)
+model = Model(in_dim=cfg['model']['in_dim'], hidden_dim=cfg['model']['hidden_dim'],
+              num_heads=cfg['model']['num_heads'], n_classes=dm.num_classes)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Trainer Initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

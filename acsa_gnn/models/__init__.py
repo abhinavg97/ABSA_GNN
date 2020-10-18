@@ -1,4 +1,4 @@
-from .gat_graph_classifier import GAT_Graph_Classifier
+from .model import Model
 
 # These are not required
-del gat_graph_classifier
+del model

@@ -1,5 +1,0 @@
-# TODO write a new model with matrix updation and gat graph classifier as layer
-
-# TODO shift gat graph classifier to layers
-
-# TODO complete porting matrix updation to lightning

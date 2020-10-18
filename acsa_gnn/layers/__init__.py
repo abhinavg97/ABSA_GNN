@@ -1,3 +1,4 @@
-from .layers import MatrixUpdation
+from .mat_update import MatrixUpdation
+from .gat_graph_classifier import GAT_Graph_Classifier
 
-del layers
+del mat_update, gat_graph_classifier

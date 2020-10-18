@@ -9,12 +9,15 @@ import pytorch_lightning as pl
 
 class MatrixUpdation(pl.LightningModule):
 
-    def __init__(self, n, d, emb_dim, out_dim=2, bias=True):
+    def __init__(self, w, d, X, A, target, emb_dim, out_dim=2, bias=True):
         super(MatrixUpdation, self).__init__()
-        self.n = n
+        self.w = w
         self.d = d
+        self.X = X
+        self.A = A
+        self.target = target
         self.weight = Parameter(torch.FloatTensor(emb_dim, out_dim))
-        self.S = Parameter(torch.FloatTensor(n+d, n+d))
+        self.S = Parameter(torch.FloatTensor(w+d, w+d))
         if bias:
             self.bias = Parameter(torch.FloatTensor(out_dim))
         else:
@@ -29,6 +32,7 @@ class MatrixUpdation(pl.LightningModule):
             self.bias.data.uniform_(-stdv, stdv)
 
     def forward(self, A, D_prime, X):
+        torch.autograd.set_detect_anomaly(True)
         S_prime = torch.mul(D_prime, self.S)
         A_prime = torch.mul(S_prime, A)
         X_prime = torch.matmul(A_prime, X)
@@ -39,6 +43,10 @@ class MatrixUpdation(pl.LightningModule):
             return X + self.bias
         else:
             return X
+
+    def backward(self, loss, optimizer, optimizer_idx):
+        # do a custom way of backward
+        loss.backward(retain_graph=True)
 
     def get_dropout_matrix(self, shape_A, dr=0.1):
         """
@@ -67,26 +75,15 @@ class MatrixUpdation(pl.LightningModule):
 
         return D_prime
 
-    def shared_step(self, batch):
-        pass
+    def train_dataloader(self):
+        return [self.A]
 
-    def training_step(self, batch):
-        pass
-
-    def training_epoch_end(self, outputs):
-        pass
-
-    def validation_step(self, batch):
-        pass
-
-    def validation_epoch_end(self, outputs):
-        pass
-
-    def test_step(self, batch):
-        pass
-
-    def test_epoch_end(self, outputs):
-        pass
+    def training_step(self, batch, batch_idx):
+        D_prime = self.get_dropout_matrix(self.A.shape, dr=0.2+(self.current_epoch/10))
+        updated_X = self(self.A, D_prime, self.X)
+        batch_loss = self.loss_function(updated_X, self.target)
+        # self.X = updated_X
+        return {'loss': batch_loss}
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=0.001)
@@ -94,38 +91,27 @@ class MatrixUpdation(pl.LightningModule):
     def loss_function(self, updated_X, target):
         return F.binary_cross_entropy_with_logits(updated_X, target)
 
+    def get_progress_bar_dict(self):
+        # don't show the version number
+        items = super().get_progress_bar_dict()
+        items.pop("v_num", None)
+        return items
+
 
 if __name__ == "__main__":
 
     epochs = 5
-    n = 5
+    w = 5
     d = 2
-    m = n + d
-    A = torch.randn(m, m)
+    n = w + d
     emb_dim = 1
-    X = torch.randn(m, emb_dim)
-    mat_test = MatrixUpdation(n, d, emb_dim=emb_dim, out_dim=emb_dim)
 
-    train_epoch_losses = []
+    A = torch.randn(n, n)
+    X = torch.randn(n, emb_dim)
+    target = torch.randint(0, 2, (n, 1)).float()
 
-    optimizer = torch.optim.Adam(mat_test.parameters(), lr=0.001)
+    mat_test = MatrixUpdation(w, d, X, A, target, emb_dim=emb_dim, out_dim=emb_dim)
 
-    target = torch.randint(0, 2, (m, 1)).float()
-    # target = torch.empty(m, dtype=torch.long).random_(emb_dim)
-    for epoch in range(epochs):
+    trainer = pl.Trainer(max_epochs=epochs)
 
-        epoch_loss = 0
-        mat_test.train()
-
-        D_prime = mat_test.get_dropout_matrix(A.shape, dr=0.2+(epoch/10))
-        updated_X = mat_test(A, D_prime, X)
-
-        loss = F.binary_cross_entropy_with_logits(updated_X, target)
-
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-        epoch_loss += loss.detach().item()
-        train_epoch_losses.append(epoch_loss)
-        X = updated_X
+    trainer.fit(mat_test)

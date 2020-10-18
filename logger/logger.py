@@ -6,9 +6,6 @@ import sys
 from copy import copy
 from datetime import datetime
 
-# from logging import FileHandler
-# from logging import Formatter
-
 # Create logger
 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
@@ -51,18 +48,7 @@ def create_logger(logger_name: str = 'root',
                                         "lineno)d): %(funcName)s] %(message)s",
                   color: bool = True,
                   ) -> logging.Logger:
-    """
 
-    :param logger_name:
-    :param log_filename:
-    :param filepath:
-    :param file_level:
-    :param file_format:
-    :param console_level:
-    :param console_format:
-    :param color:
-    :return:
-    """
     log_filename = logger_name + log_filename
     if not exists(filepath):
         makedirs(filepath)

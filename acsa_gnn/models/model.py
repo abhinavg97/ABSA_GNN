@@ -4,46 +4,30 @@ import json
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
-
-from dgl import mean_nodes
-from dgl.nn.pytorch.conv import GATConv
-
 import pytorch_lightning as pl
 
+
+from ..layers import GAT_Graph_Classifier  # MatrixUpdation
 from ..metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores,\
                       f1_score, precision_score, recall_score, accuracy_score
+
 
 from config import configuration as cfg
 
 
-class GAT_Graph_Classifier(pl.LightningModule):
+class Model(pl.LightningModule):
     """
     GAT model class: This is where the learning happens
     The boilerplate for learning is abstracted away by Lightning
     """
     def __init__(self, in_dim, hidden_dim, num_heads, n_classes):
-        super(GAT_Graph_Classifier, self).__init__()
-        self.conv1 = GATConv(in_dim, hidden_dim, num_heads)
-        self.conv2 = GATConv(hidden_dim * num_heads, hidden_dim, num_heads)
-        self.classify = torch.nn.Linear(hidden_dim * num_heads, n_classes)
+        super(Model, self).__init__()
+        self.gat_graph_classifier = GAT_Graph_Classifier(in_dim, hidden_dim, num_heads, n_classes)
+        # self.mat_update = MatrixUpdation(w, d, X, A, target, emb_dim, out_dim=2, bias=True)
 
-    def forward(self, g, emb=None):
-        if emb is None:
-            # Use node degree as the initial node feature.
-            # For undirected graphs, the in-degree is the
-            # same as the out_degree.
-            emb = g.ndata['emb']
+    def forward(self, g):
 
-        # Perform graph convolution and activation function.
-        emb = F.relu(self.conv1(g, emb))
-        emb = emb.view(-1, emb.size(1) * emb.size(2)).float()
-        emb = F.relu(self.conv2(g, emb))
-        emb = emb.view(-1, emb.size(1) * emb.size(2)).float()
-        g.ndata['emb'] = emb
-
-        # Calculate graph representation by averaging all node representations.
-        hg = mean_nodes(g, 'emb')
-        return self.classify(hg)
+        return self.gat_graph_classifier(g)
 
     def configure_optimizers(self, lr=cfg['training']['optimizer']['learning_rate']):
         return optim.Adam(self.parameters(), lr=lr)
@@ -180,4 +164,4 @@ class GAT_Graph_Classifier(pl.LightningModule):
         items.pop("v_num", None)
         return items
 
-# TODO check large update dgl graph from layers file
+# TODO use newly created model in main.py
