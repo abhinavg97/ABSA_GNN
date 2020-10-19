@@ -33,6 +33,8 @@ The cleaned data is stored in the data folder of this repository. The format of 
 
 Text contains the cleaned text from the datasets mentioned above, labels contain a custom one hot vector as described in the paper.
 
+For a detailed information about the files present in each dataset folder, please navigate to the data folder.
+
 Please cite us if you find the the above cleaned datasets helpful in your work.
 
 

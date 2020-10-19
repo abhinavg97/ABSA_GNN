@@ -22,7 +22,7 @@ dm = GraphDataModule()
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Logger initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# logger = pl.loggers.TensorBoardLogger("lightning_logs", name=cfg['data']['dataset']['name'])
+logger = pl.loggers.TensorBoardLogger("lightning_logs", name=cfg['data']['dataset']['name'])
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Model initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -51,7 +51,7 @@ n_gpu = torch.cuda.device_count()
 
 trainer = pl.Trainer(max_epochs=cfg['training']['epochs'], log_every_n_steps=50, auto_scale_batch_size='binsearch',
                      gpus=n_gpu, auto_select_gpus=cuda_available, accelerator=accelerator, auto_lr_find=True, fast_dev_run=False,
-                     num_sanity_val_steps=0, callbacks=[early_stop_callback], deterministic=True)
+                     num_sanity_val_steps=0, callbacks=[early_stop_callback], deterministic=True, logger=logger)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Train your model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

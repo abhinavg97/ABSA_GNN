@@ -20,9 +20,6 @@ class GAT_Graph_Classifier(pl.LightningModule):
 
     def forward(self, g, emb=None):
         if emb is None:
-            # Use node degree as the initial node feature.
-            # For undirected graphs, the in-degree is the
-            # same as the out_degree.
             emb = g.ndata['emb']
 
         # Perform graph convolution and activation function.

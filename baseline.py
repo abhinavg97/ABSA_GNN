@@ -146,7 +146,7 @@ val_class_recall_scores_list = train_val_metrics['val_class_wise_recall_scores']
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Logger initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-logger = TensorBoardLogger("lightning_logs", name="baseline")
+logger = TensorBoardLogger("lightning_logs", name=f"baseline_{cfg['data']['dataset']['name']}")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Log metrics ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
