@@ -25,12 +25,12 @@ For 2. 2. Remove extra repeated special characters, the special characters are a
 
 * !
 * @
-* #
+* \#
 * $
 * %
 * ^
 * &
-* *
+* \*
 * ,
 * .
 * /
@@ -48,9 +48,9 @@ For 3. Put space around the special characters, the special characters are as me
 * %
 * @
 * !
-* #
+* \#
 * ^
-* *
+* \*
 * &
 * "
 * :
@@ -58,7 +58,7 @@ For 3. Put space around the special characters, the special characters are as me
 * /
 * \
 * ,
-* +
+* \+
 * (
 * )
 * [
@@ -66,7 +66,7 @@ For 3. Put space around the special characters, the special characters are as me
 * {
 * }
 * <
-* >
+* \>
 
 The cleaned datasets can be downloaded from the data folder of the root directory of this repository.
 
