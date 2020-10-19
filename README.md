@@ -9,12 +9,32 @@ This project is under works. It aims to do sentiment analysis using text GCN.
 *   Identified aspects terms from user opinions.
 *   Dependency parsing is used to capture syntactical structure.
 *   Graph Convolutional Network is used to capture dependencies of aspect and opinions.
-*   Stratified split is used to ensure even distribution of aspect classes among train, validation and test data
+*   Stratified split is used to ensure even distribution of aspect classes among train, validation and test data.
 *   For predicting the aspect terms, MultilabelClassification from the simpletransformers library is used as the baseline.
 
 ## Backlog:
 
 1.  Connect Updating Adjacency matrix code with the main pipeline
+
+## Datasets
+
+Six datasets are used to evaluate our model.
+
+* [FourSquared](https://europe.naverlabs.com/research/natural-language-processing/aspect-based-sentiment-analysis-dataset/)
+* [MAMS ACSA](https://github.com/siat-nlp/MAMS-for-ABSA)
+* [MAMS ATSA](https://github.com/siat-nlp/MAMS-for-ABSA)
+* [Samsung Galaxy](https://github.com/epochx/opinatt)
+* [SemEval 2014](http://alt.qcri.org/semeval2014/task4/)
+* [SemEval 2016](http://alt.qcri.org/semeval2016/task5/)
+
+All the datasets are cleaned by using the text processing pipeline as mentioned in the paper. The description of the pipeline is given in the utils folder of acsa_gnn module in this repository as well.
+
+The cleaned data is stored in the data folder of this repository. The format of the data is [text labels].
+
+Text contains the cleaned text from the datasets mentioned above, labels contain a custom one hot vector as described in the paper.
+
+Please cite us if you find the the above cleaned datasets helpful in your work.
+
 
 ## Folder Structure
 
@@ -104,3 +124,14 @@ $ docker container run --name acsa_gnn --mount source=volume_name,target=/usr/sr
 The mounted directory is present at /var/lib/docker/volumes/
 
 Note: You need sudo permissions to access the above directory
+
+## Citation
+
+@misc{
+  author = {A. Gupta, S. Ghosh, A. Konjengbam},
+  title = {ACSA GNN},
+  year = {2020},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/abhinavg97/ACSA_GNN}}
+}

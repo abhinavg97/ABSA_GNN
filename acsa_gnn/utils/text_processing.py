@@ -8,7 +8,6 @@ import gensim.downloader as api
 from pycontractions import Contractions
 
 from config import configuration as cfg
-# from word2number import w2n
 
 
 class TextProcessing:
@@ -29,14 +28,15 @@ class TextProcessing:
     def process_text(self, text):
         """
         Processes text as follows:
-        1. Remove extra whitespaces
-        2. decode to unicode
-        3. replace acronyms
-        4. lower case the string
-        5. expand contractions of english words like ain't
-        6. correct spelling mistakes
-        7. replace NE in the text
-        8. add space before '(' and after ')' then remove extra spaces
+        1. decode to unicode
+        2. remove extra repeated special characters
+        3. put space around the special characters
+        4. Remove extra whitespaces
+        5. replace acronyms
+        6. expand contractions of english words like ain't
+        7. correct spelling mistakes
+        8. replace NE in the text
+        9. lower case the string
         Args:
             text: text to be processed
         """

@@ -2,7 +2,6 @@ import pathlib
 import json
 
 import torch
-import torch.optim as optim
 import torch.nn.functional as F
 import pytorch_lightning as pl
 
@@ -26,11 +25,12 @@ class Model(pl.LightningModule):
         # self.mat_update = MatrixUpdation(w, d, X, A, target, emb_dim, out_dim=2, bias=True)
 
     def forward(self, g):
+        A = g.adjacency_matrix
 
         return self.gat_graph_classifier(g)
 
     def configure_optimizers(self, lr=cfg['training']['optimizer']['learning_rate']):
-        return optim.Adam(self.parameters(), lr=lr)
+        return torch.optim.Adam(self.parameters(), lr=lr)
 
     def loss_function(self, prediction, label):
         return F.binary_cross_entropy_with_logits(prediction, label)
