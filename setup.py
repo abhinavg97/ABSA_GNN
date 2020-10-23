@@ -36,7 +36,7 @@ with io.open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     README = f.read()
 
 setup(
-    name='acsa_gnn',
+    name='absa_gnn',
     version=VERSION,
     url='https://github.com/abhinavg97/GCN',
     description='Python module designed for text GCN',

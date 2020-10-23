@@ -1,4 +1,4 @@
-# [Aspect Based Sentiment Analysis with GCN](https://github.com/abhinavg97/GCN)
+# [Aspect Based Sentiment Analysis with GCN](https://github.com/abhinavg97/ABSA_GNN)
 
 
 
@@ -27,7 +27,7 @@ Six datasets are used to evaluate our model.
 * [SemEval 2014](http://alt.qcri.org/semeval2014/task4/)
 * [SemEval 2016](http://alt.qcri.org/semeval2016/task5/)
 
-All the datasets are cleaned by using the text processing pipeline as mentioned in the paper. The description of the pipeline is given in the utils folder of acsa_gnn module in this repository as well.
+All the datasets are cleaned by using the text processing pipeline as mentioned in the paper. The description of the pipeline is given in the utils folder of absa_gnn module in this repository as well.
 
 The cleaned data is stored in the data folder of this repository. The format of the data is [text labels].
 
@@ -40,7 +40,7 @@ Please cite us if you find the the above cleaned datasets helpful in your work.
 
 ## Folder Structure
 
-Browse into the corresponding folders in the acsa_gnn module to see the pertaining details
+Browse into the corresponding folders in the absa_gnn module to see the pertaining details
 
 ## Setup
 
@@ -66,7 +66,7 @@ This is required for language check package
 
 #### Clone the repository
 ```bash
-$ git clone https://github.com/abhinavg97/ACSA_GNN.git
+$ git clone https://github.com/abhinavg97/ABSA_GNN.git
 $ cd gcn
 ```
 
@@ -120,7 +120,7 @@ $ python3 -m tensorboard.main --logdir lightning_logs/
 
 ```bash
 $ docker image build -t image_name:tag .
-$ docker container run --name acsa_gnn --mount source=volume_name,target=/usr/src/app image_name:tag
+$ docker container run --name absa_gnn --mount source=volume_name,target=/usr/src/app image_name:tag
 ```
 
 The mounted directory is present at /var/lib/docker/volumes/
@@ -129,11 +129,11 @@ Note: You need sudo permissions to access the above directory
 
 ## Citation
 
-@misc{
-  author = {A. Gupta, S. Ghosh, A. Konjengbam},
-  title = {ACSA GNN},
-  year = {2020},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/abhinavg97/ACSA_GNN}}
-}
+    @misc{
+      author = {Gupta, Abhinav and Ghosh, Samujjwal and Konjengbam, Anand},
+      title = {ABSA GNN},
+      year = {2020},
+      publisher = {GitHub},
+      journal = {GitHub repository},
+      howpublished = {\url{https://github.com/abhinavg97/ABSA_GNN}}
+    }

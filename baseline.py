@@ -9,21 +9,21 @@ from scipy.sparse import lil_matrix
 from simpletransformers.classification import MultiLabelClassificationArgs
 from simpletransformers.classification import MultiLabelClassificationModel
 
-from acsa_gnn import utils
-from acsa_gnn.metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores,\
+from absa_gnn import utils
+from absa_gnn.metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores,\
                              f1_score, accuracy_score, precision_score, recall_score
 
 from config import configuration as cfg
 
 
-def split_data(df, stratified=True, test_size=0.3, random_state=1, custom_one_hot=False):
+def split_data(df, stratified=True, test_size=0.3, random_state=1, multi_hot=False):
 
     sample_keys = df.index.values
     sample_keys = lil_matrix(np.reshape(sample_keys, (len(sample_keys), -1)))
 
     labels = df['labels'].tolist()
 
-    if custom_one_hot:
+    if multi_hot:
         labels = list(map(lambda label_vec: list(map(lambda x: 0 if x == -2 else 1, label_vec)), labels))
     df['labels'] = labels
     labels = lil_matrix(np.array(labels))
@@ -47,7 +47,7 @@ def read_data():
     df['labels'] = list(map(lambda label_list: literal_eval(label_list), df['labels'].tolist()))
 
     train_val_df, test_df = split_data(df=df, test_size=cfg['data']['trainval_test_split'], stratified=True, random_state=1,
-                                       custom_one_hot=True)
+                                       multi_hot=True)
 
     train_df, val_df = split_data(df=train_val_df, test_size=cfg['data']['train_val_split'], stratified=True, random_state=1)
 
@@ -97,7 +97,7 @@ model_args.early_stopping_delta = cfg['training']['early_stopping_delta']
 model_args.train_batch_size = cfg['training']['train_batch_size']
 model_args.eval_batch_size = cfg['training']['val_batch_size']
 model_args.threshold = cfg['training']['threshold']
-model_args.tensorboard_dir = 'lightning_logs/baseline'
+model_args.tensorboard_dir = f"lightning_logs/baseline_{cfg['data']['dataset']['name']}"
 model_args.config = {'id2label': label_id_to_label_text}
 model_args.manual_seed = cfg['training']['seed']
 

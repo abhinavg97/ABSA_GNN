@@ -2,8 +2,8 @@ import torch
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 
-from acsa_gnn.models import Model
-from acsa_gnn.loaders import GraphDataModule
+from absa_gnn.models import Model
+from absa_gnn.loaders import GraphDataModule
 
 from config import configuration as cfg
 # from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
@@ -27,7 +27,7 @@ logger = pl.loggers.TensorBoardLogger("lightning_logs", name=cfg['data']['datase
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Model initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 model = Model(in_dim=cfg['model']['in_dim'], hidden_dim=cfg['model']['hidden_dim'],
-              num_heads=cfg['model']['num_heads'], n_classes=dm.num_classes)
+              num_heads=cfg['model']['num_heads'], n_classes=dm.num_classes, large_graph=dm.large_graph)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Trainer Initialization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

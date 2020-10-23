@@ -11,7 +11,7 @@ Six datasets are used to evaluate our model.
 * [SemEval 2014](http://alt.qcri.org/semeval2014/task4/)
 * [SemEval 2016](http://alt.qcri.org/semeval2016/task5/)
 
-All the datasets are cleaned by using the text processing pipeline as mentioned in the paper. The description of the pipeline is given in the utils folder of acsa_gnn module in this repository as well.
+All the datasets are cleaned by using the text processing pipeline as mentioned in the paper. The description of the pipeline is given in the utils folder of absa_gnn module in this repository as well.
 
 The cleaned data is stored in the data folder of this repository. The format of the data is [text labels].
 
@@ -49,6 +49,6 @@ Text contains the cleaned text from the datasets mentioned above, labels contain
 
         This file contains the frequencies of the labels in the dataset.
 
-* {dataset}_train_graph.bin
+* {dataset}_train_graphs.bin
 
         The saved DGL graph created from the above dataframe. Please use this to fasten your training time.
