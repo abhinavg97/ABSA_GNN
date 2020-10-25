@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import pytorch_lightning as pl
 
 
-from ..layers import Instance_Graphs_GAT, MatrixUpdation
+from ..layers import Instance_Graphs_GAT, Token_Graph_GCN  # MatrixUpdation
 from ..metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores,\
                       f1_score, precision_score, recall_score, accuracy_score
 
@@ -20,13 +20,17 @@ class Model(pl.LightningModule):
     The boilerplate for learning is abstracted away by Lightning
     """
     def __init__(self, in_dim, hidden_dim, num_heads, out_dim, num_classes, large_graph):
+        """
+        if cfg['data']['multi_label']:
+            out_dim =
+        else:
+        """
         super(Model, self).__init__()
-
         self.large_graph = large_graph
-        self.large_token_gcn = MatrixUpdation(in_dim=in_dim, hidden_dim=hidden_dim, out_dim=out_dim)
+        # self.large_token_gcn = MatrixUpdation(in_dim=in_dim, hidden_dim=hidden_dim, out_dim=out_dim)
         self.small_instance_gat = Instance_Graphs_GAT(in_dim=in_dim, hidden_dim=hidden_dim, num_heads=num_heads, out_dim=out_dim)
         # We may have different out_dim's from 2 GNNs and concat them.
-
+        self.large_token_gcn = Token_Graph_GCN(in_dim=in_dim, hidden_dim=hidden_dim, out_dim=out_dim)
         self.classify = torch.nn.Linear(2 * out_dim, num_classes)
 
     def forward(self, small_batch_graphs, combine='concat'):
@@ -50,6 +54,7 @@ class Model(pl.LightningModule):
         # Fetch embeddings from instance graphs:
         token_embs_small = self.small_instance_gat(small_batch_graphs, small_batch_graphs.ndata['emb'])
 
+        """ Uncomment later
         # Fetch embeddings from large token graph
         token_embs_large = self.large_token_gcn(self.large_graph, self.large_graph.ndata['emb'])
 
@@ -65,8 +70,12 @@ class Model(pl.LightningModule):
             embs = torch.mean(torch.stack([token_embs_small, token_embs_large]), dim=0)
         else:
             raise NotImplementedError(f'combine supports either concat or avg.'
-                                      f' [{combine}] provided.')
-        return self.classify(embs)
+                                    f' [{combine}] provided.')
+
+            return self.classify(embs)
+        """
+
+        return self.classify(token_embs_small)
 
     def configure_optimizers(self, lr=cfg['training']['optimizer']['learning_rate']):
         return torch.optim.Adam(self.parameters(), lr=lr)
@@ -202,7 +211,3 @@ class Model(pl.LightningModule):
         items = super().get_progress_bar_dict()
         items.pop("v_num", None)
         return items
-
-
-# TODO set a flag in large graph to create doc to doc edge
-# TODO prepare the text gcn datasets

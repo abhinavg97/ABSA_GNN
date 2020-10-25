@@ -15,7 +15,7 @@ All the datasets are cleaned by using the text processing pipeline as mentioned 
 
 The cleaned data is stored in the data folder of this repository. The format of the data is [text labels].
 
-Text contains the cleaned text from the datasets mentioned above, labels contain a custom one hot vector as described in the paper.
+Text contains the cleaned text from the datasets mentioned above, labels contain a multi hot vector as described in the paper.
 
 ## Files present
 
@@ -33,7 +33,7 @@ Text contains the cleaned text from the datasets mentioned above, labels contain
         id,text,labels
         ```
 
-        labels are encoded in a custom one hot vector format.
+        labels are encoded in a multi hot vector format.
 
         -2 -> the label is not present in the sample.
         -1 -> the label has a negative sentiment associated with the sample.
@@ -43,7 +43,7 @@ Text contains the cleaned text from the datasets mentioned above, labels contain
 
 * {dataset}_label_text_to_label_id.json
 
-        The position of the custom one hot vector represents a label. This position to label mapping is present in this file.
+        The position of the multi hot vector represents a label. This position to label mapping is present in this file.
 
 * {dataset}_bag_of_words.csv 
 

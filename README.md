@@ -31,7 +31,7 @@ All the datasets are cleaned by using the text processing pipeline as mentioned 
 
 The cleaned data is stored in the data folder of this repository. The format of the data is [text labels].
 
-Text contains the cleaned text from the datasets mentioned above, labels contain a custom one hot vector as described in the paper.
+Text contains the cleaned text from the datasets mentioned above, labels contain a multi hot vector as described in the paper.
 
 For a detailed information about the files present in each dataset folder, please navigate to the data folder.
 

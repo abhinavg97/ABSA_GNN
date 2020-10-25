@@ -23,16 +23,6 @@ wheels/
 *.egg
 MANIFEST
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
 # Unit test / coverage reports
 .pytest_cache/
 
@@ -48,7 +38,6 @@ target/
 # cache
 cache/
 cache_dir/
-
 docker-data/
 
 # Environments
@@ -70,8 +59,8 @@ venv.bak/
 # backup files
 *~
 
-# saved graphs
-
+# saved graph 
+# > 100MB
 *.bin
 
 # vscode
@@ -83,4 +72,3 @@ logs/*
 output/
 outputs/
 runs/
-

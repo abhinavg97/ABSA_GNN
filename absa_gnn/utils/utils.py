@@ -2,11 +2,6 @@ import nltk
 import pandas as pd
 import numpy as np
 import spacy
-from xml.etree import ElementTree as ET
-
-import os
-import glob
-
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
@@ -16,57 +11,8 @@ from config import configuration as cfg
 from logger.logger import logger
 
 
-if cfg['training']['create_dataset'] and not cfg['DEBUG']:
+if cfg['training']['create_dataset'] or not cfg['DEBUG']:
     nlp = spacy.load("en_core_web_lg")
-
-
-def merge_semEval_16_type(folder):
-    """
-    Takes in a folder and merges all the xml files in it
-    Merge SemEval16 type xml files via this function
-    Args:
-        folder: folder path to merge files
-    """
-    xml_files = glob.glob(folder+"/*.xml")
-
-    node = None
-    for xmlFile in xml_files:
-        tree = ET.parse(xmlFile)
-        root = tree.getroot()
-        if node is None:
-            node = root
-        else:
-            elements = root.findall("./Review")
-            for element in elements:
-                node[1].append(element)
-    with open("merged_" + cfg["data"]["dataset"]["name"] + ".xml", "wb") as f:
-        f.write(ET.tostring(node))
-
-
-def merge_semEval_14_type(folder):
-    """
-    Takes in a folder and merges all the xml files in it
-    Merge SemEval14 type xml files via this function
-    Make sure to delete any uneccesary xml files including any previously merged files
-        from the directory before proceeding
-    Args:
-        folder: folder path to merge files
-    """
-    xml_files = glob.glob(os.path.join(os.path.dirname(__file__), folder)+"*.xml")
-
-    node = None
-    for xmlFile in xml_files:
-        tree = ET.parse(xmlFile)
-        root = tree.getroot()
-        if node is None:
-            node = root
-        else:
-            elements = root.findall("./sentence")
-            for element in elements:
-                node[1].append(element)
-
-    with open(os.path.join(os.path.dirname(__file__), folder+"merged_files/"+"merged_" + "SemEval14" + ".xml"), "wb") as f:
-        f.write(ET.tostring(node))
 
 
 def split_data(sample_keys, labels, test_size, stratified, random_state=0):
@@ -112,7 +58,7 @@ def print_dataframe_statistics(df, label_text_to_label_id):
     average_labels_per_sample = np.count_nonzero(labels != -2) / len(labels)
     average_samples_per_label = sum(labels_frequency)/len(labels_frequency)
 
-    labels_frequency_df.to_csv(cfg["paths"]["data_root"] + cfg["data"]["dataset"]["name"] + "_bag_of_words.csv")
+    labels_frequency_df.to_csv(cfg['paths']['data_root'] + cfg['data']['dataset']['name'] + "_bag_of_words.csv")
     logger.info("Number of samples in the dataset {}".format(len(labels)))
     logger.info("Number of labels in the dataset {}".format(len(labels[0])))
     logger.info("Average number of  labels per sample {}".format(average_labels_per_sample))
@@ -135,7 +81,7 @@ def prune_dataset_df(df, label_text_to_label_id):
         for i in range(len(labels)):
             if labels[i][j] != -2:
                 labels_frequency[j] += 1
-        if labels_frequency[j] <= cfg["data"]["min_label_occurences"]:
+        if labels_frequency[j] <= cfg['data']['min_label_occurences']:
             to_prune.append(j)
 
     labels = np.delete(labels, to_prune, axis=1)
@@ -175,8 +121,8 @@ def pmi(df):
 
     tokenized = []
 
-    for _, item in df.iterrows():
-        tokenized += token_list(item[1])
+    for text in df['text'].tolist():
+        tokenized += token_list(text)
 
     # Bigrams
     finder = nltk.collocations.BigramCollocationFinder.from_words(tokenized)
@@ -190,7 +136,7 @@ def pmi(df):
     return list_of_tuples
 
 
-def iou(label_ohv1, label_ohv2):
+def iou(label_mhv1, label_mhv2):
     """
     Calculate the ious given two lists
     Args:
@@ -201,10 +147,10 @@ def iou(label_ohv1, label_ohv2):
         iou_score: IOU for the two labels lists
     """
 
-    union = len(label_ohv1)
+    union = len(label_mhv1)
     intersection = 0
-    for i, label1 in enumerate(label_ohv1):
-        if label1 != 0 and label_ohv2[i] != 0:
+    for i, label1 in enumerate(label_mhv1):
+        if label1 != -2 and label_mhv2[i] != -2:
             intersection += 1
 
     iou_score = intersection/union
@@ -219,8 +165,8 @@ def tf_idf(df, vocab):
     """
 
     docs = []
-    for __, item in df.iterrows():
-        docs += [item[1]]
+    for text in df['text'].tolist():
+        docs += [text]
 
     vectorizer = TfidfVectorizer(tokenizer=token_list, lowercase=False, vocabulary=vocab)
     vectors = vectorizer.fit_transform(docs)
@@ -243,20 +189,3 @@ def token_list(text):
         tokens += [token.text]
 
     return tokens
-
-
-def get_labels(df):
-    """
-    Fetches labels for the documents in the dataframe
-    Args:
-        df: dataframe to fetch the labels from
-    """
-    labels = []
-    for index, doc in df.iterrows():
-        labels += [doc[2]]
-    return labels
-
-
-if __name__ == "__main__":
-
-    merge_semEval_14_type("../../data/SemEval14/")

@@ -28,9 +28,14 @@ class GraphDataset(torch.utils.data.Dataset):
         """
         Initializes the loader
         Args:
-            dataset_path: Path to the file containing the dataset.
-            dataset_info: Dictionary consisting of one field 'dataset_name'
-            train_graphs_path: path to the bin file containing the saved DGL graph
+            graphs:                      list of DGL graphs
+            labels:                      list of labels corresponding to the above DGL graphs
+            dataset_df_path:             dataframe path for the processed dataset
+            label_text_to_label_id_path: path of json file containing label to id mapping for the dataset
+            dataset_path:                path to the file containing the dataset.
+            dataset_info:                dictionary consisting of one field 'dataset_name'
+            train_graphs_path:           path to the bin file containing the saved DGL graph
+            large_graph_path:            path of the large graph for the dataset
         """
 
         assert ((graphs is not None and labels is not None)
@@ -40,7 +45,7 @@ class GraphDataset(torch.utils.data.Dataset):
                 or (pathlib.Path(dataset_path).is_file() and dataset_info is not None)
                 ), \
             "Either labels and graphs array should be given or\
-            train_graphs_path should be specified or \
+            train_graphs_path and large_graph_path should be specified or \
             dataframe_path should be specified\
             or dataset_path and dataset_info should be specified "
 
@@ -56,7 +61,6 @@ class GraphDataset(torch.utils.data.Dataset):
         elif pathlib.Path(train_graphs_path).is_file() and pathlib.Path(large_graph_path).is_file() \
                 and not cfg['training']['create_dataset']:
 
-            # If DGL graph is given in a file
             assert pathlib.Path(label_text_to_label_id_path).exists(), "Label text to label id path is not valid!"
 
             label_text_to_label_id = self.read_label_text_to_label_id_dict(label_text_to_label_id_path)
@@ -72,7 +76,7 @@ class GraphDataset(torch.utils.data.Dataset):
             self.graphs, self.labels = graph_utils.load_dgl_graphs(train_graphs_path)
             logger.info("Reading train graphs from " + train_graphs_path)
 
-            self.large_graph = graph_utils.load_dgl_graphs(large_graph_path)
+            self.local_large_graph, __ = graph_utils.load_dgl_graphs(large_graph_path)
             logger.info("Reading large graph from " + large_graph_path)
 
         # If the dataset dataframe is given
@@ -103,7 +107,7 @@ class GraphDataset(torch.utils.data.Dataset):
             self.save_label_text_to_label_id_dict(label_text_to_label_id)
             self.save_dataset_df(df)
 
-            self._finalize_graph_processing()
+            self._finalize_graph_processing(dataset_info, df, label_text_to_label_id)
 
         # atleast one document is expected
         self.classes = len(self.labels[0])
@@ -113,11 +117,11 @@ class GraphDataset(torch.utils.data.Dataset):
         self.print_dataframe_statistics(df, label_text_to_label_id)
         token_graph_ob = DGL_Graph(df)
         self.graphs, labels_dict = token_graph_ob.create_instance_dgl_graphs()
-        self.large_graph = token_graph_ob.create_large_dgl_graph()
+        self.local_large_graph = token_graph_ob.create_large_dgl_graph()
 
         token_graph_ob.save_graphs(cfg['paths']['data_root'] + dataset_info['name'] + '_train_graphs.bin', self.graphs, labels_dict)
 
-        token_graph_ob.save_graphs(cfg['paths']['data_root'] + dataset_info['name'] + '_large_graph.bin', self.large_graph)
+        token_graph_ob.save_graphs(cfg['paths']['data_root'] + dataset_info['name'] + '_large_graph.bin', self.local_large_graph)
 
         self.labels = labels_dict["glabel"]
 
@@ -140,7 +144,7 @@ class GraphDataset(torch.utils.data.Dataset):
 
         Returns
         -------
-        (dgl.DGLGraph, one hot vector)
+        (dgl.DGLGraph, multi hot vector)
             The graph and its label.
         """
         return self.graphs[idx], self.labels[idx]
@@ -156,7 +160,7 @@ class GraphDataset(torch.utils.data.Dataset):
         """
         Returns the large graph
         """
-        return self.large_graph
+        return self.local_large_graph
 
     def get_labels(self):
         """
@@ -195,6 +199,16 @@ class GraphDataset(torch.utils.data.Dataset):
             return parsing._parse_sem_eval_14_type(self.dataset_path, text_processor)
         elif dataset_name == "SamsungGalaxy":
             return parsing._parse_sem_eval_14_type(self.dataset_path, text_processor)
+        elif dataset_name == "20NG":
+            return parsing._parse_text_gcn_type(self.dataset_path)
+        elif dataset_name == "MR":
+            return parsing._parse_text_gcn_type(self.dataset_path)
+        elif dataset_name == "Ohsumed":
+            return parsing._parse_text_gcn_type(self.dataset_path)
+        elif dataset_name == "R8":
+            return parsing._parse_text_gcn_type(self.dataset_path)
+        elif dataset_name == "R52":
+            return parsing._parse_text_gcn_type(self.dataset_path)
         else:
             logger.error("{} dataset not yet supported".format(self.dataset_name))
             return NotImplemented
@@ -206,7 +220,8 @@ class GraphDataset(torch.utils.data.Dataset):
         logger.info("Generated Label to ID mapping and stored at " + cfg['paths']['data_root'])
 
     def save_dataset_df(self, df):
-        df.to_csv(cfg['paths']['data_root'] + self.dataset_info['name'] + "_dataframe.csv")
+        df.drop(columns=['id'], inplace=True)
+        df.to_csv(cfg['paths']['data_root'] + self.dataset_info['name'] + "_dataframe.csv", index_label='id')
         logger.info("Generated dataframe and stored at " + cfg['paths']['data_root'])
 
     def read_label_text_to_label_id_dict(self, label_text_to_label_id_path):

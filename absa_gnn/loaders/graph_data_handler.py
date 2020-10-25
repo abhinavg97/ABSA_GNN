@@ -1,8 +1,10 @@
-import pytorch_lightning as pl
-from ..loaders import GraphDataset
-from torch.utils.data import DataLoader
-from dgl import batch as g_batch
 import torch
+import pytorch_lightning as pl
+from dgl import batch as g_batch
+from torch.utils.data import DataLoader
+
+from ..loaders import GraphDataset
+
 from config import configuration as cfg
 
 # When doing distributed training, Datamodules have two optional arguments for
@@ -60,17 +62,17 @@ class GraphDataModule(pl.LightningDataModule):
         """
         # Use PyTorch's DataLoader and the collate function defined before.
         graph_train = DataLoader(self.graph_train, batch_size=self.train_batch_size, shuffle=True, collate_fn=self.batch_graphs,
-                                 num_workers=cfg["hardware"]["num_workers"])
+                                 num_workers=cfg['hardware']['num_workers'])
         return graph_train
 
     def val_dataloader(self):
         graph_val = DataLoader(self.graph_val, batch_size=self.val_batch_size, collate_fn=self.batch_graphs,
-                               num_workers=cfg["hardware"]["num_workers"])
+                               num_workers=cfg['hardware']['num_workers'])
         return graph_val
 
     def test_dataloader(self):
         graph_test = DataLoader(self.graph_test, batch_size=self.test_batch_size, collate_fn=self.batch_graphs,
-                                num_workers=cfg["hardware"]["num_workers"])
+                                num_workers=cfg['hardware']['num_workers'])
         return graph_test
 
     @property

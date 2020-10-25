@@ -7,26 +7,26 @@ seed = 0
 global configuration
 configuration = {
 
-    "DEBUG":    True,
+    "DEBUG":    False,
 
     # These paths are relative to the main directory
     "paths":        {
-        'data_root':    "data/SemEval14/",
+        'data_root':    "data/MR/",
         # 'data_root':    "data/SemEval16/",
         # 'data_root': "data/MAMS_ACSA/",
         # 'data_root': "data/FourSquared/",
         # 'data_root':  "data/SamsungGalaxy/",
+        "dataset":  "sample.csv",
+        "saved_train_graphs":    "MR_train_graphs.bin",
+        "saved_large_graph": "MR_large_graph.bin",
+        "dataset_dataframe": "MR_dataframe.csv",
+        "label_text_to_label_id": "MR_label_text_to_label_id.json",
         "output":    "output/",
-        "dataset_dataframe":  "train.xml",
-        "saved_train_graphs":    "SemEval14_train_graphs.bin",
-        "saved_large_graph": "SemEval14_large_graph.bin",
-        "dataframe": "SemEval14_dataframe.csv",
-        "label_text_to_label_id": "SemEval14_label_text_to_label_id.json",
     },
 
     "data":         {
         "dataset":     {
-            'name': 'SemEval14'
+            "name": "MR"
             # 'name':   'MAMS_ATSA'
             # 'name':       'SamsungGalaxy'
             # 'name':     'FourSquared'
@@ -34,13 +34,14 @@ configuration = {
         "trainval_test_split": 0.3,
         "train_val_split":  0.3,
         "min_label_occurences": 0,
-        "multi_label": True
+        "multi_label": False
     },
 
     "model": {
-        'in_dim': 300,
-        'hidden_dim': 150,
-        'num_heads': 2,
+        "in_dim": 300,
+        "hidden_dim": 150,
+        "out_dim": 2,
+        "num_heads": 2,
     },
 
     "training":        {
@@ -61,8 +62,12 @@ configuration = {
     },
 
     "embeddings":   {
-        'embedding_file': 'glove-twitter-25',
+        "embedding_file": "glove-twitter-25",
     },
+
+    "hardware": {
+        "num_workers": 16
+    }
 }
 
 

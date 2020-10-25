@@ -9,10 +9,15 @@ def save_dgl_graphs(path, graphs, labels_dict=None):
 
 def load_dgl_graphs(path, idx_list=None):
     graphs, labels_dict = load_graphs(path, idx_list)
-    labels_tensor_list = labels_dict["glabel"]
-    labels_list = []
-    for label in labels_tensor_list:
-        labels_list += [label.tolist()]
+
+    if len(labels_dict) != 0:
+        labels_tensor_list = labels_dict["glabel"]
+        labels_list = []
+        for label in labels_tensor_list:
+            labels_list += [label.tolist()]
+    else:
+        labels_list = None
+
     return graphs, labels_list
 
 

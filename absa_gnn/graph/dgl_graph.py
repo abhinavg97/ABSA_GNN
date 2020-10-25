@@ -3,7 +3,6 @@ import spacy
 import torch
 import numpy as np
 
-
 from ..utils import utils
 from ..utils import graph_utils
 
@@ -24,8 +23,8 @@ class DGL_Graph(object):
         words = {}
         counter = 0
         self.docs = [[] for i in range(dataset_df.shape[0])]
-        for index, item in dataset_df.iterrows():
-            tokens = self.nlp(item[1])
+        for index, text in enumerate(dataset_df['text'].tolist()):
+            tokens = self.nlp(text)
             for token in tokens:
                 try:
                     words[token.text]
@@ -67,8 +66,8 @@ class DGL_Graph(object):
         graphs = []
         labels = []
         for _, item in self.dataframe.iterrows():
-            graphs += [self.create_instance_dgl_graph(item[1])]
-            labels += [item[2]]
+            graphs += [self.create_instance_dgl_graph(item['text'])]
+            labels += [item['labels']]
         labels_dict = {"glabel": labels}
         return graphs, labels_dict
 
@@ -137,25 +136,25 @@ class DGL_Graph(object):
         g = dgl.DGLGraph()
         g.add_nodes(self.total_nodes)
 
-        # add node data for vocab nodes
+        # compute ids and embeddings for vocab nodes
         ids = []
         embedding = []
         for id, __ in enumerate(self.word_to_id):
             ids += [id]
             embedding += [np.array(self.id_to_vector[id])]
 
-        # add node data for doc nodes
+        # compute ids and embeddings for doc nodes
         # at least one word is expected in the corpus
-
         for id in range(len(self.word_to_id), self.total_nodes):
             ids += [id]
             embedding += [self._compute_doc_embedding(id)]
 
+        # add items ids and embeddings for vocan nodes and doc nodes
         g.ndata['item_id'] = torch.tensor(ids)
         g.ndata['emb'] = torch.tensor(embedding)
 
-        pmi = utils.pmi(self.dataframe)
         # add edges and edge data betweem vocab words in the dgl graph
+        pmi = utils.pmi(self.dataframe)
         edges_sources = []
         edges_dest = []
         edge_data = []
@@ -172,9 +171,9 @@ class DGL_Graph(object):
         g.add_edges(torch.tensor(edges_sources), torch.tensor(edges_dest),
                     {'weight': torch.tensor(edge_data)})
 
+        # add edges and edge data between documents
         if cfg['data']['multi_label']:
-            labels = utils.get_labels(self.dataframe)
-            # add edges and edge data between documents
+            labels = self.dataframe['labels'].tolist()
             edges_sources = []
             edges_dest = []
             edge_data = []
@@ -189,8 +188,8 @@ class DGL_Graph(object):
             g.add_edges(torch.tensor(edges_sources), torch.tensor(edges_dest),
                         {'weight': torch.tensor(edge_data)})
 
-        tf_idf_df = utils.tf_idf(self.dataframe, vocab=self.word_to_id)
         # add edges and edge data between word and documents
+        tf_idf_df = utils.tf_idf(self.dataframe, vocab=self.word_to_id)
         edges_sources = []
         edges_dest = []
         edge_data = []

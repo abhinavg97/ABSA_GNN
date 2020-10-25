@@ -1,4 +1,6 @@
 import re
+import os
+import glob
 import spacy
 import string
 import pandas as pd
@@ -22,7 +24,7 @@ def _clean_term(label):
 
 def _multi_hot_vector(labels_doc_dict_list):
     """
-    Creates custom one hot vector for the labels
+    Creates multi hot vector for the labels
     Args:
         labels_doc_dict_list: A list of dictionary containing labels
     """
@@ -154,7 +156,25 @@ def _parse_sem_eval_16_type(dataset_path, text_processor=None):
     return parsed_data, label_text_to_label_id
 
 
-def _parse_twitter(dataset_path, text_processor):
+def _parse_text_gcn_type(dataset_path, text_processor=None):
+    """
+    Function to parse text gcn dataframes given in the data directory
+    Args:
+    dataset_path: path of the dataframe to be parsed
+    Returns:
+        parsed_data: pandas dataframe for the parsed
+        data containing labels and text
+    """
+    parsed_data = pd.read_csv(dataset_path, index_col=0)
+    labels = parsed_data['labels']
+    labels_doc_dict_list = list(map(lambda label: {label: 1}, labels))
+    parsed_data['labels'], label_text_to_label_id = _multi_hot_vector(labels_doc_dict_list)
+    parsed_data['id'] = list(range(len(labels)))
+
+    return parsed_data, label_text_to_label_id
+
+
+def _parse_twitter(dataset_path, text_processor=None):
     """
     Parses twitter dataset
     Args:
@@ -185,3 +205,52 @@ def _parse_twitter(dataset_path, text_processor):
             count += 1
     parsed_data = pd.DataFrame(data_row, columns=['id', 'text', 'labels'])
     return parsed_data
+
+
+def merge_semEval_16_type(folder):
+    """
+    Takes in a folder and merges all the xml files in it
+    Merge SemEval16 type xml files via this function
+    Args:
+        folder: folder path to merge files
+    """
+    xml_files = glob.glob(folder+"/*.xml")
+
+    node = None
+    for xmlFile in xml_files:
+        tree = ET.parse(xmlFile)
+        root = tree.getroot()
+        if node is None:
+            node = root
+        else:
+            elements = root.findall("./Review")
+            for element in elements:
+                node[1].append(element)
+    with open("merged_" + cfg['data']['dataset']['name'] + ".xml", "wb") as f:
+        f.write(ET.tostring(node))
+
+
+def merge_semEval_14_type(folder):
+    """
+    Takes in a folder and merges all the xml files in it
+    Merge SemEval14 type xml files via this function
+    Make sure to delete any uneccesary xml files including any previously merged files
+        from the directory before proceeding
+    Args:
+        folder: folder path to merge files
+    """
+    xml_files = glob.glob(os.path.join(os.path.dirname(__file__), folder)+"*.xml")
+
+    node = None
+    for xmlFile in xml_files:
+        tree = ET.parse(xmlFile)
+        root = tree.getroot()
+        if node is None:
+            node = root
+        else:
+            elements = root.findall("./sentence")
+            for element in elements:
+                node[1].append(element)
+
+    with open(os.path.join(os.path.dirname(__file__), folder+"merged_files/"+"merged_" + "SemEval14" + ".xml"), "wb") as f:
+        f.write(ET.tostring(node))
