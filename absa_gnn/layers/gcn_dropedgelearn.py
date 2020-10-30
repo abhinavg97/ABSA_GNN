@@ -39,10 +39,10 @@ def dot(x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
     return res
 
 
-class Token_GCN_DropEdgeLearn(pl.LightningModule):
+class GCN_DropEdgeLearn(pl.LightningModule):
 
     def __init__(self, w, d, emb_dim, out_dim=2, bias=True):
-        super(Token_GCN_DropEdgeLearn, self).__init__()
+        super(GCN_DropEdgeLearn, self).__init__()
         self.w = w
         self.d = d
         self.weight = Parameter(torch.FloatTensor(emb_dim, out_dim))
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     X = torch.randn(n, emb_dim)
     target = torch.randint(0, 2, (n, emb_dim)).float()
 
-    mat_test = Token_GCN_DropEdgeLearn(w, d, X, A, target, emb_dim=emb_dim, out_dim=emb_dim)
+    mat_test = GCN_DropEdgeLearn(w, d, X, A, target, emb_dim=emb_dim, out_dim=emb_dim)
 
     trainer = pl.Trainer(max_epochs=epochs)
 

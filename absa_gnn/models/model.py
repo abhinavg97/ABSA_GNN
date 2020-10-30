@@ -5,35 +5,32 @@ import torch
 import torch.nn.functional as F
 import pytorch_lightning as pl
 
-
-from ..layers import Instance_Graphs_GAT, Token_Graph_GCN  # MatrixUpdation
+from ..layers.gcn_dropedgelearn import GCN_DropEdgeLearn
 from ..metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores,\
                       f1_score, precision_score, recall_score, accuracy_score
-
 
 from config import configuration as cfg
 
 
-class Model(pl.LightningModule):
+class GCN_DropEdgeLearn_Model(pl.LightningModule):
     """
     GAT model class: This is where the learning happens
     The boilerplate for learning is abstracted away by Lightning
     """
-    def __init__(self, in_dim, hidden_dim, num_heads, out_dim, num_classes, large_graph):
+    def __init__(self, w, d, in_dim, hidden_dim, out_dim, dropout=0.2, training=True):
         """
         if cfg['data']['multi_label']:
             out_dim =
         else:
         """
-        super(Model, self).__init__()
-        self.large_graph = large_graph
-        # self.large_token_gcn = MatrixUpdation(in_dim=in_dim, hidden_dim=hidden_dim, out_dim=out_dim)
-        self.small_instance_gat = Instance_Graphs_GAT(in_dim=in_dim, hidden_dim=hidden_dim, num_heads=num_heads, out_dim=out_dim)
-        # We may have different out_dim's from 2 GNNs and concat them.
-        self.large_token_gcn = Token_Graph_GCN(in_dim=in_dim, hidden_dim=hidden_dim, out_dim=out_dim)
-        self.classify = torch.nn.Linear(2 * out_dim, num_classes)
+        super(GCN_DropEdgeLearn_Model, self).__init__()
+        self.training=training
+        self.dropout=dropout
 
-    def forward(self, small_batch_graphs, combine='concat'):
+        self.dropedgelearn_gcn1 = GCN_DropEdgeLearn(w, d, emb_dim=in_dim, out_dim=hidden_dim)
+        self.dropedgelearn_gcn2 = GCN_DropEdgeLearn(w, d, emb_dim=hidden_dim, out_dim=out_dim)
+
+    def forward(self, A, X):
         """ Combines embeddings of tokens from large and small graph by concatenating.
 
         Take embeddings from large graph for tokens present in the small graph batch.
@@ -51,31 +48,12 @@ class Model(pl.LightningModule):
         Convert to boolean mask indicating the tokens present in the current batch of instances.
         Boolean mask size: List of number of tokens in the large graph.
         """
-        # Fetch embeddings from instance graphs:
-        token_embs_small = self.small_instance_gat(small_batch_graphs, small_batch_graphs.ndata['emb'])
-
-        """ Uncomment later
-        # Fetch embeddings from large token graph
-        token_embs_large = self.large_token_gcn(self.large_graph, self.large_graph.ndata['emb'])
-
-        token_idx_batch = small_batch_graphs.ndata['item_id']
-
-        # Fetch embeddings from large graph of tokens present in instance batch only:
-        token_embs_large = token_embs_large[token_idx_batch]
-
-        # Combines both embeddings:
-        if combine == 'concat':
-            embs = torch.cat([token_embs_small, token_embs_large])
-        elif combine == 'avg':
-            embs = torch.mean(torch.stack([token_embs_small, token_embs_large]), dim=0)
-        else:
-            raise NotImplementedError(f'combine supports either concat or avg.'
-                                    f' [{combine}] provided.')
-
-            return self.classify(embs)
-        """
-
-        return self.classify(token_embs_small)
+        self.dropedgelearn_gcn.apply_targeted_dropout(
+            targeted_drop=0.25 + self.current_epoch / self.num_epoch)
+        X = self.dropedgelearn_gcn1(A, X)
+        X = F.dropout(X, self.dropout, training=self.training)
+        X = self.dropedgelearn_gcn2(A, X)
+        return X
 
     def configure_optimizers(self, lr=cfg['training']['optimizer']['learning_rate']):
         return torch.optim.Adam(self.parameters(), lr=lr)
@@ -211,3 +189,21 @@ class Model(pl.LightningModule):
         items = super().get_progress_bar_dict()
         items.pop("v_num", None)
         return items
+
+
+if __name__ == "__main__":
+    epochs = 5
+    w = 5
+    d = 2
+    n = w + d
+    emb_dim = 2
+
+    A = torch.randn(n, n)
+    X = torch.randn(n, emb_dim)
+    target = torch.randint(0, 2, (n, emb_dim)).float()
+
+    mat_test = GCN_DropEdgeLearn_Model(w, d, in_dim=emb_dim, hidden_dim=emb_dim, out_dim=emb_dim)
+
+    trainer = pl.Trainer(max_epochs=epochs)
+
+    trainer.fit(mat_test)
