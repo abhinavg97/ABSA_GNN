@@ -77,9 +77,8 @@ class GCN_DropEdgeLearn(pl.LightningModule):
             return X
 
     def apply_targeted_dropout(self, targeted_drop=0.1):
-        """
-        updating adjacency matrix according to the logic given in the paper
-        Dropout logic is as given here: https://arxiv.org/pdf/1207.0580.pdf
+        """ Applies dropout to the doc-doc portion of adjacency matrix.
+
         """
         D = torch.ones(self.d, self.d)
         targeted_dropout = torch.nn.Dropout(p=targeted_drop, inplace=False)
@@ -116,7 +115,8 @@ class GCN_DropEdgeLearn(pl.LightningModule):
     #     return D_prime
 
     def apply_adj_dropout(self, adj_drop=0.2):
-        """ Creates a dropout matrix for the whole adjacency matrix
+        """ Applies dropout to the whole adjacency matrix.
+
         """
         ## Apply dropout to whole adjacency matrix:
         # TODO: symmetric dropout (for undirected graph)
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     X = torch.randn(n, emb_dim)
     target = torch.randint(0, 2, (n, emb_dim)).float()
 
-    mat_test = GCN_DropEdgeLearn(w, d, X, A, target, emb_dim=emb_dim, out_dim=emb_dim)
+    mat_test = GCN_DropEdgeLearn(w, d, emb_dim=emb_dim, out_dim=emb_dim)
 
     trainer = pl.Trainer(max_epochs=epochs)
 

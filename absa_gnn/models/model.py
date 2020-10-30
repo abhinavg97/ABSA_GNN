@@ -5,9 +5,9 @@ import torch
 import torch.nn.functional as F
 import pytorch_lightning as pl
 
-from ..layers.gcn_dropedgelearn import GCN_DropEdgeLearn
+from ..layers.gcn_dropedgelearn import GCN_DropEdgeLearn, dot
 from ..metrics import class_wise_f1_scores, class_wise_precision_scores, class_wise_recall_scores,\
-                      f1_score, precision_score, recall_score, accuracy_score
+    f1_score, precision_score, recall_score, accuracy_score
 
 from config import configuration as cfg
 
@@ -17,6 +17,7 @@ class GCN_DropEdgeLearn_Model(pl.LightningModule):
     GAT model class: This is where the learning happens
     The boilerplate for learning is abstracted away by Lightning
     """
+
     def __init__(self, w, d, in_dim, hidden_dim, out_dim, dropout=0.2, training=True):
         """
         if cfg['data']['multi_label']:
@@ -24,13 +25,13 @@ class GCN_DropEdgeLearn_Model(pl.LightningModule):
         else:
         """
         super(GCN_DropEdgeLearn_Model, self).__init__()
-        self.training=training
-        self.dropout=dropout
+        self.training = training
+        self.dropout = dropout
 
         self.dropedgelearn_gcn1 = GCN_DropEdgeLearn(w, d, emb_dim=in_dim, out_dim=hidden_dim)
         self.dropedgelearn_gcn2 = GCN_DropEdgeLearn(w, d, emb_dim=hidden_dim, out_dim=out_dim)
 
-    def forward(self, A, X):
+    def forward(self, A, X, targeted_drop_start=0.25):
         """ Combines embeddings of tokens from large and small graph by concatenating.
 
         Take embeddings from large graph for tokens present in the small graph batch.
@@ -49,11 +50,32 @@ class GCN_DropEdgeLearn_Model(pl.LightningModule):
         Boolean mask size: List of number of tokens in the large graph.
         """
         self.dropedgelearn_gcn.apply_targeted_dropout(
-            targeted_drop=0.25 + self.current_epoch / self.num_epoch)
+            targeted_drop=targeted_drop_start + self.current_epoch / self.num_epoch)
         X = self.dropedgelearn_gcn1(A, X)
         X = F.dropout(X, self.dropout, training=self.training)
         X = self.dropedgelearn_gcn2(A, X)
         return X
+
+    @staticmethod
+    def normalize_adj(A: torch.Tensor, eps: float = 1E-9) -> torch.Tensor:
+        """ Normalize adjacency matrix for LPA:
+        A = D^(-1/2) * A * D^(-1/2)
+        A = softmax(A)
+
+        :param A: adjacency matrix
+        :param eps: small value
+        :return:
+        """
+        D = torch.sparse.sum(A, dim=0)
+        D = torch.sqrt(1.0 / (D.to_dense() + eps))
+        D = torch.diag(D).to_sparse()
+        # nz_indices = torch.nonzero(D, as_tuple=False)
+        # D = torch.sparse.FloatTensor(nz_indices.T, D, adj.shape)
+        A = dot(D, A.to_dense()).to_sparse()
+        A = dot(A, D.to_dense()).to_sparse()
+        # A = self.softmax(A)
+
+        return A
 
     def configure_optimizers(self, lr=cfg['training']['optimizer']['learning_rate']):
         return torch.optim.Adam(self.parameters(), lr=lr)
@@ -103,7 +125,8 @@ class GCN_DropEdgeLearn_Model(pl.LightningModule):
 
         try:
             label_text_to_label_id_path = cfg['paths']['data_root'] + cfg['paths']['label_text_to_label_id']
-            assert pathlib.Path(label_text_to_label_id_path).exists(), "Label to id path is not valid! Using Incremental class names"
+            assert pathlib.Path(
+                label_text_to_label_id_path).exists(), "Label to id path is not valid! Using Incremental class names"
             with open(label_text_to_label_id_path, "r") as f:
                 label_text_to_label_id = json.load(f)
             label_id_to_label_text = {value: key for key, value in label_text_to_label_id.items()}
@@ -123,7 +146,7 @@ class GCN_DropEdgeLearn_Model(pl.LightningModule):
             class_recall_scores[class_name] = class_recall_score
 
         return avg_loss, class_f1_scores, class_precision_scores, class_recall_scores,\
-            avg_f1_score, avg_precision_score, avg_recall_score, avg_accuracy_score
+               avg_f1_score, avg_precision_score, avg_recall_score, avg_accuracy_score
 
     def training_step(self, batch, batch_idx):
         graph_batch, labels = batch
@@ -133,16 +156,21 @@ class GCN_DropEdgeLearn_Model(pl.LightningModule):
 
     def training_epoch_end(self, outputs):
         avg_train_loss, class_f1_scores, class_precision_scores, class_recall_scores,\
-         avg_f1_score, avg_precision_score, avg_recall_score, avg_accuracy_score = self._calc_metrics(outputs)
+        avg_f1_score, avg_precision_score, avg_recall_score, avg_accuracy_score = self._calc_metrics(outputs)
 
         self.logger.log_metrics(metrics={'avg_train_loss': avg_train_loss}, step=self.trainer.current_epoch)
         self.logger.log_metrics(metrics={'avg_train_f1_score': avg_f1_score}, step=self.trainer.current_epoch)
-        self.logger.log_metrics(metrics={'avg_train_precision_score': avg_precision_score}, step=self.trainer.current_epoch)
+        self.logger.log_metrics(metrics={'avg_train_precision_score': avg_precision_score},
+                                step=self.trainer.current_epoch)
         self.logger.log_metrics(metrics={'avg_train_recall_score': avg_recall_score}, step=self.trainer.current_epoch)
-        self.logger.log_metrics(metrics={'avg_train_accuracy_score': avg_accuracy_score}, step=self.trainer.current_epoch)
-        self.logger.experiment.add_scalars('train_class_f1_scores', class_f1_scores, global_step=self.trainer.current_epoch)
-        self.logger.experiment.add_scalars('train_class_precision_scores', class_precision_scores, global_step=self.trainer.current_epoch)
-        self.logger.experiment.add_scalars('train_class_recall_scores', class_recall_scores, global_step=self.trainer.current_epoch)
+        self.logger.log_metrics(metrics={'avg_train_accuracy_score': avg_accuracy_score},
+                                step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('train_class_f1_scores', class_f1_scores,
+                                           global_step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('train_class_precision_scores', class_precision_scores,
+                                           global_step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('train_class_recall_scores', class_recall_scores,
+                                           global_step=self.trainer.current_epoch)
 
     def validation_step(self, batch, batch_idx):
         graph_batch, labels = batch
@@ -152,18 +180,22 @@ class GCN_DropEdgeLearn_Model(pl.LightningModule):
 
     def validation_epoch_end(self, outputs):
         avg_val_loss, class_f1_scores, class_precision_scores, class_recall_scores,\
-         avg_f1_score, avg_precision_score, avg_recall_score, avg_accuracy_score = self._calc_metrics(outputs)
+        avg_f1_score, avg_precision_score, avg_recall_score, avg_accuracy_score = self._calc_metrics(outputs)
 
         # val_f1_score is logged via self.log also so that PL can use early stopping
         self.log('val_f1_score', avg_f1_score)
         self.logger.log_metrics(metrics={'avg_val_loss': avg_val_loss}, step=self.trainer.current_epoch)
         self.logger.log_metrics(metrics={'avg_val_f1_score': avg_f1_score}, step=self.trainer.current_epoch)
-        self.logger.log_metrics(metrics={'avg_val_precision_score': avg_precision_score}, step=self.trainer.current_epoch)
+        self.logger.log_metrics(metrics={'avg_val_precision_score': avg_precision_score},
+                                step=self.trainer.current_epoch)
         self.logger.log_metrics(metrics={'avg_val_recall_score': avg_recall_score}, step=self.trainer.current_epoch)
         self.logger.log_metrics(metrics={'avg_val_accuracy_score': avg_accuracy_score}, step=self.trainer.current_epoch)
-        self.logger.experiment.add_scalars('val_class_f1_scores', class_f1_scores, global_step=self.trainer.current_epoch)
-        self.logger.experiment.add_scalars('val_class_precision_scores', class_precision_scores, global_step=self.trainer.current_epoch)
-        self.logger.experiment.add_scalars('val_class_recall_scores', class_recall_scores, global_step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('val_class_f1_scores', class_f1_scores,
+                                           global_step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('val_class_precision_scores', class_precision_scores,
+                                           global_step=self.trainer.current_epoch)
+        self.logger.experiment.add_scalars('val_class_recall_scores', class_recall_scores,
+                                           global_step=self.trainer.current_epoch)
 
     def test_step(self, batch, batch_idx):
         graph_batch, labels = batch
@@ -173,7 +205,7 @@ class GCN_DropEdgeLearn_Model(pl.LightningModule):
 
     def test_epoch_end(self, outputs):
         avg_test_loss, class_f1_scores, class_precision_scores, class_recall_scores,\
-         avg_f1_score, avg_precision_score, avg_recall_score, avg_accuracy_score = self._calc_metrics(outputs)
+        avg_f1_score, avg_precision_score, avg_recall_score, avg_accuracy_score = self._calc_metrics(outputs)
 
         self.logger.log_metrics(metrics={'avg_test_loss': avg_test_loss}, step=0)
         self.logger.log_metrics(metrics={'avg_test_f1_score': avg_f1_score}, step=0)
