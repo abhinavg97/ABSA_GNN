@@ -18,7 +18,7 @@ class GCN_DropEdgeLearn_Model(pl.LightningModule):
     The boilerplate for learning is abstracted away by Lightning
     """
 
-    def __init__(self, w, d, in_dim, hidden_dim, out_dim, dropout=0.2, training=True):
+    def __init__(self, w, d, in_dim, hidden_dim, out_dim, num_layer=0, dropout=0.2, training=True):
         """
         if cfg['data']['multi_label']:
             out_dim =
@@ -29,7 +29,16 @@ class GCN_DropEdgeLearn_Model(pl.LightningModule):
         self.dropout = dropout
 
         self.dropedgelearn_gcn1 = GCN_DropEdgeLearn(w, d, emb_dim=in_dim, out_dim=hidden_dim)
-        self.dropedgelearn_gcn2 = GCN_DropEdgeLearn(w, d, emb_dim=hidden_dim, out_dim=out_dim)
+        # self.dropedgelearn_gcn2 = GCN_DropEdgeLearn(w, d, emb_dim=hidden_dim, out_dim=out_dim)
+
+        self.gcn_layers = []
+        for _ in range(num_layer - 2):
+            self.gcn_layers.append(GCN_DropEdgeLearn(w, d, emb_dim=hidden_dim, out_dim=hidden_dim))
+
+        self.gcn_layers = torch.nn.ModuleList(self.gcn_layers)
+
+        # Final dense layer
+        self.dropedgelearn_gcnn = GCN_DropEdgeLearn(w, d, emb_dim=hidden_dim, out_dim=out_dim)
 
     def forward(self, A, X, targeted_drop_start=0.25):
         """ Combines embeddings of tokens from large and small graph by concatenating.
@@ -53,7 +62,14 @@ class GCN_DropEdgeLearn_Model(pl.LightningModule):
             targeted_drop=targeted_drop_start + self.current_epoch / self.num_epoch)
         X = self.dropedgelearn_gcn1(A, X)
         X = F.dropout(X, self.dropout, training=self.training)
-        X = self.dropedgelearn_gcn2(A, X)
+        # X = self.dropedgelearn_gcnn(A, X)
+
+        for gcn_layer in self.gcn_layers:
+            X = gcn_layer(A, X)
+            X = torch.relu(X)
+
+        # hidden = [batch size, hid dim]
+        X = self.dropedgelearn_gcnn(A, X)
         return X
 
     @staticmethod
